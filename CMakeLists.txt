@@ -1,19 +1,19 @@
 # SPDX-License-Identifier: Apache-2.0
-# SANKHYA - build system.
+# YUKTHI - build system.
 #
 # Layout of targets:
-#   sankhya_objects  object library, compiled once, PIC
-#   sankhya_core     static library      (the one the CLI and tests link)
-#   sankhya_shared   shared library      (what the Python bindings and the C API consumer use)
-#   sankhya-cli      command line front end
-#   sankhya_tests    GoogleTest binary
+#   YUKTHI_objects  object library, compiled once, PIC
+#   YUKTHI_core     static library      (the one the CLI and tests link)
+#   YUKTHI_shared   shared library      (what the Python bindings and the C API consumer use)
+#   YUKTHI-cli      command line front end
+#   YUKTHI_tests    GoogleTest binary
 #
 # Warning flags are applied PER TARGET, never globally, so that -Werror governs our code
 # and not the dependencies fetched below.
 
 cmake_minimum_required(VERSION 3.20)
 
-project(sankhya
+project(YUKTHI
         VERSION 0.1.0
         DESCRIPTION "Indigenous GPU-accelerated LP/MILP/QP optimization solver"
         LANGUAGES CXX)
@@ -33,28 +33,28 @@ endif()
 # Options
 # -----------------------------------------------------------------------------------------
 
-option(SANKHYA_ENABLE_CUDA  "Build the CUDA backend (Phase 4)"          OFF)
-option(SANKHYA_BUILD_PYTHON "Build the pybind11 bindings (Phase 10)"    OFF)
-option(SANKHYA_BUILD_TESTS  "Build the GoogleTest suite"                ON)
-option(SANKHYA_SANITIZE     "Build with AddressSanitizer + UBSan"       OFF)
-option(SANKHYA_WITH_ZLIB    "Read gzip-compressed model files"          ON)
-option(SANKHYA_WITH_OPENMP  "Multi-core column loops through OpenMP (#57)" ON)
+option(YUKTHI_ENABLE_CUDA  "Build the CUDA backend (Phase 4)"          OFF)
+option(YUKTHI_BUILD_PYTHON "Build the pybind11 bindings (Phase 10)"    OFF)
+option(YUKTHI_BUILD_TESTS  "Build the GoogleTest suite"                ON)
+option(YUKTHI_SANITIZE     "Build with AddressSanitizer + UBSan"       OFF)
+option(YUKTHI_WITH_ZLIB    "Read gzip-compressed model files"          ON)
+option(YUKTHI_WITH_OPENMP  "Multi-core column loops through OpenMP (#57)" ON)
 
 # -----------------------------------------------------------------------------------------
 # Build identification. Every benchmark CSV records the commit, so the binary must know it.
 # -----------------------------------------------------------------------------------------
 
 find_package(Git QUIET)
-set(SANKHYA_GIT_COMMIT "unknown")
+set(YUKTHI_GIT_COMMIT "unknown")
 if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
   execute_process(
     COMMAND "${GIT_EXECUTABLE}" rev-parse --short HEAD
     WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-    OUTPUT_VARIABLE SANKHYA_GIT_COMMIT
+    OUTPUT_VARIABLE YUKTHI_GIT_COMMIT
     OUTPUT_STRIP_TRAILING_WHITESPACE
     ERROR_QUIET)
-  if(SANKHYA_GIT_COMMIT STREQUAL "")
-    set(SANKHYA_GIT_COMMIT "unknown")
+  if(YUKTHI_GIT_COMMIT STREQUAL "")
+    set(YUKTHI_GIT_COMMIT "unknown")
   endif()
 endif()
 
@@ -88,7 +88,7 @@ FetchContent_MakeAvailable(fmt cli11 nlohmann_json)
 # their code as well as ours - fmt 10.2.1's ranges.h trips -Wtautological-compare on GCC 16,
 # for instance. Re-export each dependency's include directories as SYSTEM so the compiler
 # suppresses diagnostics originating inside them while still policing every line we write.
-function(sankhya_mark_include_dirs_system)
+function(YUKTHI_mark_include_dirs_system)
   foreach(dep IN LISTS ARGN)
     if(NOT TARGET ${dep})
       continue()
@@ -101,14 +101,14 @@ function(sankhya_mark_include_dirs_system)
   endforeach()
 endfunction()
 
-sankhya_mark_include_dirs_system(fmt CLI11 nlohmann_json)
+YUKTHI_mark_include_dirs_system(fmt CLI11 nlohmann_json)
 
-if(SANKHYA_WITH_ZLIB)
+if(YUKTHI_WITH_ZLIB)
   # Prefer a system zlib; only fetch and build one when the platform has none.
   find_package(ZLIB QUIET)
   if(ZLIB_FOUND)
-    message(STATUS "sankhya: using system zlib ${ZLIB_VERSION_STRING}")
-    set(SANKHYA_ZLIB_TARGET ZLIB::ZLIB)
+    message(STATUS "YUKTHI: using system zlib ${ZLIB_VERSION_STRING}")
+    set(YUKTHI_ZLIB_TARGET ZLIB::ZLIB)
   else()
     FetchContent_Declare(zlib
       GIT_REPOSITORY https://github.com/madler/zlib.git
@@ -117,14 +117,14 @@ if(SANKHYA_WITH_ZLIB)
     set(ZLIB_BUILD_EXAMPLES OFF CACHE INTERNAL "")
     FetchContent_MakeAvailable(zlib)
     # madler/zlib names its static target zlibstatic and does not export a namespaced alias.
-    set(SANKHYA_ZLIB_TARGET zlibstatic)
+    set(YUKTHI_ZLIB_TARGET zlibstatic)
     target_include_directories(zlibstatic PUBLIC
       "${zlib_SOURCE_DIR}" "${zlib_BINARY_DIR}")
-    message(STATUS "sankhya: building bundled zlib 1.3.1")
+    message(STATUS "YUKTHI: building bundled zlib 1.3.1")
   endif()
 endif()
 
-if(SANKHYA_BUILD_TESTS)
+if(YUKTHI_BUILD_TESTS)
   FetchContent_Declare(googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG        v1.14.0
@@ -139,12 +139,12 @@ endif()
 # Warning and sanitizer configuration, applied per target.
 # -----------------------------------------------------------------------------------------
 
-add_library(sankhya_flags INTERFACE)
+add_library(YUKTHI_flags INTERFACE)
 
 if(MSVC)
-  target_compile_options(sankhya_flags INTERFACE /W4 /WX /permissive- /Zc:__cplusplus)
+  target_compile_options(YUKTHI_flags INTERFACE /W4 /WX /permissive- /Zc:__cplusplus)
 else()
-  target_compile_options(sankhya_flags INTERFACE
+  target_compile_options(YUKTHI_flags INTERFACE
     -Wall -Wextra -Werror
     -Wshadow
     -Wconversion
@@ -161,23 +161,23 @@ if(MINGW)
   # the binary; its libstdc++-6.dll is then loaded first and the process dies at start-up
   # with STATUS_ENTRYPOINT_NOT_FOUND (0xC0000139) before main() runs. Linking the runtime
   # statically makes the produced .exe self-contained and removes the whole failure mode.
-  target_link_options(sankhya_flags INTERFACE -static-libgcc -static-libstdc++ -static)
+  target_link_options(YUKTHI_flags INTERFACE -static-libgcc -static-libstdc++ -static)
 endif()
 
-if(SANKHYA_SANITIZE)
+if(YUKTHI_SANITIZE)
   if(MSVC)
-    message(FATAL_ERROR "SANKHYA_SANITIZE is not supported with MSVC")
+    message(FATAL_ERROR "YUKTHI_SANITIZE is not supported with MSVC")
   endif()
-  target_compile_options(sankhya_flags INTERFACE
+  target_compile_options(YUKTHI_flags INTERFACE
     -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all)
-  target_link_options(sankhya_flags INTERFACE -fsanitize=address,undefined)
+  target_link_options(YUKTHI_flags INTERFACE -fsanitize=address,undefined)
 endif()
 
 # -----------------------------------------------------------------------------------------
 # The solver core
 # -----------------------------------------------------------------------------------------
 
-set(SANKHYA_CORE_SOURCES
+set(YUKTHI_CORE_SOURCES
   src/api/c_api.cpp
   src/core/certificate.cpp
   src/core/model.cpp
@@ -205,61 +205,61 @@ set(SANKHYA_CORE_SOURCES
   src/util/options.cpp
   src/util/version.cpp)
 
-add_library(sankhya_objects OBJECT ${SANKHYA_CORE_SOURCES})
+add_library(YUKTHI_objects OBJECT ${YUKTHI_CORE_SOURCES})
 
-target_include_directories(sankhya_objects PUBLIC
+target_include_directories(YUKTHI_objects PUBLIC
   "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>")
 
 # src/ is PRIVATE: it lets one module include another module's implementation header
 # (src/mip needs src/simplex, and later phases need more of these) without a chain of
 # ../ paths. It is deliberately not PUBLIC - nothing outside the library may depend on
-# a header that is not in include/sankhya.
-target_include_directories(sankhya_objects PRIVATE "${PROJECT_SOURCE_DIR}/src")
+# a header that is not in include/YUKTHI.
+target_include_directories(YUKTHI_objects PRIVATE "${PROJECT_SOURCE_DIR}/src")
 
-target_link_libraries(sankhya_objects
+target_link_libraries(YUKTHI_objects
   PUBLIC  fmt::fmt
   # nlohmann_json is used only by src/io/writer.cpp to emit the benchmark stats blob. It is
   # header-only, so PRIVATE keeps it out of every consumer's include path.
-  PRIVATE nlohmann_json::nlohmann_json sankhya_flags)
+  PRIVATE nlohmann_json::nlohmann_json YUKTHI_flags)
 
-target_compile_definitions(sankhya_objects PRIVATE
-  SANKHYA_VERSION="${PROJECT_VERSION}"
-  SANKHYA_GIT_COMMIT="${SANKHYA_GIT_COMMIT}"
-  SANKHYA_BUILD_TYPE="$<CONFIG>"
-  SANKHYA_COMPILER="${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+target_compile_definitions(YUKTHI_objects PRIVATE
+  YUKTHI_VERSION="${PROJECT_VERSION}"
+  YUKTHI_GIT_COMMIT="${YUKTHI_GIT_COMMIT}"
+  YUKTHI_BUILD_TYPE="$<CONFIG>"
+  YUKTHI_COMPILER="${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 
-if(SANKHYA_ENABLE_CUDA)
+if(YUKTHI_ENABLE_CUDA)
   enable_language(CUDA)
-  target_compile_definitions(sankhya_objects PUBLIC SANKHYA_ENABLE_CUDA)
+  target_compile_definitions(YUKTHI_objects PUBLIC YUKTHI_ENABLE_CUDA)
 endif()
 
-if(SANKHYA_WITH_ZLIB AND SANKHYA_ZLIB_TARGET)
-  target_link_libraries(sankhya_objects PUBLIC ${SANKHYA_ZLIB_TARGET})
-  target_compile_definitions(sankhya_objects PUBLIC SANKHYA_WITH_ZLIB)
+if(YUKTHI_WITH_ZLIB AND YUKTHI_ZLIB_TARGET)
+  target_link_libraries(YUKTHI_objects PUBLIC ${YUKTHI_ZLIB_TARGET})
+  target_compile_definitions(YUKTHI_objects PUBLIC YUKTHI_WITH_ZLIB)
 endif()
 
 # OPENMP, OPTIONAL AND DETERMINISTIC (#57). Only loops whose every output element is
 # written by one thread are parallel - gathers, never reductions - so the answer does not
 # depend on the thread count. Without OpenMP the pragmas are ignored and the build is the
 # single-threaded one; the `threads` option then reports that it has nothing to set.
-if (SANKHYA_WITH_OPENMP)
+if (YUKTHI_WITH_OPENMP)
   find_package(OpenMP QUIET COMPONENTS CXX)
   if (OpenMP_CXX_FOUND)
-    target_link_libraries(sankhya_objects PUBLIC OpenMP::OpenMP_CXX)
-    target_compile_definitions(sankhya_objects PUBLIC SANKHYA_HAVE_OPENMP)
-    message(STATUS "SANKHYA: OpenMP ${OpenMP_CXX_VERSION} found; column loops run multi-core")
+    target_link_libraries(YUKTHI_objects PUBLIC OpenMP::OpenMP_CXX)
+    target_compile_definitions(YUKTHI_objects PUBLIC YUKTHI_HAVE_OPENMP)
+    message(STATUS "YUKTHI: OpenMP ${OpenMP_CXX_VERSION} found; column loops run multi-core")
   else()
-    message(STATUS "SANKHYA: OpenMP not found; single-threaded build")
+    message(STATUS "YUKTHI: OpenMP not found; single-threaded build")
   endif()
 endif()
 
-add_library(sankhya_core STATIC $<TARGET_OBJECTS:sankhya_objects>)
-target_link_libraries(sankhya_core PUBLIC sankhya_objects)
+add_library(YUKTHI_core STATIC $<TARGET_OBJECTS:YUKTHI_objects>)
+target_link_libraries(YUKTHI_core PUBLIC YUKTHI_objects)
 
-add_library(sankhya_shared SHARED $<TARGET_OBJECTS:sankhya_objects>)
-target_link_libraries(sankhya_shared PUBLIC sankhya_objects)
-set_target_properties(sankhya_shared PROPERTIES
-  OUTPUT_NAME sankhya
+add_library(YUKTHI_shared SHARED $<TARGET_OBJECTS:YUKTHI_objects>)
+target_link_libraries(YUKTHI_shared PUBLIC YUKTHI_objects)
+set_target_properties(YUKTHI_shared PROPERTIES
+  OUTPUT_NAME YUKTHI
   VERSION ${PROJECT_VERSION}
   SOVERSION ${PROJECT_VERSION_MAJOR})
 
@@ -267,16 +267,16 @@ set_target_properties(sankhya_shared PROPERTIES
 # CLI
 # -----------------------------------------------------------------------------------------
 
-add_executable(sankhya-cli apps/sankhya-cli/main.cpp)
-target_link_libraries(sankhya-cli
-  PRIVATE sankhya_core CLI11::CLI11 nlohmann_json::nlohmann_json sankhya_flags)
-set_target_properties(sankhya-cli PROPERTIES OUTPUT_NAME sankhya)
+add_executable(YUKTHI-cli apps/YUKTHI-cli/main.cpp)
+target_link_libraries(YUKTHI-cli
+  PRIVATE YUKTHI_core CLI11::CLI11 nlohmann_json::nlohmann_json YUKTHI_flags)
+set_target_properties(YUKTHI-cli PROPERTIES OUTPUT_NAME YUKTHI)
 
 # -----------------------------------------------------------------------------------------
 # Tests
 # -----------------------------------------------------------------------------------------
 
-if(SANKHYA_BUILD_TESTS)
+if(YUKTHI_BUILD_TESTS)
   add_subdirectory(tests)
 endif()
 
@@ -285,11 +285,11 @@ endif()
 # -----------------------------------------------------------------------------------------
 
 message(STATUS "")
-message(STATUS "SANKHYA ${PROJECT_VERSION} (${SANKHYA_GIT_COMMIT})")
+message(STATUS "YUKTHI ${PROJECT_VERSION} (${YUKTHI_GIT_COMMIT})")
 message(STATUS "  build type : ${CMAKE_BUILD_TYPE}")
 message(STATUS "  compiler   : ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
-message(STATUS "  CUDA       : ${SANKHYA_ENABLE_CUDA}")
-message(STATUS "  sanitizers : ${SANKHYA_SANITIZE}")
-message(STATUS "  tests      : ${SANKHYA_BUILD_TESTS}")
-message(STATUS "  zlib       : ${SANKHYA_WITH_ZLIB}")
+message(STATUS "  CUDA       : ${YUKTHI_ENABLE_CUDA}")
+message(STATUS "  sanitizers : ${YUKTHI_SANITIZE}")
+message(STATUS "  tests      : ${YUKTHI_BUILD_TESTS}")
+message(STATUS "  zlib       : ${YUKTHI_WITH_ZLIB}")
 message(STATUS "")

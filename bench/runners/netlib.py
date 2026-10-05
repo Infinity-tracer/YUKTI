@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Run SANKHYA over the fetched Netlib instances and emit the evidence CSV.
+"""Run YUKTHI over the fetched Netlib instances and emit the evidence CSV.
 
 Every column CLAUDE.md requires is here: instance, sha256 of the instance file, our
 objective, the PUBLISHED reference objective, absolute and relative gap, status, wall time,
@@ -18,7 +18,7 @@ Two things this runner does that a plain timing loop would not:
 
 Usage:
     python bench/runners/netlib.py
-    python bench/runners/netlib.py --binary build/sankhya --time-limit 60
+    python bench/runners/netlib.py --binary build/YUKTHI --time-limit 60
     python bench/runners/netlib.py --check        # fail if the pass rate dropped
 """
 
@@ -144,8 +144,8 @@ def sha256_file(path: Path) -> str:
 
 
 def default_binary() -> Path:
-    for candidate in ("build/sankhya.exe", "build/sankhya", "build-main/sankhya.exe",
-                      "build-main/sankhya"):
+    for candidate in ("build/YUKTHI.exe", "build/YUKTHI", "build-main/YUKTHI.exe",
+                      "build-main/YUKTHI"):
         path = REPO_ROOT / candidate
         if path.exists():
             return path

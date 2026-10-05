@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - exact simplex over the rationals. TESTS ONLY.
+// YUKTHI - exact simplex over the rationals. TESTS ONLY.
 //
 // This is the standard the floating-point simplex is judged against, so it is written for
 // transparency rather than speed: a full dense tableau, reduced costs recomputed from
@@ -21,11 +21,11 @@
 #include <cstdint>
 #include <vector>
 
-#include "sankhya/model.hpp"
+#include "YUKTHI/model.hpp"
 
 #include "oracles/rational.hpp"
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 
 /// No upper bound on a column.
 inline constexpr std::int64_t kNoUpperBound = std::numeric_limits<std::int64_t>::max();
@@ -54,7 +54,7 @@ struct GeneratedLp {
   [[nodiscard]] std::string to_text() const;
 };
 
-/// Build the sankhya::Model that represents exactly the same instance, so the float solver
+/// Build the YUKTHI::Model that represents exactly the same instance, so the float solver
 /// and the oracle see one problem and not two.
 [[nodiscard]] Model to_model(const GeneratedLp& lp);
 
@@ -91,4 +91,4 @@ struct OracleResult {
 /// answer, and the fuzz harness counts those separately.
 [[nodiscard]] OracleResult solve_exact_milp(const GeneratedLp& lp, std::int64_t node_limit);
 
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

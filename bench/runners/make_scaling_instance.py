@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Emit a sparse multi-period production LP of a chosen size, as MPS.
 
-The Netlib instances SANKHYA currently carries top out around 120 rows, which is far too
+The Netlib instances YUKTHI currently carries top out around 120 rows, which is far too
 small to show what the basis factorization costs: a dense refactorization of a 120x120 basis
 is genuinely cheap. This generator produces the shape the problem statement actually cares
 about - thousands of rows, a handful of nonzeros per column, and a banded structure that

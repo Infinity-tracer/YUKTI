@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - random LP generators. TESTS ONLY.
+// YUKTHI - random LP generators. TESTS ONLY.
 
 #include "oracles/lp_generator.hpp"
 
 #include <algorithm>
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 namespace {
 
 Index pick_dimension(std::mt19937_64& rng, Index low, Index high) {
@@ -186,4 +186,4 @@ KktInstance kkt_lp(std::mt19937_64& rng, const GeneratorConfig& config) {
   return instance;
 }
 
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

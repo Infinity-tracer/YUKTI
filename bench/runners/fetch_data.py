@@ -15,7 +15,7 @@ only evidence if a judge can regenerate it.
     third-party source; the sha256 of everything downloaded is recorded in the manifest.
 
 ``emps.c`` is a file-format converter, not a solver, so it is outside the CLAUDE.md red
-line. Nothing it produces is linked into SANKHYA; it runs once, offline, to turn Netlib's
+line. Nothing it produces is linked into YUKTHI; it runs once, offline, to turn Netlib's
 archive format into plain MPS.
 
 Usage:
@@ -75,7 +75,7 @@ DEFAULT_SET = [
     # that reason rather than in spite of it. 175 rows, 2358 nonzeros, and it is the only
     # instance in the set whose basis goes SINGULAR when scaling is disabled:
     #
-    #     sankhya solve data/netlib/israel.mps --option scaling=false
+    #     YUKTHI solve data/netlib/israel.mps --option scaling=false
     #     -> numerical_error, "basis became singular at iteration 218"
     #
     # while with scaling it solves to a relative duality gap of 3.9e-16. That pair is the
@@ -211,7 +211,7 @@ def find_c_compiler(work_dir: Path | None = None) -> list[str] | None:
     ]
     tried: list[str] = []
     with tempfile.TemporaryDirectory() as probe_dir:
-        probe = Path(work_dir or probe_dir) / "sankhya_cc_probe.c"
+        probe = Path(work_dir or probe_dir) / "YUKTHI_cc_probe.c"
         probe.write_text("int main(void) { return 0; }\n", encoding="utf-8")
         for candidate in candidates:
             if not candidate or not Path(candidate).exists():
@@ -257,7 +257,7 @@ def build_emps(work_dir: Path) -> tuple[Path, str]:
     Compiling is the normal path, but a compiled binary that the machine will not execute is
     no use, so a decoder that already runs is preferred when one is available:
 
-      1. $SANKHYA_EMPS, if set and executable - the escape hatch for a locked-down machine.
+      1. $YUKTHI_EMPS, if set and executable - the escape hatch for a locked-down machine.
       2. The cached copy this function leaves in data/netlib/ after a successful build, which
          has had a chance to earn the reputation a temp-directory binary never gets.
       3. A fresh compile, which is then cached for next time.
@@ -265,15 +265,15 @@ def build_emps(work_dir: Path) -> tuple[Path, str]:
     source_bytes = download(f"{NETLIB_BASE}/emps.c")
     digest = sha256(source_bytes)
 
-    supplied = os.environ.get("SANKHYA_EMPS")
+    supplied = os.environ.get("YUKTHI_EMPS")
     if supplied:
         candidate = Path(supplied)
         if not candidate.exists():
-            raise SystemExit(f"SANKHYA_EMPS points at {candidate}, which does not exist")
+            raise SystemExit(f"YUKTHI_EMPS points at {candidate}, which does not exist")
         if not can_execute(candidate):
-            raise SystemExit(f"SANKHYA_EMPS points at {candidate}, which this machine "
+            raise SystemExit(f"YUKTHI_EMPS points at {candidate}, which this machine "
                              f"refuses to execute")
-        print(f"  using the decoder named by SANKHYA_EMPS: {candidate}")
+        print(f"  using the decoder named by YUKTHI_EMPS: {candidate}")
         return candidate, digest
 
     cached = DATA_DIR / ("emps.exe" if sys.platform == "win32" else "emps")
@@ -290,7 +290,7 @@ def build_emps(work_dir: Path) -> tuple[Path, str]:
             "no C compiler on this machine could build Netlib's emps decoder - each candidate "
             "was tried on a two-line program and none of them produced a binary. Install gcc "
             "or clang, or point the fetcher at a decoder you already have:\n"
-            "    SANKHYA_EMPS=/path/to/emps python bench/runners/fetch_data.py --set full"
+            "    YUKTHI_EMPS=/path/to/emps python bench/runners/fetch_data.py --set full"
         )
 
     binary = work_dir / ("emps.exe" if sys.platform == "win32" else "emps")
@@ -310,7 +310,7 @@ def build_emps(work_dir: Path) -> tuple[Path, str]:
             "Smart App Control, which blocks binaries it has no reputation for "
             "(OSError WinError 4551).\n"
             "Point the fetcher at a decoder it will run instead:\n"
-            "    SANKHYA_EMPS=/path/to/emps python bench/runners/fetch_data.py --set full\n"
+            "    YUKTHI_EMPS=/path/to/emps python bench/runners/fetch_data.py --set full\n"
             "A copy built earlier on this machine often works, because it has had time to "
             "earn that reputation; data/mittelmann/emps.exe is one if a Mittelmann fetch has "
             "run. Turning the policy off for the repository directory also works and is the "

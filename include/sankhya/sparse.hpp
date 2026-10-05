@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - sparse linear algebra containers.
+// YUKTHI - sparse linear algebra containers.
 //
 // Reference: Davis, "Direct Methods for Sparse Linear Systems" (SIAM, 2006), ch. 2, for the
 // compressed-column layout and the two-pass counting-sort transpose used here.
@@ -21,10 +21,10 @@
 #include <cstddef>
 #include <vector>
 
-#include "sankhya/tolerances.hpp"
-#include "sankhya/types.hpp"
+#include "YUKTHI/tolerances.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// A read-only view of one column of a frozen SparseMatrix.
 struct ColumnView {
@@ -218,4 +218,4 @@ class SparseVector {
   std::vector<Index> pattern_;
 };
 
-}  // namespace sankhya
+}  // namespace YUKTHI

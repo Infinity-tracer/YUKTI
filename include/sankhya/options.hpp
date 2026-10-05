@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the option table.
+// YUKTHI - the option table.
 //
 // One table drives three surfaces: the CLI (--option name=value), the C API
-// (sankhya_set_option_str) and the Python bindings. Adding a knob means adding one row to
+// (YUKTHI_set_option_str) and the Python bindings. Adding a knob means adding one row to
 // the registry in src/util/options.cpp and nothing else - no parser edit, no CLI edit, no
 // binding edit. That is deliberate: every future engine adds options, and three people are
 // going to be adding them concurrently.
@@ -16,7 +16,7 @@
 #include <variant>
 #include <vector>
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// The four value kinds an option can hold.
 enum class OptionType { Bool, Int, Double, String };
@@ -39,7 +39,7 @@ struct OptionSpec {
   /// Empty when the option is live. Otherwise the phase that will implement it, e.g.
   /// "Phase 6".
   ///
-  /// An option table is a capability list, and `sankhya options` is one of the first things
+  /// An option table is a capability list, and `YUKTHI options` is one of the first things
   /// anyone runs. Registering a knob the solver never reads and printing it exactly like a
   /// working one overstates the product - and it is the cheapest kind of overclaim to catch:
   /// set it, watch nothing happen, ask why. The entry stays registered, because the CLI, the
@@ -108,4 +108,4 @@ class Options {
   std::vector<OptionValue> values_;
 };
 
-}  // namespace sankhya
+}  // namespace YUKTHI

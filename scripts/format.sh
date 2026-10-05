@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
-# SANKHYA - run the pinned clang-format over the tree.
+# YUKTHI - run the pinned clang-format over the tree.
 #
 # CI gates formatting with clang-format 22.1.8 installed from pip, and clang-format's output
 # changes between major versions - so a system clang-format from a distro package will
@@ -19,7 +19,7 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # CMake build tree, where a `cmake --build` or a `rm -rf build` would churn it, and some
 # Windows environments refuse to execute a freshly written .exe from a working directory.
 # Keyed by version so bumping the pin provisions a fresh one instead of reusing a stale one.
-VENV_DIR="${SANKHYA_FORMAT_VENV:-${TMPDIR:-/tmp}/sankhya-clang-format-${CLANG_FORMAT_VERSION}}"
+VENV_DIR="${YUKTHI_FORMAT_VENV:-${TMPDIR:-/tmp}/YUKTHI-clang-format-${CLANG_FORMAT_VERSION}}"
 
 MODE="write"
 if [ "${1:-}" = "--check" ]; then
@@ -49,7 +49,7 @@ pick_python() {
 PYTHON="$(pick_python)"
 
 if [ ! -x "${VENV_DIR}/bin/clang-format" ] && [ ! -x "${VENV_DIR}/Scripts/clang-format.exe" ]; then
-  echo "sankhya: provisioning clang-format ${CLANG_FORMAT_VERSION} in ${VENV_DIR}"
+  echo "YUKTHI: provisioning clang-format ${CLANG_FORMAT_VERSION} in ${VENV_DIR}"
   "$PYTHON" -m venv "$VENV_DIR"
   if [ -x "${VENV_DIR}/bin/python" ]; then
     "${VENV_DIR}/bin/python" -m pip install --quiet "clang-format==${CLANG_FORMAT_VERSION}"
@@ -72,8 +72,8 @@ FIND_ARGS=(include src apps tests -type f \( -name '*.hpp' -o -name '*.cpp' -o -
 
 if [ "$MODE" = "check" ]; then
   find "${FIND_ARGS[@]}" -print0 | xargs -0 "$CLANG_FORMAT" --dry-run --Werror
-  echo "sankhya: formatting is clean"
+  echo "YUKTHI: formatting is clean"
 else
   find "${FIND_ARGS[@]}" -print0 | xargs -0 "$CLANG_FORMAT" -i
-  echo "sankhya: formatted in place; re-run with --check to confirm"
+  echo "YUKTHI: formatted in place; re-run with --check to confirm"
 fi

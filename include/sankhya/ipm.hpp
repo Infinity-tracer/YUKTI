@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - primal-dual interior-point method for LP (#56).
+// YUKTHI - primal-dual interior-point method for LP (#56).
 #pragma once
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya::ipm {
+namespace YUKTHI::ipm {
 
 /// Solve a continuous LP with Mehrotra's predictor-corrector method on the normal
 /// equations. Integrality is ignored, as by every LP engine; the dispatcher routes MILPs
@@ -34,4 +34,4 @@ struct WarmStart {
 [[nodiscard]] Solution solve_ipm(const Model& model, const Options& options, Logger& logger,
                                  const WarmStart* warm);
 
-}  // namespace sankhya::ipm
+}  // namespace YUKTHI::ipm

@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-# SANKHYA - continuous integration.
+# YUKTHI - continuous integration.
 #
 # ubuntu-latest is the authority on -Werror cleanliness and on the sanitizer runs; the
 # Windows build is a developer convenience and is not gated here.
@@ -52,8 +52,8 @@ jobs:
         run: |
           cmake -G Ninja -B build \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DSANKHYA_SANITIZE=${{ matrix.sanitize }} \
-            -DSANKHYA_BUILD_TESTS=ON
+            -DYUKTHI_SANITIZE=${{ matrix.sanitize }} \
+            -DYUKTHI_BUILD_TESTS=ON
 
       - name: Build
         run: cmake --build build -j
@@ -91,23 +91,23 @@ jobs:
       - name: CLI end-to-end smoke test
         run: |
           set -euo pipefail
-          ./build/sankhya version
-          ./build/sankhya options
-          ./build/sankhya info demo/crude_blend.mps
+          ./build/YUKTHI version
+          ./build/YUKTHI options
+          ./build/YUKTHI info demo/crude_blend.mps
 
           echo '--- solve the MPS form ---'
-          ./build/sankhya solve demo/crude_blend.mps --write-sol blend.sol --stats blend.json
+          ./build/YUKTHI solve demo/crude_blend.mps --write-sol blend.sol --stats blend.json
           test -s blend.sol
           test -s blend.json
 
           echo '--- the LP form must give an identical solution ---'
-          ./build/sankhya solve demo/crude_blend.lp --write-sol blend_lp.sol
+          ./build/YUKTHI solve demo/crude_blend.lp --write-sol blend_lp.sol
           diff <(sed -n '/begin columns/,/end rows/p' blend.sol) \
                <(sed -n '/begin columns/,/end rows/p' blend_lp.sol)
 
           echo '--- so must the gzipped MPS ---'
           gzip -kf demo/crude_blend.mps
-          ./build/sankhya solve demo/crude_blend.mps.gz --write-sol blend_gz.sol
+          ./build/YUKTHI solve demo/crude_blend.mps.gz --write-sol blend_gz.sol
           diff <(sed -n '/begin columns/,/end rows/p' blend.sol) \
                <(sed -n '/begin columns/,/end rows/p' blend_gz.sol)
 
@@ -115,7 +115,7 @@ jobs:
           # CLAUDE.md: the CPU build works with zero CUDA installed and --gpu never crashes.
           # Until the CUDA backend lands this is the whole of the GPU story a judge can
           # type, so the flag has to parse and the CPU answer has to be the same one.
-          ./build/sankhya solve demo/crude_blend.mps --gpu --write-sol blend_gpu.sol 2>&1 \
+          ./build/YUKTHI solve demo/crude_blend.mps --gpu --write-sol blend_gpu.sol 2>&1 \
             | tee gpu.log
           grep -q 'no CUDA backend' gpu.log
           diff <(sed -n '/begin columns/,/end rows/p' blend.sol) \
@@ -135,7 +135,7 @@ jobs:
           # solves it, so the assertion moves to what actually matters and always did: the
           # answer must be INTEGRAL. A fractional point reported as optimal is the failure
           # this check exists to catch, whichever engine produced it.
-          ./build/sankhya solve demo/blend_milp.mps --write-sol milp.sol --stats milp.json
+          ./build/YUKTHI solve demo/blend_milp.mps --write-sol milp.sol --stats milp.json
           grep -q 'branch-and-bound' milp.json
           python3 tools/verify_solution.py demo/blend_milp.mps milp.sol
           echo 'MILP solved and independently verified'
@@ -189,13 +189,13 @@ jobs:
           for engine in simplex pdhg; do
             echo "--- $engine ---"
             # `solve` returns 0 ONLY for optimal; a limit or a feasible-but-unproven point is
-            # 1, and 5 is a real error (see apps/sankhya-cli/main.cpp). PDHG legitimately
+            # 1, and 5 is a real error (see apps/YUKTHI-cli/main.cpp). PDHG legitimately
             # returns `feasible` here - it meets its relative tolerance but not the absolute
             # standard this project verifies against - so a bare invocation under `set -e`
             # aborts the loop. The first version of this step did exactly that: it passed
             # having silently never checked pdhg at all.
             code=0
-            ./build/sankhya solve bench/large/ci.mps --time-limit 120               --option algorithm=$engine --option log_to_console=false               --stats "ci-$engine.json" || code=$?
+            ./build/YUKTHI solve bench/large/ci.mps --time-limit 120               --option algorithm=$engine --option log_to_console=false               --stats "ci-$engine.json" || code=$?
             if [ "$code" -ge 5 ]; then
               echo "::error::$engine failed with exit code $code"
               exit 1
@@ -217,7 +217,7 @@ jobs:
 
           for case in power_dispatch supply_chain ill_conditioned lot_sizing; do
             echo "--- $case ---"
-            ./build/sankhya solve "data/casestudies/$case.mps"               --write-sol "$case.sol" --stats "$case.json"
+            ./build/YUKTHI solve "data/casestudies/$case.mps"               --write-sol "$case.sol" --stats "$case.json"
             python3 tools/verify_solution.py "data/casestudies/$case.mps" "$case.sol" --quiet
           done
 
@@ -247,7 +247,7 @@ jobs:
           echo '--- the robustness sweep, reduced (#71) ---'
           # One instance per point, shorter sweeps. The CSV goes outside bench/results/ so
           # a reduced run can never be mistaken for the evidence docs/BENCHMARKS.md reports.
-          python3 bench/runners/robustness.py --quick --binary ./build/sankhya               --out "$RUNNER_TEMP/robustness-quick.csv"
+          python3 bench/runners/robustness.py --quick --binary ./build/YUKTHI               --out "$RUNNER_TEMP/robustness-quick.csv"
 
           echo '--- every tracked shell script must be executable ---'
           # README says `scripts/reproduce.sh`, not `bash scripts/reproduce.sh`. All six
@@ -277,7 +277,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DSANKHYA_BUILD_TESTS=OFF
+          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DYUKTHI_BUILD_TESTS=OFF
           cmake --build build -j
 
       # data/netlib/ is gitignored, so without a cache this job downloads the whole set
@@ -309,7 +309,7 @@ jobs:
       # Gates on BOTH the published optimum and independent verification of every
       # solution. Exits non-zero if any instance fails either one.
       - name: Solve and verify
-        run: python3 bench/runners/netlib.py --binary build/sankhya --time-limit 120
+        run: python3 bench/runners/netlib.py --binary build/YUKTHI --time-limit 120
 
       - name: Upload the evidence CSV
         if: always()
@@ -353,7 +353,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DSANKHYA_BUILD_TESTS=OFF
+          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DYUKTHI_BUILD_TESTS=OFF
           cmake --build build -j
 
       # Keyed on the tier as well as on fetch_data.py, so this cache and the small set's
@@ -369,7 +369,7 @@ jobs:
 
       - name: Solve and verify every answer
         run: |
-          python3 bench/runners/netlib.py --binary build/sankhya             --time-limit 120 --require-verified
+          python3 bench/runners/netlib.py --binary build/YUKTHI             --time-limit 120 --require-verified
 
       - name: Upload the evidence CSV
         if: always()
@@ -392,7 +392,7 @@ jobs:
 
       - name: Configure and build
         run: |
-          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DSANKHYA_BUILD_TESTS=OFF
+          cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release -DYUKTHI_BUILD_TESTS=OFF
           cmake --build build -j
 
       - name: Record the link line and shared library dependencies
@@ -400,13 +400,13 @@ jobs:
           echo "=== full link line ==="
           # The link command the build system actually ran. Asked of Ninja directly rather
           # than read out of a file, so it cannot drift from what was really executed.
-          ninja -C build -t commands sankhya | tail -1
+          ninja -C build -t commands YUKTHI | tail -1
           echo
-          echo "=== ldd build/sankhya ==="
-          ldd build/sankhya
+          echo "=== ldd build/YUKTHI ==="
+          ldd build/YUKTHI
           echo
           echo "=== nothing below may name a solver ==="
-          if ldd build/sankhya | grep -Ei 'cbc|clp|highs|scip|soplex|glpk|lpsolve|osqp|ortools|gurobi|cplex|xpress'; then
+          if ldd build/YUKTHI | grep -Ei 'cbc|clp|highs|scip|soplex|glpk|lpsolve|osqp|ortools|gurobi|cplex|xpress'; then
             echo "FAIL: a solver library is linked into the binary"
             exit 1
           fi
@@ -432,7 +432,7 @@ jobs:
         with:
           path: .
           format: spdx-json
-          artifact-name: sankhya-sbom.spdx.json
+          artifact-name: YUKTHI-sbom.spdx.json
 
   reproduce:
     name: fresh-machine reproduction

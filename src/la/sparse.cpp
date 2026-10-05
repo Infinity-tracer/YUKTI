@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - sparse container implementation.
+// YUKTHI - sparse container implementation.
 //
 // Reference: Davis, "Direct Methods for Sparse Linear Systems" (SIAM, 2006), ch. 2.
 // The triplet-to-CSC conversion and the transpose are both the standard two-pass counting
@@ -7,13 +7,13 @@
 // indices without ever calling a comparison sort, which matters because finalize() runs
 // once per model read and once per presolve round on matrices with millions of entries.
 
-#include "sankhya/sparse.hpp"
+#include "YUKTHI/sparse.hpp"
 
 #include <algorithm>
 #include <cmath>
 #include <numeric>
 
-namespace sankhya {
+namespace YUKTHI {
 
 // =========================================================================================
 // SparseMatrix
@@ -215,7 +215,7 @@ void SparseMatrix::transpose_multiply_add(const double* x, double* y, double alp
   ensure_frozen();
   // A gather per column: y[j] is written by exactly one thread, so the result is the same
   // at any thread count (#57).
-#ifdef SANKHYA_HAVE_OPENMP
+#ifdef YUKTHI_HAVE_OPENMP
 #pragma omp parallel for schedule(static)
 #endif
   for (Index j = 0; j < num_cols_; ++j) {
@@ -355,4 +355,4 @@ void SparseVector::gather_from_dense(const double* in, double drop_tol) {
   }
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

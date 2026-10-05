@@ -1,4 +1,4 @@
-instance,published_objective,sankhya_status,sankhya_objective,sankhya_relative_error,sankhya_seconds,sankhya_iterations,highs_status,highs_objective,highs_relative_error,highs_seconds,objectives_agree,speed_ratio_sankhya_over_highs,git_commit,machine,timestamp_utc
+instance,published_objective,YUKTHI_status,YUKTHI_objective,YUKTHI_relative_error,YUKTHI_seconds,YUKTHI_iterations,highs_status,highs_objective,highs_relative_error,highs_seconds,objectives_agree,speed_ratio_YUKTHI_over_highs,git_commit,machine,timestamp_utc
 adlittle,225494.96316,optimal,225494.96316238042,1.055634351959886e-11,0.003857,158,optimal,225494.9631623803,1.0555827253868593e-11,0.012662,1,0.305,a90db47,Windows-AMD64,2026-08-26T19:59:07+00:00
 afiro,-464.75314286,optimal,-464.75314285714285,6.147731649617561e-12,0.000808,16,optimal,-464.75314285714285,6.147731649617561e-12,0.002825,1,0.286,a90db47,Windows-AMD64,2026-08-26T19:59:07+00:00
 agg,-35991767.287,optimal,-35991767.28657649,1.1766950744425143e-11,0.034211,141,optimal,-35991767.2865765,1.1766536728601052e-11,0.013531,1,2.528,a90db47,Windows-AMD64,2026-08-26T19:59:07+00:00

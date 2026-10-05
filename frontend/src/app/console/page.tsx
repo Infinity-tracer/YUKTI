@@ -90,7 +90,7 @@ export default function ConsolePage() {
     setResult(null)
     setLogs([])
 
-    addLog('Connecting to SANKHYA solver...')
+    addLog('Connecting to YUKTHI solver...')
 
     try {
       let mpsContent: string | null = null

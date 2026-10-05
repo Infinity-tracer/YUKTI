@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - sparse symmetric LDL^T (#70). See ldl.hpp for the references; every step below
+// YUKTHI - sparse symmetric LDL^T (#70). See ldl.hpp for the references; every step below
 // is implemented from their description of the algorithm, none from another solver's code.
 
 #include "la/ldl.hpp"
@@ -9,9 +9,9 @@
 #include <limits>
 #include <utility>
 
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 // -----------------------------------------------------------------------------------------
 // Ordering: approximate minimum degree on the quotient graph (Amestoy, Davis & Duff 1996)
@@ -524,4 +524,4 @@ bool normal_equations_lower(const SparseMatrix& a, const std::vector<double>& th
   return true;
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

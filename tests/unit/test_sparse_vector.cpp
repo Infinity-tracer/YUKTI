@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - SparseVector tests.
+// YUKTHI - SparseVector tests.
 //
 // SparseVector is the accumulator FTRAN and BTRAN will write into, so its invariant matters
 // more than its interface: the pattern must list exactly the touched indices, clear() must
@@ -14,9 +14,9 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/sparse.hpp"
+#include "YUKTHI/sparse.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 TEST(SparseVector, StartsZero) {
@@ -170,4 +170,4 @@ TEST(SparseVector, ResizeClearsContents) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

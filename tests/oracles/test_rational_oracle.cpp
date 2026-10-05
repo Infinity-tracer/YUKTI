@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - tests for the exact oracle ITSELF.
+// YUKTHI - tests for the exact oracle ITSELF.
 //
 // The fuzz harness judges the floating-point simplex against this oracle, so an oracle bug
 // would not show up as a failure - it would show up as agreement on a wrong answer. That
@@ -20,7 +20,7 @@
 #include "oracles/rational.hpp"
 #include "oracles/rational_simplex.hpp"
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 namespace {
 
 /// Build an instance directly, for the hand-checked cases.
@@ -230,4 +230,4 @@ TEST(RationalSimplex, ReportsOverflowRatherThanAWrongAnswer) {
 }
 
 }  // namespace
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

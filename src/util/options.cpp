@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the option registry and its string parser.
+// YUKTHI - the option registry and its string parser.
 //
 // THE REGISTRY IS THE ONLY PLACE AN OPTION IS DECLARED. The CLI, the C API and the Python
 // bindings all read it. Adding a knob is one row here.
 //
-// Defaults are taken from include/sankhya/tolerances.hpp so that there is exactly one
+// Defaults are taken from include/YUKTHI/tolerances.hpp so that there is exactly one
 // numerical source of truth, per CLAUDE.md.
 
-#include "sankhya/options.hpp"
+#include "YUKTHI/options.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -21,10 +21,10 @@
 #include <fmt/format.h>
 #include <fmt/ranges.h>
 
-#include "sankhya/tolerances.hpp"
-#include "sankhya/types.hpp"
+#include "YUKTHI/tolerances.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 constexpr double kNoLimit = std::numeric_limits<double>::max();
@@ -61,7 +61,7 @@ const std::unordered_map<std::string, std::size_t>& name_index() {
 /// about. Marking the failure path [[noreturn]] also tells the optimizer the iterator is
 /// dereferenceable, which is what clears -Wnull-dereference on GCC 16.
 [[noreturn]] void unknown_option_name(const std::string& name) {
-  fmt::print(stderr, "sankhya: internal error - unknown option name '{}' in a typed accessor\n",
+  fmt::print(stderr, "YUKTHI: internal error - unknown option name '{}' in a typed accessor\n",
              name);
   std::abort();
 }
@@ -609,4 +609,4 @@ std::string Options::value_as_string(const std::string& name) const {
       slot);
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

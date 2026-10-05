@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - SparseMatrix tests, fuzzed against a naive dense reference.
+// YUKTHI - SparseMatrix tests, fuzzed against a naive dense reference.
 //
 // The reference implementation lives in this file on purpose. CLAUDE.md forbids linking a
 // third-party matrix library into src/, and an oracle that shares code with the thing it
@@ -15,9 +15,9 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/sparse.hpp"
+#include "YUKTHI/sparse.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// Row-major dense matrix with the textbook definitions of the two products.
@@ -322,4 +322,4 @@ TEST(CsrView, FuzzRowsAgainstDenseReference) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

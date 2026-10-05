@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - build identification.
+// YUKTHI - build identification.
 //
 // Every benchmark CSV records the git commit (CLAUDE.md), so the commit has to be
 // reachable from inside the binary rather than from whatever shell produced the CSV.
 #pragma once
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// Semantic version of the library, e.g. "0.1.0".
 [[nodiscard]] const char* version_string() noexcept;
@@ -26,4 +26,4 @@ namespace sankhya {
 /// One-line banner: name, version, commit, build type.
 [[nodiscard]] const char* banner() noexcept;
 
-}  // namespace sankhya
+}  // namespace YUKTHI

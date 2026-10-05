@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - buffered line input for the model readers.
+// YUKTHI - buffered line input for the model readers.
 //
 // One class serves both readers and both compression states. When the build has zlib we go
 // through gzread unconditionally: zlib reads an uncompressed file transparently, so there
@@ -16,9 +16,9 @@
 #include <string>
 #include <vector>
 
-#include "sankhya/types.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 
 class LineReader {
  public:
@@ -58,4 +58,4 @@ class LineReader {
   bool eof_ = false;
 };
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

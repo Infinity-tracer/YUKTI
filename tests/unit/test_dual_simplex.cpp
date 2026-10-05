@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - dual simplex tests (issue #65).
+// YUKTHI - dual simplex tests (issue #65).
 //
 // A second simplex method must give the SAME answers as the first, and that is the property
 // pinned here: on every model where both terminate, the dual and the primal agree on the
@@ -14,13 +14,13 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "simplex/primal_simplex.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 Model make_model(ObjSense sense, const std::vector<double>& cost,
@@ -340,4 +340,4 @@ TEST(DualSimplex, AWarmStartThatIsNotABasisFallsBackToTheSlackBasis) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

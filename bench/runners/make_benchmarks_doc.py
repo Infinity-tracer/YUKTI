@@ -282,7 +282,7 @@ def comparison_section(path: Path | None) -> str:
             "\n"
             "`bench/runners/compare.py` is written and ready; it needs a HiGHS binary on the\n"
             "machine, which is invoked purely as an external subprocess and is never linked\n"
-            "into SANKHYA (see the red line in `CLAUDE.md`).\n"
+            "into YUKTHI (see the red line in `CLAUDE.md`).\n"
             "\n"
             "```bash\n"
             "apt-get install highs      # or conda install -c conda-forge highs\n"
@@ -295,7 +295,7 @@ def comparison_section(path: Path | None) -> str:
     if not rows:
         return "The comparison CSV is empty.\n"
 
-    ours = [t for t in (as_float(r, "sankhya_seconds") for r in rows) if t is not None]
+    ours = [t for t in (as_float(r, "YUKTHI_seconds") for r in rows) if t is not None]
     theirs = [t for t in (as_float(r, "highs_seconds") for r in rows) if t is not None]
     agreed = sum(1 for r in rows if r.get("objectives_agree") == "1")
 
@@ -311,16 +311,16 @@ def comparison_section(path: Path | None) -> str:
         "size start-up would otherwise dominate and the comparison would measure the wrong "
         "thing entirely.",
         "",
-        "| instance | SANKHYA obj | HiGHS obj | agree | SANKHYA (s) | HiGHS (s) | ratio |",
+        "| instance | YUKTHI obj | HiGHS obj | agree | YUKTHI (s) | HiGHS (s) | ratio |",
         "|---|---:|---:|:--:|---:|---:|---:|",
     ]
     ratios: list[float] = []
     for row in sorted(rows, key=lambda r: r["instance"]):
-        a = as_float(row, "sankhya_objective")
+        a = as_float(row, "YUKTHI_objective")
         b = as_float(row, "highs_objective")
-        sa = as_float(row, "sankhya_seconds")
+        sa = as_float(row, "YUKTHI_seconds")
         sb = as_float(row, "highs_seconds")
-        ratio = as_float(row, "speed_ratio_sankhya_over_highs")
+        ratio = as_float(row, "speed_ratio_YUKTHI_over_highs")
         if ratio is not None:
             ratios.append(ratio)
         out.append(
@@ -332,7 +332,7 @@ def comparison_section(path: Path | None) -> str:
 
     out += ["", "**Summary**", ""]
     if ours:
-        out.append(f"- SANKHYA shifted geometric mean: "
+        out.append(f"- YUKTHI shifted geometric mean: "
                    f"**{shifted_geometric_mean(ours):.3f}s**")
     if theirs:
         out.append(f"- HiGHS shifted geometric mean: "
@@ -341,7 +341,7 @@ def comparison_section(path: Path | None) -> str:
         ours_mean = shifted_geometric_mean(ours)
         theirs_mean = shifted_geometric_mean(theirs)
         if theirs_mean > 0:
-            out.append(f"- SANKHYA is **{ours_mean / theirs_mean:.1f}x** the HiGHS time by "
+            out.append(f"- YUKTHI is **{ours_mean / theirs_mean:.1f}x** the HiGHS time by "
                        f"that measure")
     out.append("")
     # Derived, not asserted. This paragraph used to state flatly that we lose on time.
@@ -741,7 +741,7 @@ def scale_section(path: Path | None) -> str:
             "Not yet run at this commit. Reproduce with:",
             "",
             "```",
-            "python bench/runners/scale.py --binary build/sankhya",
+            "python bench/runners/scale.py --binary build/YUKTHI",
             "```",
             "",
         ])
@@ -1407,7 +1407,7 @@ def main() -> int:
               file=sys.stderr)
         return 1
 
-    document = f"""# SANKHYA — benchmarks
+    document = f"""# YUKTHI — benchmarks
 
 <!-- GENERATED FILE. Do not edit by hand. -->
 <!-- Regenerate with: python bench/runners/make_benchmarks_doc.py -->
@@ -1517,7 +1517,7 @@ that, and both run in CI:
 ## 4. Comparison against an established solver
 
 HiGHS is the reference. It runs as a SEPARATE PROCESS over the same MPS files; no HiGHS code
-is linked into, or read by, SANKHYA - see `docs/PROVENANCE.md`. Both sides are timed on
+is linked into, or read by, YUKTHI - see `docs/PROVENANCE.md`. Both sides are timed on
 solver-internal time only.
 
 The comparison below is run on **the same tier as section 1b**, not on the nine-instance

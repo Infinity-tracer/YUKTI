@@ -21,7 +21,7 @@ runs out of time at one size on a slow machine may finish there on a fast one. R
 error column first and the clock second.
 
 Usage:
-    python bench/runners/scale.py --binary build/sankhya
+    python bench/runners/scale.py --binary build/YUKTHI
     python bench/runners/scale.py --sizes 1000 5000 20000 --engines pdhg --time-limit 300
 """
 
@@ -88,7 +88,7 @@ def sha256(path: Path) -> str:
 
 
 def default_binary() -> Path:
-    for candidate in ("build/sankhya.exe", "build/sankhya", "build-dbg/sankhya.exe"):
+    for candidate in ("build/YUKTHI.exe", "build/YUKTHI", "build-dbg/YUKTHI.exe"):
         path = REPO_ROOT / candidate
         if path.exists():
             return path

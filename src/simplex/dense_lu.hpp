@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - dense LU factorization of the simplex basis.
+// YUKTHI - dense LU factorization of the simplex basis.
 //
 // Reference: Golub & Van Loan, "Matrix Computations" (4th ed.), sections 3.2 and 3.4, for
 // right-looking LU with partial pivoting and for the transposed triangular solves.
@@ -19,9 +19,9 @@
 
 #include <vector>
 
-#include "sankhya/types.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 class DenseLu {
  public:
@@ -65,4 +65,4 @@ class DenseLu {
   double largest_pivot_ = 0.0;
 };
 
-}  // namespace sankhya
+}  // namespace YUKTHI

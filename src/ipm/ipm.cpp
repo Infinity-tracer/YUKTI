@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - Mehrotra's predictor-corrector interior-point method for LP (#56).
+// YUKTHI - Mehrotra's predictor-corrector interior-point method for LP (#56).
 //
 // References:
 //   Mehrotra, S., "On the implementation of a primal-dual interior point method", SIAM J.
@@ -25,7 +25,7 @@
 // unboundedness: when it fails to converge it says so and hands back a numerical error,
 // never a claim it cannot prove. Both are stated in the option's description.
 
-#include "sankhya/ipm.hpp"
+#include "YUKTHI/ipm.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -38,10 +38,10 @@
 
 #include "la/ldl.hpp"
 #include "la/scaling.hpp"
-#include "sankhya/timer.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/timer.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya::ipm {
+namespace YUKTHI::ipm {
 namespace {
 
 /// Convergence: relative primal and dual infeasibility and relative complementarity all
@@ -987,4 +987,4 @@ Solution solve_ipm(const Model& model, const Options& options, Logger& logger,
   return solve_scaled(model, options, logger, warm);
 }
 
-}  // namespace sankhya::ipm
+}  // namespace YUKTHI::ipm

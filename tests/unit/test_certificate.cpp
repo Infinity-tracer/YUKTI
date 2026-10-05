@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the two certificates, and the proof that they are proofs (#191).
+// YUKTHI - the two certificates, and the proof that they are proofs (#191).
 //
 // THE BUG THIS FILE EXISTS BECAUSE OF. `infeasible` and `unbounded` used to be written to a
 // .sol file as a full all-zero point, indistinguishable from a claimed solution. The
@@ -18,12 +18,12 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/certificate.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/certificate.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 Model make_lp(const std::vector<std::vector<double>>& rows,
@@ -240,4 +240,4 @@ TEST(Certificate, AnUnprovableCertificateIsDroppedRatherThanPublished) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

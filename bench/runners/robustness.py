@@ -299,8 +299,8 @@ def git_commit() -> str:
         return "unknown"
 
 def default_binary() -> Path:
-    for candidate in ("build/sankhya.exe", "build/sankhya", "build-main/sankhya.exe",
-                      "build-main/sankhya"):
+    for candidate in ("build/YUKTHI.exe", "build/YUKTHI", "build-main/YUKTHI.exe",
+                      "build-main/YUKTHI"):
         path = REPO_ROOT / candidate
         if path.exists():
             return path

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA — every numerical tolerance in the solver, in one place.
+// YUKTHI — every numerical tolerance in the solver, in one place.
 //
 // CLAUDE.md rule: no magic numbers in the numerical core. If a comparison against a small
 // constant appears anywhere in src/, the constant is declared here with a justification.
@@ -7,9 +7,9 @@
 // whose default is one of these constants; these are the defaults, not the law.
 #pragma once
 
-#include "sankhya/types.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya::tol {
+namespace YUKTHI::tol {
 
 // ---------------------------------------------------------------------------------------
 // Feasibility and optimality
@@ -184,4 +184,4 @@ inline constexpr double kCutNoiseRelative = 1e-14;
 /// or barely violated are safely rejected to save LP solves.
 inline constexpr double kCutViolationTolerance = 1e-5;
 
-}  // namespace sankhya::tol
+}  // namespace YUKTHI::tol

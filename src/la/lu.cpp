@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - sparse LU with Markowitz pivoting. See lu.hpp for the references and for why
+// YUKTHI - sparse LU with Markowitz pivoting. See lu.hpp for the references and for why
 // DenseLu is kept alive as the oracle for this file.
 //
 // ============================================================================================
@@ -49,9 +49,9 @@
 #include <cmath>
 #include <limits>
 
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// How many low-count columns and rows the pivot search inspects before settling. Suhl &
@@ -907,4 +907,4 @@ void SparseLu::solve_transpose(double* b) const {
   }
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

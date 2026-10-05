@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Tests for the SANKHYA Python bindings.
+"""Tests for the YUKTHI Python bindings.
 
 Hand-rolled rather than pytest, matching tools/test_verify_solution.py, so that running the
 bindings' tests never requires installing anything the solver does not already need.
@@ -22,7 +22,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-import sankhya  # noqa: E402
+import YUKTHI  # noqa: E402
 
 FAILURES = 0
 
@@ -44,7 +44,7 @@ def test_lp() -> None:
     #   maximise 3x + 2y  s.t.  x + y <= 4,  x + 3y <= 6,  0 <= x <= 3,  y >= 0
     # Both rows tight at x = 3, y = 1 -> objective 11. x sits on its upper bound there, so a
     # boxed column is exercised rather than only the origin cone.
-    model = sankhya.Model(maximize=True)
+    model = YUKTHI.Model(maximize=True)
     x = model.add_column(cost=3.0, upper=3.0, name="x")
     y = model.add_column(cost=2.0, name="y")
     model.add_row({x: 1.0, y: 1.0}, upper=4.0, name="c0")
@@ -70,7 +70,7 @@ def test_lp() -> None:
 def test_milp() -> None:
     #   maximise x + y  s.t.  2x + 2y <= 3,  x, y in {0, 1}
     # The relaxation gives x = y = 0.75 for 1.5; the integer optimum is a single unit, 1.
-    model = sankhya.Model(maximize=True)
+    model = YUKTHI.Model(maximize=True)
     x = model.add_column(cost=1.0, upper=1.0, integer=True, name="x")
     y = model.add_column(cost=1.0, upper=1.0, integer=True, name="y")
     model.add_row({x: 2.0, y: 2.0}, upper=3.0)
@@ -88,7 +88,7 @@ def test_qp() -> None:
     # minimise 0.5*(2x^2 + 2y^2) - 2x - 6y  s.t.  x + y <= 3,  x, y >= 0.
     # The unconstrained stationary point (1, 3) violates the row, so the optimum lies on
     # x + y = 3. With y = 3 - x: f = 2x^2 - 2x - 9, minimised at x = 0.5, y = 2.5, f = -9.5.
-    model = sankhya.Model()
+    model = YUKTHI.Model()
     x = model.add_column(cost=-2.0, name="x")
     y = model.add_column(cost=-6.0, name="y")
     model.add_row({x: 1.0, y: 1.0}, upper=3.0)
@@ -106,7 +106,7 @@ def test_coefficient_replaces_rather_than_accumulates() -> None:
     # The MPS reader treats a repeated entry as an error; through an API, overwriting a cell
     # is ordinary. Summing would silently double a coefficient, which the answer does not
     # reveal. minimise x s.t. 2x >= 6 gives 3; a summed 3x >= 6 would give 2.
-    model = sankhya.Model()
+    model = YUKTHI.Model()
     x = model.add_column(cost=1.0, name="x")
     row = model.add_row(lower=6.0)
     model.set_coefficient(row, x, 1.0)
@@ -121,10 +121,10 @@ def test_bool_is_not_routed_to_the_int_setter() -> None:
     # bool is a subclass of int in Python, so a naive isinstance(value, int) check routes
     # True to the integer setter, which the C API then rejects as the wrong type for a bool
     # option. The dispatch order in Options.set exists for this and nothing else.
-    options = sankhya.Options(presolve=False, log_to_console=False)
+    options = YUKTHI.Options(presolve=False, log_to_console=False)
     check(True, "bool options are accepted", "presolve=False, log_to_console=False")
 
-    model = sankhya.Model()
+    model = YUKTHI.Model()
     x = model.add_column(cost=1.0, name="x")
     model.add_row({x: 1.0}, lower=2.0)
     result = model.solve(options)
@@ -138,8 +138,8 @@ def test_options_reject_a_typo_instead_of_aborting() -> None:
     # process dies, which is itself unmistakable.
     raised = False
     try:
-        sankhya.Options(no_such_option_at_all=1.0)
-    except sankhya.SankhyaError as error:
+        YUKTHI.Options(no_such_option_at_all=1.0)
+    except YUKTHI.YUKTHIError as error:
         raised = "unknown option" in str(error).lower()
     check(raised, "an unknown option raises rather than aborting the process")
 
@@ -158,15 +158,15 @@ def test_reads_a_file() -> None:
         path = os.path.join(directory, "tiny.mps")
         with open(path, "w", encoding="utf-8") as handle:
             handle.write(text)
-        model = sankhya.Model.read(path)
+        model = YUKTHI.Model.read(path)
         check(model.num_cols == 1 and model.num_rows == 1, "file dimensions", repr(model))
         result = model.solve(log_to_console=False)
         check(near(result.objective, 4.0), "objective from file", f"{result.objective}")
 
         raised = False
         try:
-            sankhya.Model.read(os.path.join(directory, "does_not_exist.mps"))
-        except sankhya.SankhyaError:
+            YUKTHI.Model.read(os.path.join(directory, "does_not_exist.mps"))
+        except YUKTHI.YUKTHIError:
             raised = True
         check(raised, "a missing file raises with the reader's message")
 
@@ -175,7 +175,7 @@ def test_infeasible_returns_rather_than_raising() -> None:
     # A CALL that fails raises; a model the solver PROVES infeasible is a successful call
     # with an infeasible answer. Conflating the two would make an ordinary modelling outcome
     # indistinguishable from a bug in the caller's code.
-    model = sankhya.Model()
+    model = YUKTHI.Model()
     x = model.add_column(cost=1.0, upper=1.0, name="x")
     model.add_row({x: 1.0}, lower=5.0)
     result = model.solve(log_to_console=False)
@@ -188,10 +188,10 @@ def test_handles_are_released() -> None:
     # a few thousand models; the check is that it completes and stays responsive rather than
     # any assertion about memory, which Python cannot observe portably.
     for _ in range(2000):
-        model = sankhya.Model()
+        model = YUKTHI.Model()
         model.add_column(cost=1.0, name="x")
         del model
-    with sankhya.Model() as model:
+    with YUKTHI.Model() as model:
         x = model.add_column(cost=1.0, name="x")
         model.add_row({x: 1.0}, lower=1.0)
         with model.solve(log_to_console=False) as result:
@@ -201,7 +201,7 @@ def test_handles_are_released() -> None:
 
 
 def main() -> int:
-    print(f"SANKHYA Python bindings, against solver version {sankhya.version()}\n")
+    print(f"YUKTHI Python bindings, against solver version {YUKTHI.version()}\n")
     for name, function in sorted(globals().items()):
         if name.startswith("test_") and callable(function):
             print(name)

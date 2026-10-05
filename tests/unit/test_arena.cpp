@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - Arena tests.
+// YUKTHI - Arena tests.
 
 #include <cstdint>
 #include <vector>
 
 #include <gtest/gtest.h>
 
-#include "sankhya/arena.hpp"
+#include "YUKTHI/arena.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 TEST(Arena, ZeroSizedAllocationReturnsNull) {
@@ -134,4 +134,4 @@ TEST(Arena, RepeatedResetDoesNotGrowMemory) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

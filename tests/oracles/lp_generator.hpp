@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - random LP generators for the oracle fuzz. TESTS ONLY.
+// YUKTHI - random LP generators for the oracle fuzz. TESTS ONLY.
 //
 // Three families, because they fail the solver in different ways:
 //
@@ -22,7 +22,7 @@
 
 #include "oracles/rational_simplex.hpp"
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 
 /// Shape and coefficient range for a generated instance.
 struct GeneratorConfig {
@@ -64,4 +64,4 @@ struct KktInstance {
 
 [[nodiscard]] KktInstance kkt_lp(std::mt19937_64& rng, const GeneratorConfig& config);
 
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

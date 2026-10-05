@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the solve() dispatcher.
+// YUKTHI - the solve() dispatcher.
 //
 // THIS FILE IS THE SEAM. Every engine registers here and nowhere else:
 //   Phase 2  primal revised simplex  -> LP            [registered]
@@ -19,20 +19,20 @@
 
 #include "core/status_guard.hpp"
 #include "presolve/presolve.hpp"
-#include "sankhya/certificate.hpp"
-#include "sankhya/ipm.hpp"
-#include "sankhya/logging.hpp"
-#include "sankhya/mip.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/pdhg.hpp"
-#include "sankhya/qp.hpp"
-#include "sankhya/timer.hpp"
+#include "YUKTHI/certificate.hpp"
+#include "YUKTHI/ipm.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/mip.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/pdhg.hpp"
+#include "YUKTHI/qp.hpp"
+#include "YUKTHI/timer.hpp"
 #include "util/threads.hpp"
 
 #include "../simplex/primal_simplex.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// The problem class, decided from the model rather than from a user assertion.
@@ -487,4 +487,4 @@ Solution solve(const Model& model, const Options& options) {
   return solution;
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

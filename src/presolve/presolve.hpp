@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - presolve reductions and the postsolve stack.
+// YUKTHI - presolve reductions and the postsolve stack.
 //
 // References, written from the literature:
 //   Brearley, Mitra & Williams, "Analysis of mathematical programming problems prior to
@@ -28,11 +28,11 @@
 #include <string>
 #include <vector>
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya::presolve {
+namespace YUKTHI::presolve {
 
 /// What a reduction did, kept so postsolve can undo it.
 ///
@@ -127,4 +127,4 @@ struct Result {
 [[nodiscard]] Solution postsolve(const Result& result, const Model& original,
                                  const Solution& reduced);
 
-}  // namespace sankhya::presolve
+}  // namespace YUKTHI::presolve

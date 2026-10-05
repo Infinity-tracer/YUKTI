@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - dense LU tests.
+// YUKTHI - dense LU tests.
 //
 // The simplex reduces to two calls on this class, FTRAN and BTRAN, and it makes several
 // hundred of them per solve. A transposed solve that is subtly wrong does not crash: it
@@ -14,12 +14,12 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/tolerances.hpp"
-#include "sankhya/types.hpp"
+#include "YUKTHI/tolerances.hpp"
+#include "YUKTHI/types.hpp"
 
 #include "simplex/dense_lu.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// Column-major m x m matrix, the layout DenseLu consumes.
@@ -249,4 +249,4 @@ TEST(DenseLu, TransposeSolveSatisfiesItsOwnEquation) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

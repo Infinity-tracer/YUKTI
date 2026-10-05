@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - sparse symmetric LDL^T factorization (#70), the linear algebra an interior-point
+// YUKTHI - sparse symmetric LDL^T factorization (#70), the linear algebra an interior-point
 // method needs and the simplex's unsymmetric LU cannot provide.
 //
 // References:
@@ -33,9 +33,9 @@
 #include <functional>
 #include <vector>
 
-#include "sankhya/sparse.hpp"
+#include "YUKTHI/sparse.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 class SparseLdl {
  public:
@@ -136,4 +136,4 @@ class SparseLdl {
                                           SparseMatrix* out,
                                           const SparseLdl::ShouldStop& should_stop = {});
 
-}  // namespace sankhya
+}  // namespace YUKTHI

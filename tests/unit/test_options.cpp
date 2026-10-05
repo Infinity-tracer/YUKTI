@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - option table tests.
+// YUKTHI - option table tests.
 //
 // The registry is a single source of truth for three surfaces, so the tests that matter
 // most are the structural ones: no duplicate names, every default inside its own declared
@@ -12,10 +12,10 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 TEST(Options, RegistryHasNoDuplicateNames) {
@@ -204,4 +204,4 @@ TEST(Options, InstancesAreIndependent) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

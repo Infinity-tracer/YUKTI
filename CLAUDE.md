@@ -1,4 +1,4 @@
-# SANKHYA — Claude Code operating rules
+# YUKTHI — Claude Code operating rules
 
 ## What this is
 
@@ -49,7 +49,7 @@ even their MPS reader. If you land on one of those repos, stop and back out.
 Maintain docs/PROVENANCE.md continuously, not at the end:
 - dependency table: name, version, licence, one line on why it is not a solver
 - algorithm table: every major algorithm, its citation, the file it lives in
-- `ldd build/sankhya-cli` output and the full CMake link line
+- `ldd build/YUKTHI-cli` output and the full CMake link line
 - SPDX SBOM generated in CI
 
 If unsure whether something crosses the red line, log it under "Judgement calls" with your
@@ -81,7 +81,7 @@ reasoning and tell me. Never silently decide either way.
 - [ ] docs/PROVENANCE.md updated if a dependency or algorithm was added
 - [ ] Conventional commit, one logical change
 
-## Numerical conventions — no magic numbers, all in include/sankhya/tolerances.hpp
+## Numerical conventions — no magic numbers, all in include/YUKTHI/tolerances.hpp
 
 primal feasibility 1e-7 · dual feasibility 1e-7 · integrality 1e-6 · MIP relative gap 1e-4,
 absolute 1e-6 · pivot/zero drop 1e-11 · Markowitz threshold 0.01 · PDHG reported at both
@@ -89,8 +89,8 @@ absolute 1e-6 · pivot/zero drop 1e-11 · Markowitz threshold 0.01 · PDHG repor
 
 ## Frozen interfaces — never change without saying so explicitly
 
-- `sankhya::Model` — what readers produce and every solver consumes
-- `sankhya::Solution` — what every solver produces
+- `YUKTHI::Model` — what readers produce and every solver consumes
+- `YUKTHI::Solution` — what every solver produces
 - `solve(const Model&, const Options&) -> Solution` — the one entry point both engines
   implement, and the seam where QP/MIQP/NLP engines plug in later
 
@@ -98,7 +98,7 @@ tools/verify_solution.py consumes the written .sol file only. It never links our
 
 ## Layout
 
-    include/sankhya/   public headers, model.hpp, tolerances.hpp, sankhya.h (C API)
+    include/YUKTHI/   public headers, model.hpp, tolerances.hpp, YUKTHI.h (C API)
     src/core           Model/Solution implementation and the solve() dispatcher (the seam)
     src/util           logging, timers, arena allocator, options table
     src/la             sparse CSC/CSR, LU, FTRAN/BTRAN
@@ -109,9 +109,9 @@ tools/verify_solution.py consumes the written .sol file only. It never links our
     src/ipm            interior point
     src/qp             convex QP
     src/mip            branch & cut
-    src/gpu            CUDA kernels, guarded by SANKHYA_ENABLE_CUDA
+    src/gpu            CUDA kernels, guarded by YUKTHI_ENABLE_CUDA
     src/api            C API
-    apps/sankhya-cli · bindings/python · tools/ · tests/ · bench/ · data/casestudies/ · docs/
+    apps/YUKTHI-cli · bindings/python · tools/ · tests/ · bench/ · data/casestudies/ · docs/
 
 ## Workflow
 
@@ -125,7 +125,7 @@ rejects. Run the pinned one before pushing - it provisions itself on first use:
     scripts/format.sh --check    # exactly what CI runs
 
 The CPU build must work with zero CUDA installed — all GPU code behind
-`#ifdef SANKHYA_ENABLE_CUDA` plus a runtime `--gpu` flag that warns and falls back to the CPU.
+`#ifdef YUKTHI_ENABLE_CUDA` plus a runtime `--gpu` flag that warns and falls back to the CPU.
 
 ## Local toolchain note (Windows dev boxes)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
-# SANKHYA - regenerate every claim this repository makes, from a fresh clone, in one command.
+# YUKTHI - regenerate every claim this repository makes, from a fresh clone, in one command.
 #
 # WHAT THIS PROTECTS. Everything here rests on a promise that a reader can reproduce our
 # numbers. Until this script existed that promise required knowing which of eight scripts to
@@ -99,7 +99,7 @@ run_benchmark() {
 }
 
 START=$(date +%s)
-printf '\n\033[1mSANKHYA - reproducing every claim\033[0m\n'
+printf '\n\033[1mYUKTHI - reproducing every claim\033[0m\n'
 printf 'commit %s\n' "$(git rev-parse --short HEAD 2>/dev/null || echo 'not a git checkout')"
 # THE TOOLCHAIN IS PART OF THE RESULT. Every number below depends on which compiler built the
 # binary and which Python drove the harness, and a reproduction that does not say so cannot be
@@ -133,8 +133,8 @@ if ! cmake --build "$BUILD_DIR" -j; then
   printf '\033[31mbuild failed\033[0m\n'; exit 1
 fi
 
-BIN="$BUILD_DIR/sankhya.exe"
-[ -x "$BIN" ] || BIN="$BUILD_DIR/sankhya"
+BIN="$BUILD_DIR/YUKTHI.exe"
+[ -x "$BIN" ] || BIN="$BUILD_DIR/YUKTHI"
 if ! "$BIN" version >/dev/null 2>&1; then
   # Re-checked HERE and not only in preflight, because the binary that matters is the one
   # this run just linked - and on Windows that is exactly the one Smart App Control blocks.
@@ -239,11 +239,11 @@ if [ "$BUILD_TYPE" != "Release" ]; then
   solver, and a number that unfair to us is still a number someone could quote. Build
   Release for the comparison."
 elif "$PYTHON" -c "import highspy" >/dev/null 2>&1; then
-  "$PYTHON" bench/runners/compare.py --sankhya-binary "$BIN" --time-limit 60 || \
+  "$PYTHON" bench/runners/compare.py --YUKTHI-binary "$BIN" --time-limit 60 || \
     skip "HiGHS comparison" "see the output above"
 else
   skip "HiGHS comparison" "highspy not installed.  pip install highspy   - it runs as a
-  separate process and is never linked into SANKHYA, so it does not touch the sovereignty
+  separate process and is never linked into YUKTHI, so it does not touch the sovereignty
   claim that section 1 of the demo prints live."
 fi
 
@@ -251,11 +251,11 @@ fi
 rule "The PS26119 walkthrough"
 printf 'Everything above, in the problem statement order, plus the case studies, the\n'
 printf 'robustness hazards, and the list of what we do NOT have.\n'
-# SANKHYA_BIN, not just PYTHON. The demo searches the usual build locations on its own, so
+# YUKTHI_BIN, not just PYTHON. The demo searches the usual build locations on its own, so
 # without this a run with --build-dir would test the binary this script just built and then
 # demonstrate a DIFFERENT one - or, as happened here, find a stale build/ that Smart App
 # Control had blocked and skip the whole walkthrough for a reason unrelated to the run.
-SANKHYA_BIN="$(cd "$(dirname "$BIN")" && pwd)/$(basename "$BIN")" PYTHON="$PYTHON" \
+YUKTHI_BIN="$(cd "$(dirname "$BIN")" && pwd)/$(basename "$BIN")" PYTHON="$PYTHON" \
   bash demo/run_sih_demo.sh || ran_with_failures "demo" "the walkthrough runs the same
   benchmark runners, which exit non-zero when any instance fails; its own sections above say
   which, and section 6 lists what the project does not have"

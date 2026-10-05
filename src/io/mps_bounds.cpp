@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - MPS RANGES and BOUNDS section handlers.
+// YUKTHI - MPS RANGES and BOUNDS section handlers.
 //
 // Reference: IBM, "MPS file format" (the de-facto specification everyone implements), plus
 // Maros, "Computational Techniques of the Simplex Method" (Kluwer, 2003), appendix A, for
@@ -21,13 +21,13 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
 
 #include "mps_parser.hpp"
 #include "token.hpp"
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 
 // ---- RANGES -------------------------------------------------------------------------
 
@@ -196,4 +196,4 @@ bool MpsParser::do_bounds(std::string* error) {
   return true;
 }
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

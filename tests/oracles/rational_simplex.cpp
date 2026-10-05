@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - exact simplex over the rationals. TESTS ONLY.
+// YUKTHI - exact simplex over the rationals. TESTS ONLY.
 //
 // Reference: Chvatal, "Linear Programming" (1983), ch. 2-3 - the tableau method and Bland's
 // anti-cycling rule. Written from the textbook formulation, deliberately unoptimised.
@@ -10,7 +10,7 @@
 #include <limits>
 #include <sstream>
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 namespace {
 
 /// The standard form the tableau consumes:  min c'x  s.t.  Ax = b,  x >= 0,  b >= 0.
@@ -477,4 +477,4 @@ OracleResult solve_exact_milp(const GeneratedLp& lp, std::int64_t node_limit) {
   return best;
 }
 
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

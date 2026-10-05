@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - bounded-variable revised primal simplex.
+// YUKTHI - bounded-variable revised primal simplex.
 #pragma once
 
 #include <vector>
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
 #include "la/scaling.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// Solve a continuous LP with the revised primal simplex. Integrality is IGNORED: this is
 /// the node solver branch-and-cut will call in Phase 5, and it is the caller's job to know
@@ -80,4 +80,4 @@ struct WarmStart {
                                           Logger& logger, const NodeScaling& cache,
                                           const WarmStart* warm = nullptr);
 
-}  // namespace sankhya
+}  // namespace YUKTHI

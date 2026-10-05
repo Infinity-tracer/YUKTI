@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - model readers and result writers.
+// YUKTHI - model readers and result writers.
 //
 // Readers return a status object rather than throwing. A malformed model file is ordinary
 // user input, not an exceptional condition, and the CLI, the C API and the Python bindings
@@ -13,10 +13,10 @@
 
 #include <string>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 
 /// Outcome of a read. `ok == false` means `model` is in an unspecified state and must be
 /// discarded.
@@ -56,7 +56,7 @@ ReadResult read_model(const std::string& path, Model* model);
 // Writers
 // -----------------------------------------------------------------------------------------
 
-/// Write the solution in SANKHYA's text solution format. Values are printed with 17
+/// Write the solution in YUKTHI's text solution format. Values are printed with 17
 /// significant digits so that a reader recovers the exact double: tools/verify_solution.py
 /// recomputes the objective from these numbers and compares against ours at 1e-9, which is
 /// only meaningful if the file round-trips bit-for-bit.
@@ -77,4 +77,4 @@ bool write_solution(const std::string& path, const Model& model, const Solution&
 bool write_stats_json(const std::string& path, const Model& model, const Solution& solution,
                       std::string* error);
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

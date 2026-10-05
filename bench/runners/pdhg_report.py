@@ -13,7 +13,7 @@ runs rather than from anybody's recollection:
 4.  An honest list of the instances PDHG cannot drive to 1e-8.
 
 Usage:
-    python bench/runners/pdhg_report.py --binary build/sankhya
+    python bench/runners/pdhg_report.py --binary build/YUKTHI
 """
 
 from __future__ import annotations
@@ -56,8 +56,8 @@ def as_number(value):
 
 
 def default_binary() -> Path:
-    for candidate in ("build/sankhya.exe", "build/sankhya", "build-gate/sankhya.exe",
-                      "build-gate/sankhya", "build-main/sankhya.exe", "build-main/sankhya"):
+    for candidate in ("build/YUKTHI.exe", "build/YUKTHI", "build-gate/YUKTHI.exe",
+                      "build-gate/YUKTHI", "build-main/YUKTHI.exe", "build-main/YUKTHI"):
         path = REPO_ROOT / candidate
         if path.exists():
             return path

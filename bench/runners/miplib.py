@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Run SANKHYA over the fetched MIPLIB subset and record what happened.
+"""Run YUKTHI over the fetched MIPLIB subset and record what happened.
 
 The MILP counterpart of netlib.py. Same CSV contract from CLAUDE.md - instance, sha256, our
 objective, published optimum, gaps, status, time, git commit, machine - plus the two columns
@@ -96,7 +96,7 @@ def as_number(value):
 def find_binary(explicit: Path | None) -> Path | None:
     if explicit is not None:
         return explicit if explicit.exists() else None
-    for candidate in ("build/sankhya", "build/sankhya.exe", "build/Release/sankhya.exe"):
+    for candidate in ("build/YUKTHI", "build/YUKTHI.exe", "build/Release/YUKTHI.exe"):
         path = REPO_ROOT / candidate
         if path.exists():
             return path

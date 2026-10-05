@@ -55,7 +55,7 @@ RUNTIME_ONLY = [
         "license": "GPL-3.0 WITH GCC-exception-3.1 OR Apache-2.0 WITH LLVM-exception",
         "download": "NOASSERTION",
         "purl": None,
-        "note": "optional, linked only when SANKHYA_WITH_OPENMP finds it",
+        "note": "optional, linked only when YUKTHI_WITH_OPENMP finds it",
     },
 ]
 
@@ -120,22 +120,22 @@ def build_document() -> dict:
 
     created = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     packages = [{
-        "name": "sankhya",
-        "SPDXID": spdx_id("sankhya"),
+        "name": "YUKTHI",
+        "SPDXID": spdx_id("YUKTHI"),
         "versionInfo": version,
         "downloadLocation": "https://github.com/thegoodengineer/sih-26",
         "filesAnalyzed": False,
         "licenseConcluded": "Apache-2.0",
         "licenseDeclared": "Apache-2.0",
         "copyrightText": "NOASSERTION",
-        "supplier": "Organization: SANKHYA (SIH 2026 PS26119)",
+        "supplier": "Organization: YUKTHI (SIH 2026 PS26119)",
         "description": "A mathematical optimization solver core (LP, MILP, convex QP, MIQP) "
                        "written from mathematical foundations in C++20.",
     }]
     relationships = [{
         "spdxElementId": "SPDXRef-DOCUMENT",
         "relationshipType": "DESCRIBES",
-        "relatedSpdxElement": spdx_id("sankhya"),
+        "relatedSpdxElement": spdx_id("YUKTHI"),
     }]
 
     for dep in deps:
@@ -163,7 +163,7 @@ def build_document() -> dict:
             }]
         packages.append(package)
         relationships.append({
-            "spdxElementId": spdx_id("sankhya"),
+            "spdxElementId": spdx_id("YUKTHI"),
             "relationshipType": "DEPENDS_ON",
             "relatedSpdxElement": spdx_id(dep["name"]),
         })
@@ -182,7 +182,7 @@ def build_document() -> dict:
             "comment": dep["note"],
         })
         relationships.append({
-            "spdxElementId": spdx_id("sankhya"),
+            "spdxElementId": spdx_id("YUKTHI"),
             "relationshipType": "OPTIONAL_DEPENDENCY_OF",
             "relatedSpdxElement": spdx_id(dep["name"]),
         })
@@ -191,11 +191,11 @@ def build_document() -> dict:
         "spdxVersion": "SPDX-2.3",
         "dataLicense": "CC0-1.0",
         "SPDXID": "SPDXRef-DOCUMENT",
-        "name": f"sankhya-{version}",
-        "documentNamespace": f"https://github.com/thegoodengineer/sih-26/spdx/sankhya-{version}",
+        "name": f"YUKTHI-{version}",
+        "documentNamespace": f"https://github.com/thegoodengineer/sih-26/spdx/YUKTHI-{version}",
         "creationInfo": {
             "created": created,
-            "creators": ["Tool: tools/make_sbom.py", "Organization: SANKHYA (SIH 2026 PS26119)"],
+            "creators": ["Tool: tools/make_sbom.py", "Organization: YUKTHI (SIH 2026 PS26119)"],
             "comment": "Generated from the FetchContent_Declare blocks of CMakeLists.txt and "
                        "the dependency table of docs/PROVENANCE.md. Not a binary scan: it "
                        "states what the build declares, which is the thing a reader can check "

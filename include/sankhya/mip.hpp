@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - branch and bound for mixed-integer linear programming.
+// YUKTHI - branch and bound for mixed-integer linear programming.
 #pragma once
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya::mip {
+namespace YUKTHI::mip {
 
 /// Solve a MILP by branch and bound over the revised primal simplex.
 ///
@@ -20,4 +20,4 @@ namespace sankhya::mip {
 [[nodiscard]] Solution solve_branch_and_bound(const Model& model, const Options& options,
                                               Logger& logger);
 
-}  // namespace sankhya::mip
+}  // namespace YUKTHI::mip

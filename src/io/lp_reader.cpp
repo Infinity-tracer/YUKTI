@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - CPLEX LP format reader.
+// YUKTHI - CPLEX LP format reader.
 //
 // Reference: the LP file format as documented in the public CPLEX and Gurobi reference
 // manuals. Per CLAUDE.md this is interface compatibility read from published documentation;
@@ -25,14 +25,14 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/io.hpp"
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
 
 #include "line_reader.hpp"
 #include "token.hpp"
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 namespace {
 
 enum class TokKind { kIdent, kNumber, kOp, kEof };
@@ -659,4 +659,4 @@ ReadResult read_model(const std::string& path, Model* model) {
   return read_mps(path, model);
 }
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

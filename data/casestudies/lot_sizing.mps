@@ -1,4 +1,4 @@
-* SANKHYA case study - production planning by lot sizing.
+* YUKTHI case study - production planning by lot sizing.
 *
 * PS26119 asks for robustness on 'weak LP relaxations'. This is the textbook source of
 * one. Producing in a period costs a fixed set-up charge no matter how little is made,

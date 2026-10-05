@@ -1,4 +1,4 @@
-* SANKHYA case study - product distribution from refineries to depots.
+* YUKTHI case study - product distribution from refineries to depots.
 *
 * PS26119 names 'transportation and supply chain management'. This is the classical
 * balanced transportation problem, chosen because of a property it has BY

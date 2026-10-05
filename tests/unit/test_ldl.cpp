@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the sparse LDL^T (#70) against the dense LU, and its limits measured.
+// YUKTHI - the sparse LDL^T (#70) against the dense LU, and its limits measured.
 
 #include <cmath>
 #include <iostream>
@@ -9,10 +9,10 @@
 #include <gtest/gtest.h>
 
 #include "la/ldl.hpp"
-#include "sankhya/sparse.hpp"
+#include "YUKTHI/sparse.hpp"
 #include "simplex/dense_lu.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// A random sparse SPD matrix M = B B^T + shift I with B n x n of the given density, as
@@ -362,4 +362,4 @@ TEST(SparseLdl, ADeadlineNeverAskedIsADeadlineThatChangesNothing) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

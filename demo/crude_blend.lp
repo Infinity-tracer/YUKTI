@@ -1,4 +1,4 @@
-\ SANKHYA demo instance - crude blending for a diesel pool.
+\ YUKTHI demo instance - crude blending for a diesel pool.
 \
 \ The same model as demo/crude_blend.mps, written algebraically. Solving both and getting
 \ the same objective, the same recipe and the same shadow prices is the cheapest available

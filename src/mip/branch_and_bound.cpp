@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - branch and bound over the revised primal simplex.
+// YUKTHI - branch and bound over the revised primal simplex.
 //
 // References, written from the literature:
 //   Land & Doig, "An automatic method of solving discrete programming problems",
@@ -23,8 +23,8 @@
 // optimum and the search then proves the wrong answer, confidently, so a plain, correct
 // search came first and is what makes each addition checkable.
 
-#include "sankhya/mip.hpp"
-#include "sankhya/qp.hpp"
+#include "YUKTHI/mip.hpp"
+#include "YUKTHI/qp.hpp"
 
 #include "cuts.hpp"
 
@@ -37,12 +37,12 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/timer.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/timer.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "simplex/primal_simplex.hpp"
 
-namespace sankhya::mip {
+namespace YUKTHI::mip {
 namespace {
 
 /// One tightened bound, recorded so entering a node can be undone rather than rebuilt.
@@ -1245,4 +1245,4 @@ Solution solve_branch_and_bound(const Model& model, const Options& options, Logg
   return search.run();
 }
 
-}  // namespace sankhya::mip
+}  // namespace YUKTHI::mip

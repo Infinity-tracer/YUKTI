@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - convex QP by a primal-dual proximal method with a forward step.
+// YUKTHI - convex QP by a primal-dual proximal method with a forward step.
 //
 // References
 //   Condat, "A primal-dual splitting method for convex optimization involving Lipschitzian,
@@ -39,7 +39,7 @@
 // CLAUDE.md is explicit that a wrong answer scores zero, and the LP path is the thing most
 // of the project's evidence rests on.
 
-#include "sankhya/qp.hpp"
+#include "YUKTHI/qp.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -50,12 +50,12 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/timer.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/timer.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "convexity.hpp"
 
-namespace sankhya::qp {
+namespace YUKTHI::qp {
 namespace {
 
 /// Componentwise projection onto [lower, upper], tolerant of infinite sides.
@@ -320,4 +320,4 @@ Solution solve_convex_qp(const Model& model, const Options& options, Logger& log
   return solution;
 }
 
-}  // namespace sankhya::qp
+}  // namespace YUKTHI::qp

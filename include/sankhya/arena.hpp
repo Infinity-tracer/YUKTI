@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - bump-pointer arena for node-local memory.
+// YUKTHI - bump-pointer arena for node-local memory.
 //
 // Why this exists: branch-and-cut allocates and frees a swarm of short-lived arrays per
 // node - the ratio-test candidate list, the cut-separation working set, the propagation
@@ -21,7 +21,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace sankhya {
+namespace YUKTHI {
 
 class Arena {
  public:
@@ -118,4 +118,4 @@ class Arena {
   std::size_t total_reserved_ = 0;
 };
 
-}  // namespace sankhya
+}  // namespace YUKTHI

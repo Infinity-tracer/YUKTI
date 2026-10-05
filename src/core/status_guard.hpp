@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the status/measurement reconciliation guard.
+// YUKTHI - the status/measurement reconciliation guard.
 //
 // Declared in its own header so it can be tested DIRECTLY. The guard's job is to catch an
 // engine that claims more than its own returned point supports; testing it only through an
@@ -8,11 +8,11 @@
 // PDHG now polices itself, so the path through PDHG no longer reaches this code.
 #pragma once
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// Force the reported status to agree with the measured quality of the point. See the
 /// definition in src/core/solve.cpp for the full reasoning.
@@ -23,4 +23,4 @@ namespace sankhya {
 void reconcile_status_with_measurement(Solution* solution, const Options& options,
                                        Logger& logger, bool check_dual);
 
-}  // namespace sankhya
+}  // namespace YUKTHI

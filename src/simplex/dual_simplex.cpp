@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - bounded-variable revised dual simplex (issue #65).
+// YUKTHI - bounded-variable revised dual simplex (issue #65).
 //
 // References
 //   Lemke, C.E. (1954), "The dual method of solving the linear programming problem", Naval
@@ -55,10 +55,10 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/timer.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/timer.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya::detail {
+namespace YUKTHI::detail {
 
 namespace {
 
@@ -261,7 +261,7 @@ void Simplex::compute_pivot_row(Index leaving_slot) {
   lu_.solve_transpose(rho_.data());
   // pivot_row_[k] = e_r^T B^-1 a_k = rho . a_k; for a logical, a_k = -e_i, so it is -rho_i.
   // A gather per column, deterministic at any thread count (#57).
-#ifdef SANKHYA_HAVE_OPENMP
+#ifdef YUKTHI_HAVE_OPENMP
 #pragma omp parallel for schedule(static)
 #endif
   for (Index k = 0; k < total_; ++k) {
@@ -790,4 +790,4 @@ Solution Simplex::run_dual(const WarmStart* warm) {
   return primal_loop(timer, &iterations);
 }
 
-}  // namespace sankhya::detail
+}  // namespace YUKTHI::detail

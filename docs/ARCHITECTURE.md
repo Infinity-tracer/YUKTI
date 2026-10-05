@@ -1,4 +1,4 @@
-# SANKHYA — architecture
+# YUKTHI — architecture
 
 How the solver is put together, where each algorithm lives, and where the next engine plugs
 in. PS26119 asks for a "transparent, extensible foundation"; this document is the map that
@@ -48,19 +48,19 @@ That seam is what makes a new engine a bounded piece of work: it has to produce 
 
 | directory | what lives there | depends on | lines |
 |---|---|---|---|
-| `include/sankhya/` | the public headers: `model.hpp` (Model, Solution, BasisStatus), `options.hpp`, `tolerances.hpp` (every numerical constant, cited), `sankhya.h` (the C API), `io.hpp`, `mip.hpp`, `qp.hpp`, `pdhg.hpp` | nothing | 1.6k |
+| `include/YUKTHI/` | the public headers: `model.hpp` (Model, Solution, BasisStatus), `options.hpp`, `tolerances.hpp` (every numerical constant, cited), `YUKTHI.h` (the C API), `io.hpp`, `mip.hpp`, `qp.hpp`, `pdhg.hpp` | nothing | 1.6k |
 | `src/core/` | `Model`/`Solution` implementation, `recompute_quality()`, the `solve()` dispatcher and its status guard | everything below | 0.7k |
 | `src/util/` | logging, the options registry (every option has a description and a default, checked for duplicates by a test), the version stamp | – | 0.8k |
 | `src/la/` | CSC/CSR sparse matrix with row views, the sparse LU with Markowitz threshold pivoting and the product-form update (FTRAN/BTRAN, eta file), Ruiz + Pock–Chambolle equilibration | – | 1.6k |
 | `src/io/` | MPS (fixed and free, RANGES, negative-UP convention, MARKER blocks, gzip) and LP readers, the `.sol` writer and the `--stats` JSON writer | core | 2.2k |
 | `src/presolve/` | reductions (empty/fixed/singleton rows and columns, redundant rows, free-column singletons, doubleton equations, integer bound rounding) and the postsolve stack that reconstructs the primal and the DUAL of the original model | core, la | 1.8k |
 | `src/simplex/` | `simplex_core.hpp` — the state the two simplex loops share (basis, factors, pricing weights, perturbation, warm start); `primal_simplex.cpp` — bounded-variable revised primal simplex, composite phase 1, Devex pricing, textbook and Harris ratio tests, bound perturbation, basis repair; `dual_simplex.cpp` — bounded dual simplex, bound-flipping ratio test, dual Devex, artificial bounds, cost perturbation, hand-over to the primal loop; `dense_lu` — a dense reference used by tests | core, la | 3.2k |
-| `src/pdhg/` | restarted PDHG (PDLP-style), CPU; the GPU backend hangs off this path (`src/gpu/`, behind `SANKHYA_ENABLE_CUDA`, PR #153) | core, la | 0.7k |
+| `src/pdhg/` | restarted PDHG (PDLP-style), CPU; the GPU backend hangs off this path (`src/gpu/`, behind `YUKTHI_ENABLE_CUDA`, PR #153) | core, la | 0.7k |
 | `src/ipm/` | Mehrotra predictor-corrector interior-point method on the normal equations, over the sparse LDLᵀ in `src/la/ldl.cpp`; no basis | core, la | 0.5k |
 | `src/qp/` | convexity check (Cholesky of the Hessian), Condat–Vũ first-order convex QP | core, la | 0.5k |
 | `src/mip/` | branch and bound: propagation, root diving, reliability branching with strong branching, warm-started dual node LPs, MIQP nodes through the QP engine; root cuts are PR #159 | core, simplex, qp | 1.3k |
 | `src/api/` | the C API over `solve()`; the Python bindings (`bindings/python/`) wrap this, not the C++ | core | 0.5k |
-| `apps/sankhya-cli/` | `sankhya solve|info|options|version`, `--stats`, `--write-sol`, `--option k=v` | api, io | – |
+| `apps/YUKTHI-cli/` | `YUKTHI solve|info|options|version`, `--stats`, `--write-sol`, `--option k=v` | api, io | – |
 | `tools/` | `verify_solution.py`: re-parses the model with its own reader and checks the `.sol` file's primal feasibility, reduced costs, dual feasibility, complementary slackness and strong duality. Shares no code with the solver, deliberately | – | 1.5k |
 | `tests/` | unit tests per module; `oracles/` — a rational-arithmetic simplex and exact MILP branch and bound that the float engines are fuzzed against; `robustness/` — the sweeps that find where the solver stops working | – | 10k |
 | `bench/runners/` | Netlib, MIPLIB and Mittelmann runners and fetchers, the HiGHS comparison (a separate process over the same files), the robustness sweep, `make_benchmarks_doc.py` which generates `docs/BENCHMARKS.md` from the CSVs | – | 4k |

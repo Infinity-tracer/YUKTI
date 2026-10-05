@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
 #
-# SANKHYA demo. Every number printed below comes from a command run just now; nothing is
+# YUKTHI demo. Every number printed below comes from a command run just now; nothing is
 # cached, quoted from a previous run, or read out of a file somebody wrote by hand.
 #
 #   demo/run_demo.sh                 # solves afiro
@@ -17,9 +17,9 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO"
 
-BIN="${SANKHYA_BIN:-}"
+BIN="${YUKTHI_BIN:-}"
 if [ -z "$BIN" ]; then
-  for candidate in build/sankhya build/sankhya.exe build/Release/sankhya.exe; do
+  for candidate in build/YUKTHI build/YUKTHI.exe build/Release/YUKTHI.exe; do
     [ -x "$REPO/$candidate" ] && BIN="$REPO/$candidate" && break
   done
 fi

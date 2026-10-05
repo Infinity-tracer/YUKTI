@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - cutting planes. See cuts.hpp for the correctness obligations this file carries
+// YUKTHI - cutting planes. See cuts.hpp for the correctness obligations this file carries
 // and for the references each family is written from.
 
 #include "cuts.hpp"
@@ -11,10 +11,10 @@
 #include <vector>
 
 #include "la/lu.hpp"
-#include "sankhya/sparse.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/sparse.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya::mip {
+namespace YUKTHI::mip {
 namespace {
 
 // =========================================================================================
@@ -1075,4 +1075,4 @@ std::vector<FilteredCut> filter_and_deduplicate_cuts(const Model& model,
   return results;
 }
 
-}  // namespace sankhya::mip
+}  // namespace YUKTHI::mip

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - lexical helpers shared by the MPS and LP readers.
+// YUKTHI - lexical helpers shared by the MPS and LP readers.
 //
 // parse_double is the one that matters. std::stod throws, std::atof cannot report failure,
 // and a silently-zero coefficient in a constraint matrix is precisely the bug class that
@@ -16,7 +16,7 @@
 #include <string_view>
 #include <vector>
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 
 [[nodiscard]] inline bool is_space(char c) noexcept {
   return std::isspace(static_cast<unsigned char>(c)) != 0;
@@ -108,4 +108,4 @@ inline void tokenize(std::string_view line, std::vector<std::string_view>* out) 
   return true;
 }
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

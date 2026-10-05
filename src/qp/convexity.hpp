@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - convexity test for a quadratic objective.
+// YUKTHI - convexity test for a quadratic objective.
 //
 // A convex QP has a global minimum that first-order and interior-point methods actually
 // converge to. A NON-convex one has local minima, saddle points and possibly no finite
@@ -21,9 +21,9 @@
 
 #include <string>
 
-#include "sankhya/model.hpp"
+#include "YUKTHI/model.hpp"
 
-namespace sankhya::qp {
+namespace YUKTHI::qp {
 
 /// What the convexity test concluded.
 enum class Convexity {
@@ -44,4 +44,4 @@ struct ConvexityResult {
 /// is 0.5 x^T Q x, so this tests Q itself rather than the stored triangle.
 [[nodiscard]] ConvexityResult check_convexity(const Model& model);
 
-}  // namespace sankhya::qp
+}  // namespace YUKTHI::qp

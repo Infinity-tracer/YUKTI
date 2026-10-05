@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Generate the SANKHYA industrial case studies named in SIH PS26119.
+"""Generate the YUKTHI industrial case studies named in SIH PS26119.
 
 The .mps files are committed, so a judge does not need to run this. It exists so that every
 coefficient in them has a visible derivation instead of being a number somebody typed, and
@@ -100,7 +100,7 @@ RESERVE_FACTOR = 1.15
 def power_dispatch() -> Mps:
     m = Mps("PWRDISP")
     m.comment = [
-        "SANKHYA case study - power system dispatch (single-period unit commitment).",
+        "YUKTHI case study - power system dispatch (single-period unit commitment).",
         "",
         "PS26119 names 'power system dispatch' in scope. This is its smallest honest form:",
         "each generating unit has a marginal cost, a minimum stable generation level it",
@@ -181,7 +181,7 @@ def _transport_rhs() -> list[tuple[str, float]]:
 def supply_chain() -> Mps:
     m = Mps("SUPPLYCH")
     m.comment = [
-        "SANKHYA case study - product distribution from refineries to depots.",
+        "YUKTHI case study - product distribution from refineries to depots.",
         "",
         "PS26119 names 'transportation and supply chain management'. This is the classical",
         "balanced transportation problem, chosen because of a property it has BY",
@@ -231,7 +231,7 @@ COL_SCALE = [1e4, 1e-4, 1e3, 1e-3, 1e5, 1e-5, 1e2, 1e-2, 1e6, 1e-6, 1e1, 1e-1]
 def ill_conditioned() -> Mps:
     m = Mps("ILLCOND")
     m.comment = [
-        "SANKHYA case study - the supply chain model, deliberately badly scaled.",
+        "YUKTHI case study - the supply chain model, deliberately badly scaled.",
         "",
         "PS26119 asks for robustness on 'ill-conditioned constraint matrices'. The honest way",
         "to demonstrate that is on an instance WHOSE ANSWER IS ALREADY KNOWN, so the claim is",
@@ -286,7 +286,7 @@ def lot_sizing(relaxed: bool = False) -> Mps:
     big_m = sum(LOT_DEMAND)
     m = Mps("LOTSIZLP" if relaxed else "LOTSIZE")
     m.comment = [
-        "SANKHYA case study - production planning by lot sizing.",
+        "YUKTHI case study - production planning by lot sizing.",
         "",
         "PS26119 asks for robustness on 'weak LP relaxations'. This is the textbook source of",
         "one. Producing in a period costs a fixed set-up charge no matter how little is made,",
@@ -337,7 +337,7 @@ if __name__ == "__main__":
     lot_sizing().write(HERE / "lot_sizing.mps")
     relaxation = lot_sizing(relaxed=True)
     relaxation.comment = [
-        "SANKHYA case study - the LP RELAXATION of lot_sizing.mps, y continuous in [0, 1].",
+        "YUKTHI case study - the LP RELAXATION of lot_sizing.mps, y continuous in [0, 1].",
         "",
         "Emitted as its own file so the weak-relaxation claim is MEASURED rather than",
         "asserted. Solving both and printing the two objectives shows the exact size of the",

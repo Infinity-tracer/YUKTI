@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: Apache-2.0
-"""SANKHYA - Python bindings.
+"""YUKTHI - Python bindings.
 
-A thin, Pythonic layer over the C API in ``include/sankhya/sankhya.h``. Nothing here
+A thin, Pythonic layer over the C API in ``include/YUKTHI/YUKTHI.h``. Nothing here
 reimplements solver behaviour; it converts between Python values and the C surface, and
 turns non-zero status codes into exceptions.
 
-    >>> import sankhya
-    >>> model = sankhya.Model(maximize=True)
+    >>> import YUKTHI
+    >>> model = YUKTHI.Model(maximize=True)
     >>> x = model.add_column(cost=3.0, upper=3.0, name="x")
     >>> y = model.add_column(cost=2.0, name="y")
     >>> model.add_row({x: 1.0, y: 1.0}, upper=4.0)
@@ -19,7 +19,7 @@ turns non-zero status codes into exceptions.
 
 Or from a file:
 
-    >>> model = sankhya.Model.read("data/netlib/afiro.mps")   # doctest: +SKIP
+    >>> model = YUKTHI.Model.read("data/netlib/afiro.mps")   # doctest: +SKIP
     >>> model.solve().objective                                # doctest: +SKIP
     -464.7531428571429
 
@@ -33,9 +33,9 @@ from __future__ import annotations
 import ctypes
 from typing import Iterable, Mapping, Sequence
 
-from ._library import SankhyaError, load
+from ._library import YUKTHIError, load
 
-__all__ = ["Model", "Options", "Result", "SankhyaError", "INFINITY", "version"]
+__all__ = ["Model", "Options", "Result", "YUKTHIError", "INFINITY", "version"]
 
 _lib = None
 
@@ -49,29 +49,29 @@ def _library():
 
 def version() -> str:
     """The solver's version string."""
-    return _library().sankhya_version().decode()
+    return _library().YUKTHI_version().decode()
 
 
 def _check(status: int, what: str) -> None:
     if status == 0:
         return
-    detail = _library().sankhya_last_error().decode()
-    raise SankhyaError(f"{what}: {detail}" if detail else what)
+    detail = _library().YUKTHI_last_error().decode()
+    raise YUKTHIError(f"{what}: {detail}" if detail else what)
 
 
 class _Infinity(float):
     """The C API's infinity, as a float that repr()s recognisably."""
 
     def __repr__(self) -> str:
-        return "sankhya.INFINITY"
+        return "YUKTHI.INFINITY"
 
 
 def _infinity() -> float:
-    return _Infinity(_library().sankhya_infinity())
+    return _Infinity(_library().YUKTHI_infinity())
 
 
 # Resolved lazily on first use so that importing the package does not require the library to
-# be built - a caller who imports sankhya only to catch the "not built" error should get that
+# be built - a caller who imports YUKTHI only to catch the "not built" error should get that
 # error from the call, with its instructions, rather than from the import.
 class _LazyInfinity:
     _value: float | None = None
@@ -82,7 +82,7 @@ class _LazyInfinity:
         return _LazyInfinity._value
 
     def __repr__(self) -> str:
-        return "sankhya.INFINITY"
+        return "YUKTHI.INFINITY"
 
     def __neg__(self) -> float:
         return -float(self)
@@ -113,7 +113,7 @@ _STATUS_NAMES = {
 
 
 class Options:
-    """Solver options, by the same names the CLI and ``sankhya options`` use.
+    """Solver options, by the same names the CLI and ``YUKTHI options`` use.
 
     Types are dispatched from the Python value, so ``Options(presolve=False,
     time_limit=10.0, algorithm="pdhg")`` does the right thing for each. An unknown name is
@@ -122,9 +122,9 @@ class Options:
     """
 
     def __init__(self, **values: object) -> None:
-        self._handle = _library().sankhya_options_create()
+        self._handle = _library().YUKTHI_options_create()
         if not self._handle:
-            raise SankhyaError("could not allocate options")
+            raise YUKTHIError("could not allocate options")
         for name, value in values.items():
             self.set(name, value)
 
@@ -134,16 +134,16 @@ class Options:
         # bool BEFORE int, because bool is a subclass of int in Python and would otherwise
         # be routed to the integer setter and rejected as the wrong type.
         if isinstance(value, bool):
-            _check(lib.sankhya_options_set_bool(self._handle, encoded, 1 if value else 0),
+            _check(lib.YUKTHI_options_set_bool(self._handle, encoded, 1 if value else 0),
                    f"setting option {name!r}")
         elif isinstance(value, int):
-            _check(lib.sankhya_options_set_int(self._handle, encoded, value),
+            _check(lib.YUKTHI_options_set_int(self._handle, encoded, value),
                    f"setting option {name!r}")
         elif isinstance(value, float):
-            _check(lib.sankhya_options_set_double(self._handle, encoded, value),
+            _check(lib.YUKTHI_options_set_double(self._handle, encoded, value),
                    f"setting option {name!r}")
         elif isinstance(value, str):
-            _check(lib.sankhya_options_set_string(self._handle, encoded, value.encode()),
+            _check(lib.YUKTHI_options_set_string(self._handle, encoded, value.encode()),
                    f"setting option {name!r}")
         else:
             raise TypeError(f"option {name!r}: unsupported value type {type(value).__name__}")
@@ -152,7 +152,7 @@ class Options:
     def __del__(self) -> None:
         handle = getattr(self, "_handle", None)
         if handle and _lib is not None:
-            _lib.sankhya_options_free(handle)
+            _lib.YUKTHI_options_free(handle)
             self._handle = None
 
 
@@ -174,7 +174,7 @@ class Result:
         ``feasible`` means a usable point with optimality NOT proven; it is not a weaker
         spelling of ``optimal`` and should not be treated as one.
         """
-        return _STATUS_NAMES.get(_library().sankhya_solution_status(self._handle), "unknown")
+        return _STATUS_NAMES.get(_library().YUKTHI_solution_status(self._handle), "unknown")
 
     @property
     def optimal(self) -> bool:
@@ -182,28 +182,28 @@ class Result:
 
     @property
     def message(self) -> str:
-        return _library().sankhya_solution_message(self._handle).decode()
+        return _library().YUKTHI_solution_message(self._handle).decode()
 
     @property
     def objective(self) -> float:
-        return _library().sankhya_solution_objective(self._handle)
+        return _library().YUKTHI_solution_objective(self._handle)
 
     @property
     def dual_bound(self) -> float:
         """Best proven bound. Equal to the objective when optimality was proved."""
-        return _library().sankhya_solution_dual_bound(self._handle)
+        return _library().YUKTHI_solution_dual_bound(self._handle)
 
     @property
     def iterations(self) -> int:
-        return _library().sankhya_solution_iterations(self._handle)
+        return _library().YUKTHI_solution_iterations(self._handle)
 
     @property
     def nodes(self) -> int:
-        return _library().sankhya_solution_nodes(self._handle)
+        return _library().YUKTHI_solution_nodes(self._handle)
 
     @property
     def seconds(self) -> float:
-        return _library().sankhya_solution_seconds(self._handle)
+        return _library().YUKTHI_solution_seconds(self._handle)
 
     # ---- Measured quality ------------------------------------------------------------------
 
@@ -214,15 +214,15 @@ class Result:
         Recomputed from the returned vectors before anything is reported. A caller writing
         its own acceptance test should read this rather than trusting ``status`` alone.
         """
-        return _library().sankhya_solution_primal_infeasibility(self._handle)
+        return _library().YUKTHI_solution_primal_infeasibility(self._handle)
 
     @property
     def dual_infeasibility(self) -> float:
-        return _library().sankhya_solution_dual_infeasibility(self._handle)
+        return _library().YUKTHI_solution_dual_infeasibility(self._handle)
 
     @property
     def integrality_violation(self) -> float:
-        return _library().sankhya_solution_integrality_violation(self._handle)
+        return _library().YUKTHI_solution_integrality_violation(self._handle)
 
     # ---- Vectors ---------------------------------------------------------------------------
 
@@ -236,24 +236,24 @@ class Result:
     @property
     def x(self) -> list[float]:
         """Primal column values, in the order the columns were added."""
-        return self._vector(_library().sankhya_solution_col_values, self._cols, "column values")
+        return self._vector(_library().YUKTHI_solution_col_values, self._cols, "column values")
 
     @property
     def row_activities(self) -> list[float]:
-        return self._vector(_library().sankhya_solution_row_activities, self._rows,
+        return self._vector(_library().YUKTHI_solution_row_activities, self._rows,
                             "row activities")
 
     @property
     def row_duals(self) -> list[float]:
         """Shadow prices: the marginal worth of relaxing each row by one unit."""
-        return self._vector(_library().sankhya_solution_row_duals, self._rows, "row duals")
+        return self._vector(_library().YUKTHI_solution_row_duals, self._rows, "row duals")
 
     @property
     def reduced_costs(self) -> list[float]:
-        return self._vector(_library().sankhya_solution_col_duals, self._cols, "reduced costs")
+        return self._vector(_library().YUKTHI_solution_col_duals, self._cols, "reduced costs")
 
     def __repr__(self) -> str:
-        return f"<sankhya.Result {self.status} objective={self.objective:.10g}>"
+        return f"<YUKTHI.Result {self.status} objective={self.objective:.10g}>"
 
     def __enter__(self) -> "Result":
         return self
@@ -263,7 +263,7 @@ class Result:
 
     def close(self) -> None:
         if self._handle and _lib is not None:
-            _lib.sankhya_solution_free(self._handle)
+            _lib.YUKTHI_solution_free(self._handle)
             self._handle = None
 
     def __del__(self) -> None:
@@ -274,17 +274,17 @@ class Model:
     """A linear, mixed-integer or convex quadratic program."""
 
     def __init__(self, maximize: bool = False) -> None:
-        self._handle = _library().sankhya_model_create()
+        self._handle = _library().YUKTHI_model_create()
         if not self._handle:
-            raise SankhyaError("could not allocate model")
+            raise YUKTHIError("could not allocate model")
         if maximize:
-            _check(_library().sankhya_model_set_maximize(self._handle, 1), "setting sense")
+            _check(_library().YUKTHI_model_set_maximize(self._handle, 1), "setting sense")
 
     @classmethod
     def read(cls, path: str) -> "Model":
-        """Read an MPS, QPS or LP file. Raises SankhyaError with the parser's message."""
+        """Read an MPS, QPS or LP file. Raises YUKTHIError with the parser's message."""
         model = cls()
-        _check(_library().sankhya_model_read(model._handle, str(path).encode()),
+        _check(_library().YUKTHI_model_read(model._handle, str(path).encode()),
                f"reading {path!r}")
         return model
 
@@ -295,11 +295,11 @@ class Model:
         """Append a column and return its index.
 
         ``upper=None`` means no upper bound. The default lower bound is 0, matching the
-        convention every MPS file uses, so a free variable needs ``lower=-sankhya.INFINITY``
+        convention every MPS file uses, so a free variable needs ``lower=-YUKTHI.INFINITY``
         stated explicitly rather than implied.
         """
         index = ctypes.c_int(-1)
-        _check(_library().sankhya_model_add_column(
+        _check(_library().YUKTHI_model_add_column(
             self._handle, float(cost), float(lower),
             float(INFINITY) if upper is None else float(upper),
             1 if integer else 0, name.encode() if name else None, ctypes.byref(index)),
@@ -315,7 +315,7 @@ class Model:
         to get an equality. ``coefficients`` maps column index to value.
         """
         index = ctypes.c_int(-1)
-        _check(_library().sankhya_model_add_row(
+        _check(_library().YUKTHI_model_add_row(
             self._handle,
             -float(INFINITY) if lower is None else float(lower),
             float(INFINITY) if upper is None else float(upper),
@@ -326,7 +326,7 @@ class Model:
 
     def set_coefficient(self, row: int, column: int, value: float) -> None:
         """Set one constraint coefficient. Setting it twice REPLACES, never accumulates."""
-        _check(_library().sankhya_model_set_coefficient(self._handle, row, column, float(value)),
+        _check(_library().YUKTHI_model_set_coefficient(self._handle, row, column, float(value)),
                f"setting coefficient ({row}, {column})")
 
     def set_quadratic(self, row: int, column: int, value: float) -> None:
@@ -336,30 +336,30 @@ class Model:
         name ONE entry; the 0.5 belongs to the objective rather than to the value you pass.
         A non-convex Q is refused at solve time rather than solved to a local point.
         """
-        _check(_library().sankhya_model_set_quadratic_coefficient(
+        _check(_library().YUKTHI_model_set_quadratic_coefficient(
             self._handle, row, column, float(value)), f"setting Q({row}, {column})")
 
     def set_objective_offset(self, offset: float) -> None:
-        _check(_library().sankhya_model_set_objective_offset(self._handle, float(offset)),
+        _check(_library().YUKTHI_model_set_objective_offset(self._handle, float(offset)),
                "setting the objective offset")
 
     # ---- Inspection ---------------------------------------------------------------------------
 
     @property
     def num_cols(self) -> int:
-        return _library().sankhya_model_num_cols(self._handle)
+        return _library().YUKTHI_model_num_cols(self._handle)
 
     @property
     def num_rows(self) -> int:
-        return _library().sankhya_model_num_rows(self._handle)
+        return _library().YUKTHI_model_num_rows(self._handle)
 
     @property
     def num_nonzeros(self) -> int:
-        return _library().sankhya_model_num_nonzeros(self._handle)
+        return _library().YUKTHI_model_num_nonzeros(self._handle)
 
     def validate(self) -> None:
-        """Raise SankhyaError if the model is not internally consistent."""
-        _check(_library().sankhya_model_validate(self._handle), "validating the model")
+        """Raise YUKTHIError if the model is not internally consistent."""
+        _check(_library().YUKTHI_model_validate(self._handle), "validating the model")
 
     # ---- Solving --------------------------------------------------------------------------------
 
@@ -377,13 +377,13 @@ class Model:
                 options.set(name, value)
 
         handle = ctypes.c_void_p()
-        _check(_library().sankhya_solve(
+        _check(_library().YUKTHI_solve(
             self._handle, options._handle if options else None, ctypes.byref(handle)),
             "solving")
         return Result(handle.value, self.num_cols, self.num_rows)
 
     def __repr__(self) -> str:
-        return (f"<sankhya.Model {self.num_rows} rows x {self.num_cols} columns, "
+        return (f"<YUKTHI.Model {self.num_rows} rows x {self.num_cols} columns, "
                 f"{self.num_nonzeros} nonzeros>")
 
     def __enter__(self) -> "Model":
@@ -394,7 +394,7 @@ class Model:
 
     def close(self) -> None:
         if self._handle and _lib is not None:
-            _lib.sankhya_model_free(self._handle)
+            _lib.YUKTHI_model_free(self._handle)
             self._handle = None
 
     def __del__(self) -> None:

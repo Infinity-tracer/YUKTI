@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Independently verify a SANKHYA solution. Trusts nothing the solver said.
+"""Independently verify a YUKTHI solution. Trusts nothing the solver said.
 
     python tools/verify_solution.py model.mps solution.sol
 
@@ -36,7 +36,7 @@ from pathlib import Path
 INF = math.inf
 MPS_INFINITY = 1e30
 
-# Defaults mirror include/sankhya/tolerances.hpp. They are CLI-overridable because a judge
+# Defaults mirror include/YUKTHI/tolerances.hpp. They are CLI-overridable because a judge
 # should be able to tighten them and watch what happens.
 DEFAULT_PRIMAL_TOL = 1e-7
 DEFAULT_DUAL_TOL = 1e-7
@@ -83,7 +83,7 @@ class Model:
         self.entries: list[list[tuple[int, float]]] = []
         # QPS quadratic objective. LOWER TRIANGLE ONLY, keyed (row, col) with row >= col,
         # holding the objective 0.5 * x'Qx - the same convention the file uses and the same
-        # one sankhya::Model uses. Stored raw: halving or mirroring here would be exactly
+        # one YUKTHI::Model uses. Stored raw: halving or mirroring here would be exactly
         # the misreading this script exists to catch the solver making.
         self.hessian: dict[tuple[int, int], float] = {}
 
@@ -694,7 +694,7 @@ def verify_ray(model: Model, solution: Solution, report: Report, primal_tol: flo
     return report
 
 
-# The verdicts that hand back a point, mirroring claims_a_point() in include/sankhya/model.hpp.
+# The verdicts that hand back a point, mirroring claims_a_point() in include/YUKTHI/model.hpp.
 # The two lists are the .sol file's contract and have to agree; this script deliberately shares
 # no code with the solver, so they are kept in step by saying so in both places rather than by
 # a header. `unbounded` is here because since #191 it carries the feasible point its ray starts
@@ -1151,7 +1151,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("model", type=Path, help="the .mps model (optionally .gz)")
-    parser.add_argument("solution", type=Path, help="the .sol file SANKHYA wrote")
+    parser.add_argument("solution", type=Path, help="the .sol file YUKTHI wrote")
     parser.add_argument("--primal-tolerance", type=float, default=DEFAULT_PRIMAL_TOL)
     parser.add_argument("--dual-tolerance", type=float, default=DEFAULT_DUAL_TOL)
     parser.add_argument("--integer-tolerance", type=float, default=DEFAULT_INTEGER_TOL)

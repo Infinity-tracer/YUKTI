@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the bounded-variable revised simplex: shared state for the primal and dual
+// YUKTHI - the bounded-variable revised simplex: shared state for the primal and dual
 // methods. PRIVATE to src/simplex; the public entry points are in primal_simplex.hpp.
 //
 // The class carries everything both methods need - the working problem in [A | -I] form,
@@ -21,13 +21,13 @@
 #include <string>
 #include <vector>
 
-#include "sankhya/timer.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/timer.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "../la/lu.hpp"
 #include "../la/scaling.hpp"
 
-namespace sankhya::detail {
+namespace YUKTHI::detail {
 
 /// Consecutive zero-length steps tolerated before the solve is declared stalled. Twenty
 /// times the Bland switch threshold: long enough that no honest degenerate plateau trips
@@ -574,4 +574,4 @@ struct RatioCandidate {
   double pivot_magnitude;
 };
 
-}  // namespace sankhya::detail
+}  // namespace YUKTHI::detail

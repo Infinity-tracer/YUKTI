@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - logger tests.
+// YUKTHI - logger tests.
 //
 // The iteration table is a deliverable, not decoration: the demo shows it to judges and the
 // benchmark harness greps it. These tests pin the level filtering and the column layout so
@@ -15,11 +15,11 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 
-#include "sankhya/logging.hpp"
+#include "YUKTHI/logging.hpp"
 
 #include "support/temp_file.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 using testing::TempFile;
@@ -42,7 +42,7 @@ template <typename Body>
 std::vector<std::string> capture(LogLevel level, Body&& body) {
   const std::filesystem::path path =
       std::filesystem::temp_directory_path() /
-      ("sankhya_log_test_" +
+      ("YUKTHI_log_test_" +
        std::to_string(::testing::UnitTest::GetInstance()->current_test_info()->line()) +
        ".txt");
   std::FILE* stream = std::fopen(path.string().c_str(), "w");
@@ -282,4 +282,4 @@ TEST(Logging, ProgressOutputOpenFailureWarnsAndDoesNotCrash) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

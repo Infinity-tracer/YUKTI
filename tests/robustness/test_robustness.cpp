@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the robustness suite (#71). Where does the solver stop working?
+// YUKTHI - the robustness suite (#71). Where does the solver stop working?
 //
 // PS26119 asks for "a clear demonstration of numerical robustness ... involving degeneracy,
 // weak LP relaxations or ill-conditioned constraint matrices, where simpler implementations
@@ -33,14 +33,14 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "oracles/lp_generator.hpp"
 #include "oracles/rational_simplex.hpp"
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 namespace {
 
 Options quiet(const std::string& algorithm = "auto") {
@@ -424,4 +424,4 @@ TEST(Robustness, ConditioningSweepHoldsTheOptimumToASpreadOfTenToTheNine) {
 }
 
 }  // namespace
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

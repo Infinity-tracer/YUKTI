@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - branch and bound tests.
+// YUKTHI - branch and bound tests.
 //
 // The gate here is FuzzAgainstTheExactMilpOracle, and it is the MILP counterpart of the LP
 // fuzz in tests/oracles/. A branch and bound has a failure mode the LP solver does not: it
@@ -17,15 +17,15 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "oracles/lp_generator.hpp"
 #include "oracles/rational_simplex.hpp"
 #include "support/temp_file.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 using testing::TempFile;
@@ -666,13 +666,13 @@ TEST(BranchAndBound, ProgressOutWritesReadableJsonlForAMilpSolve) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI
 
 // =========================================================================================
 // Stage 4D: Root Cut Integration Tests
 // =========================================================================================
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 Model make_fractional_gmi_model() {
   // Maximize x + y s.t. x + y <= 1.5, x, y >= 0 integer
@@ -735,4 +735,4 @@ TEST(RootCuts, NoCutsWhenDisabled) {
   Solution sol = solve(model, opts);
   EXPECT_EQ(sol.status, SolveStatus::kOptimal);
 }
-}  // namespace sankhya
+}  // namespace YUKTHI

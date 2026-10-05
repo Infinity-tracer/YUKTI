@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - convexity test. See convexity.hpp for why a refusal is the right default.
+// YUKTHI - convexity test. See convexity.hpp for why a refusal is the right default.
 
 #include "convexity.hpp"
 
@@ -9,9 +9,9 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya::qp {
+namespace YUKTHI::qp {
 namespace {
 
 /// Above this the dense O(n^2) working set stops being reasonable and the test reports
@@ -133,4 +133,4 @@ ConvexityResult check_convexity(const Model& model) {
   return result;
 }
 
-}  // namespace sankhya::qp
+}  // namespace YUKTHI::qp

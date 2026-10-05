@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
 #
-# SANKHYA - the SIH PS26119 demonstration.
+# YUKTHI - the SIH PS26119 demonstration.
 #
 # Walks the problem statement in its own order and shows, for each thing it asks for, either
 # a live result or an explicit admission that we do not have it yet. Every number printed
@@ -19,7 +19,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO"
 
-BIN="${SANKHYA_BIN:-}"
+BIN="${YUKTHI_BIN:-}"
 if [ -z "$BIN" ]; then
   # build-dbg is searched too, and deliberately last. On Windows 11, Smart App Control
   # blocks a freshly linked unsigned executable by hash and reputation, and a Release build
@@ -27,7 +27,7 @@ if [ -z "$BIN" ]; then
   # is the escape hatch scripts/preflight.sh documents and scripts/reproduce.sh offers as
   # --debug, and without it the demo stops at its first command on a machine that can
   # nevertheless run the solver perfectly well.
-  for candidate in build/sankhya build/sankhya.exe build/Release/sankhya.exe                    build-dbg/sankhya build-dbg/sankhya.exe; do
+  for candidate in build/YUKTHI build/YUKTHI.exe build/Release/YUKTHI.exe                    build-dbg/YUKTHI build-dbg/YUKTHI.exe; do
     [ -x "$REPO/$candidate" ] && BIN="$REPO/$candidate" && break
   done
 fi
@@ -48,7 +48,7 @@ if ! "$BIN" version >/dev/null 2>&1; then
   echo "executable. A Debug build has different bytes and is generally allowed:" >&2
   echo "" >&2
   echo "    scripts/configure.sh build-dbg Debug && cmake --build build-dbg -j" >&2
-  echo "    SANKHYA_BIN=\$PWD/build-dbg/sankhya.exe demo/run_sih_demo.sh" >&2
+  echo "    YUKTHI_BIN=\$PWD/build-dbg/YUKTHI.exe demo/run_sih_demo.sh" >&2
   echo "" >&2
   echo "scripts/preflight.sh reports on this before anything else runs." >&2
   exit 1
@@ -90,7 +90,7 @@ rule "0. What this is"
 "$BIN" version
 cat <<'INTRO'
 
-SANKHYA is a mathematical optimization solver core written from scratch in C++20 for
+YUKTHI is a mathematical optimization solver core written from scratch in C++20 for
 SIH PS26119, issued by Mangalore Refinery and Petrochemicals. LP and MILP engines are
 implemented and benchmarked, and so is convex QP - end to end from an MPS file with a
 QUADOBJ section through to an independently verified answer, demonstrated twice below: a
@@ -117,7 +117,7 @@ QPINTRO
 # reasoning as tolerances.hpp's kDualityGap note: make the solver converge tighter, not the
 # checker looser.
 solve_case qp_blend demo/qp_blend.mps --option qp_tolerance=1e-12
-echo "    SANKHYA: status $(field qp_blend result status), objective $(field qp_blend result objective)"
+echo "    YUKTHI: status $(field qp_blend result status), objective $(field qp_blend result objective)"
 echo
 echo "    Checked independently by tools/verify_solution.py, which now reads QUADOBJ itself"
 echo "    and evaluates c'x + 0.5 x'Qx directly - no code shared with the solver:"
@@ -157,7 +157,7 @@ solve_case miqp_blend demo/miqp_blend.mps --option mip_relative_gap=0 --option m
 # The GAP is the point, not the objective: a MIP reports an objective the moment it finds any
 # incumbent, and 66.67 would print just the same if the search had given up right after. A
 # relative gap of 0 is the part that says nothing better exists.
-echo "    SANKHYA: status $(field miqp_blend result status), objective $(field miqp_blend result objective), bound $(field miqp_blend result dual_bound), relative gap $(field miqp_blend result relative_gap)"
+echo "    YUKTHI: status $(field miqp_blend result status), objective $(field miqp_blend result objective), bound $(field miqp_blend result dual_bound), relative gap $(field miqp_blend result relative_gap)"
 echo
 echo "    Checked independently by tools/verify_solution.py - no code shared with the solver:"
 echo
@@ -178,7 +178,7 @@ best = min(range(101), key=f)
 print("    integer optimum by enumeration:  LN = {}, HN = {}, objective {:.5f}"
       .format(best, 100 - best, f(best)))
 print("    continuous relaxation (200/3):   {:.5f}".format(200.0 / 3.0))
-print("    SANKHYA:                         {:.5f}".format(obj))
+print("    YUKTHI:                         {:.5f}".format(obj))
 
 rel = abs(obj - f(best)) / abs(f(best))
 print("    relative difference:             {:.3e}".format(rel))
@@ -247,7 +247,7 @@ ANALYTIC="$(echo "$GEN_OUT" | sed -n 's/.*analytic optimum: //p')"
 echo
 "$BIN" solve "$LARGE" --option log_to_console=false --option algorithm=pdhg \
   --progress-out "$WORK/large_progress.jsonl" --stats "$WORK/large.json" >/dev/null || true
-echo "    SANKHYA: status $(field large result status), objective $(field large result objective),"
+echo "    YUKTHI: status $(field large result status), objective $(field large result objective),"
 echo "             $(field large effort iterations) PDHG iterations, $(field large effort solve_seconds)s"
 echo
 echo "    --progress-out, tail of $WORK/large_progress.jsonl (one line per residual"
@@ -346,7 +346,7 @@ echo "$ORACLE_OUT" | sed 's/^/    /'
 # here: a literal would have to be kept in step with the instance by hand.
 ORACLE_COST="$(echo "$ORACLE_OUT" | sed -n 's/.*total cost *//p' | tail -1)"
 echo
-echo "    SANKHYA returned:  $(field power_dispatch result objective)  in $(field power_dispatch effort nodes) nodes"
+echo "    YUKTHI returned:  $(field power_dispatch result objective)  in $(field power_dispatch effort nodes) nodes"
 "$PYTHON" - "$WORK/power_dispatch.json" "$ORACLE_COST" <<'PYCHK'
 import json, sys
 got = json.load(open(sys.argv[1]))["result"]["objective"]
@@ -377,11 +377,11 @@ DEGEN
 echo
 echo "    Measured, not asserted. The matrix is read by verify_solution.py's INDEPENDENT MPS"
 echo "    reader, and the rank is computed EXACTLY by elimination over the rationals - no"
-echo "    singular-value threshold to pick, and no SANKHYA code involved:"
+echo "    singular-value threshold to pick, and no YUKTHI code involved:"
 echo
 PYTHONWARNINGS=ignore "$PYTHON" "$CASES/matrix_stats.py" "$CASES/supply_chain.mps" --rank | sed 's/^/        /'
 echo
-echo "    SANKHYA: status $(field supply_chain result status), objective $(field supply_chain result objective), $(field supply_chain effort iterations) iterations, no stall."
+echo "    YUKTHI: status $(field supply_chain result status), objective $(field supply_chain result objective), $(field supply_chain effort iterations) iterations, no stall."
 echo "    Anti-cycling is Bland's rule, cited in src/simplex/primal_simplex.cpp."
 
 # --- ill conditioning ----------------------------------------------------------------------
@@ -448,7 +448,7 @@ if [ "$QUICK" = "1" ]; then
   echo "Skipped (--quick). Run without --quick to execute the comparison live."
 elif "$PYTHON" -c "import highspy" >/dev/null 2>&1; then
   echo "HiGHS is the reference. It is invoked as a SEPARATE PROCESS over the same MPS files;"
-  echo "no HiGHS code is linked into, or read by, SANKHYA. Both sides are timed on solver"
+  echo "no HiGHS code is linked into, or read by, YUKTHI. Both sides are timed on solver"
   echo "time only, so neither is charged for interpreter start-up."
   echo
   # `tail -n +3`, NOT `tail -18`. The intent is to drop compare.py's first two lines -
@@ -459,7 +459,7 @@ elif "$PYTHON" -c "import highspy" >/dev/null 2>&1; then
   # was right; adding a ninth made it 21, so the header's second line was cut and its
   # continuation was left dangling under nothing. Counting from the FRONT does not
   # care how many instances run.
-  "$PYTHON" bench/runners/compare.py --sankhya-binary "$BIN" --time-limit 60 \
+  "$PYTHON" bench/runners/compare.py --YUKTHI-binary "$BIN" --time-limit 60 \
     --out "$WORK/compare.csv" 2>&1 | tail -n +3
 else
   echo "highspy is not importable, so the comparison cannot run here."

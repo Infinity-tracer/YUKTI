@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - convex quadratic programming.
+// YUKTHI - convex quadratic programming.
 #pragma once
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya::qp {
+namespace YUKTHI::qp {
 
 /// Solve a convex QP:
 ///
@@ -20,4 +20,4 @@ namespace sankhya::qp {
 [[nodiscard]] Solution solve_convex_qp(const Model& model, const Options& options,
                                        Logger& logger);
 
-}  // namespace sankhya::qp
+}  // namespace YUKTHI::qp

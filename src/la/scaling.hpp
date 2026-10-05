@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - diagonal preconditioning for the first-order LP engine.
+// YUKTHI - diagonal preconditioning for the first-order LP engine.
 //
 // References:
 //   Ruiz, "A scaling algorithm to equilibrate both rows and columns norms in matrices",
@@ -29,9 +29,9 @@
 
 #include <vector>
 
-#include "sankhya/model.hpp"
+#include "YUKTHI/model.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// A diagonal rescaling of a model:  Ahat = Dr A Dc.
 ///
@@ -72,4 +72,4 @@ struct Scaling {
 [[nodiscard]] double estimate_spectral_norm(const SparseMatrix& matrix, int iterations,
                                             unsigned seed);
 
-}  // namespace sankhya
+}  // namespace YUKTHI

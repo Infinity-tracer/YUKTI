@@ -5,23 +5,23 @@
     "created": "2026-09-07T13:25:49Z",
     "creators": [
       "Tool: tools/make_sbom.py",
-      "Organization: SANKHYA (SIH 2026 PS26119)"
+      "Organization: YUKTHI (SIH 2026 PS26119)"
     ]
   },
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://github.com/thegoodengineer/sih-26/spdx/sankhya-0.1.0",
-  "name": "sankhya-0.1.0",
+  "documentNamespace": "https://github.com/thegoodengineer/sih-26/spdx/YUKTHI-0.1.0",
+  "name": "YUKTHI-0.1.0",
   "packages": [
     {
-      "SPDXID": "SPDXRef-Package-sankhya",
+      "SPDXID": "SPDXRef-Package-YUKTHI",
       "copyrightText": "NOASSERTION",
       "description": "A mathematical optimization solver core (LP, MILP, convex QP, MIQP) written from mathematical foundations in C++20.",
       "downloadLocation": "https://github.com/thegoodengineer/sih-26",
       "filesAnalyzed": false,
       "licenseConcluded": "Apache-2.0",
       "licenseDeclared": "Apache-2.0",
-      "name": "sankhya",
-      "supplier": "Organization: SANKHYA (SIH 2026 PS26119)",
+      "name": "YUKTHI",
+      "supplier": "Organization: YUKTHI (SIH 2026 PS26119)",
       "versionInfo": "0.1.0"
     },
     {
@@ -108,7 +108,7 @@
       "SPDXID": "SPDXRef-Package-GoogleTest",
       "comment": "linked: test binary only; pinned in CMakeLists.txt at v1.14.0",
       "copyrightText": "NOASSERTION",
-      "description": "Unit test framework. Never linked into `sankhya_core`.",
+      "description": "Unit test framework. Never linked into `YUKTHI_core`.",
       "downloadLocation": "https://github.com/google/googletest.git",
       "externalRefs": [
         {
@@ -126,7 +126,7 @@
     },
     {
       "SPDXID": "SPDXRef-Package-OpenMP-runtime",
-      "comment": "optional, linked only when SANKHYA_WITH_OPENMP finds it",
+      "comment": "optional, linked only when YUKTHI_WITH_OPENMP finds it",
       "copyrightText": "NOASSERTION",
       "downloadLocation": "NOASSERTION",
       "filesAnalyzed": false,
@@ -139,39 +139,39 @@
   ],
   "relationships": [
     {
-      "relatedSpdxElement": "SPDXRef-Package-sankhya",
+      "relatedSpdxElement": "SPDXRef-Package-YUKTHI",
       "relationshipType": "DESCRIBES",
       "spdxElementId": "SPDXRef-DOCUMENT"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-fmt",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-sankhya"
+      "spdxElementId": "SPDXRef-Package-YUKTHI"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-CLI11",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-sankhya"
+      "spdxElementId": "SPDXRef-Package-YUKTHI"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-nlohmann-json",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-sankhya"
+      "spdxElementId": "SPDXRef-Package-YUKTHI"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-zlib",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-sankhya"
+      "spdxElementId": "SPDXRef-Package-YUKTHI"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-GoogleTest",
       "relationshipType": "DEPENDS_ON",
-      "spdxElementId": "SPDXRef-Package-sankhya"
+      "spdxElementId": "SPDXRef-Package-YUKTHI"
     },
     {
       "relatedSpdxElement": "SPDXRef-Package-OpenMP-runtime",
       "relationshipType": "OPTIONAL_DEPENDENCY_OF",
-      "spdxElementId": "SPDXRef-Package-sankhya"
+      "spdxElementId": "SPDXRef-Package-YUKTHI"
     }
   ],
   "spdxVersion": "SPDX-2.3"

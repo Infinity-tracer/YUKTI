@@ -1,4 +1,4 @@
-* SANKHYA case study - the LP RELAXATION of lot_sizing.mps, y continuous in [0, 1].
+* YUKTHI case study - the LP RELAXATION of lot_sizing.mps, y continuous in [0, 1].
 *
 * Emitted as its own file so the weak-relaxation claim is MEASURED rather than
 * asserted. Solving both and printing the two objectives shows the exact size of the

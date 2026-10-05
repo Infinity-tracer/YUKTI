@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Compare SANKHYA against HiGHS on identical instances, same machine, same time limit.
+"""Compare YUKTHI against HiGHS on identical instances, same machine, same time limit.
 
-HiGHS is invoked ONLY as an external subprocess binary. It is never linked into SANKHYA,
+HiGHS is invoked ONLY as an external subprocess binary. It is never linked into YUKTHI,
 never a build dependency, and no part of its source informs ours - see the red line in
 CLAUDE.md and section 1 of docs/PROVENANCE.md. This script shells out to whatever `highs`
 executable the machine already has, reads its stdout, and compares numbers. That is the
@@ -59,15 +59,15 @@ def display_path(path: Path) -> Path | str:
 CSV_COLUMNS = [
     "instance",
     "published_objective",
-    "sankhya_status",
-    "sankhya_objective",
-    "sankhya_relative_error",
-    "sankhya_seconds",
+    "YUKTHI_status",
+    "YUKTHI_objective",
+    "YUKTHI_relative_error",
+    "YUKTHI_seconds",
     # The envelope, not just the point estimate. A reader checking whether the ratio above
     # is trustworthy needs to see how far the samples it came from were spread.
-    "sankhya_seconds_min",
-    "sankhya_seconds_max",
-    "sankhya_iterations",
+    "YUKTHI_seconds_min",
+    "YUKTHI_seconds_max",
+    "YUKTHI_iterations",
     "highs_status",
     "highs_objective",
     "highs_relative_error",
@@ -76,7 +76,7 @@ CSV_COLUMNS = [
     "highs_seconds_max",
     "timing_repeats",
     "objectives_agree",
-    "speed_ratio_sankhya_over_highs",
+    "speed_ratio_YUKTHI_over_highs",
     "git_commit",
     "machine",
     "timestamp_utc",
@@ -117,7 +117,7 @@ def find_highs(explicit: Path | None) -> Path | None:
 def find_highspy():
     """The `highspy` package, as a fallback when no HiGHS binary is installed.
 
-    Still an external solver, still never linked into SANKHYA: `highspy` is a pip package
+    Still an external solver, still never linked into YUKTHI: `highspy` is a pip package
     that this benchmark script imports, and nothing in `src/` knows it exists. It is not a
     build dependency and no part of HiGHS informs our code. See the red line in CLAUDE.md
     and section 1 of docs/PROVENANCE.md.
@@ -129,16 +129,16 @@ def find_highspy():
         return None
 
 
-def default_sankhya() -> Path:
-    for candidate in ("build/sankhya.exe", "build/sankhya", "build-main/sankhya.exe",
-                      "build-main/sankhya"):
+def default_YUKTHI() -> Path:
+    for candidate in ("build/YUKTHI.exe", "build/YUKTHI", "build-main/YUKTHI.exe",
+                      "build-main/YUKTHI"):
         path = REPO_ROOT / candidate
         if path.exists():
             return path
-    raise SystemExit("no SANKHYA binary found; build first, or pass --sankhya-binary")
+    raise SystemExit("no YUKTHI binary found; build first, or pass --YUKTHI-binary")
 
 
-def run_sankhya(binary: Path, mps: Path, time_limit: float) -> dict:
+def run_YUKTHI(binary: Path, mps: Path, time_limit: float) -> dict:
     with tempfile.TemporaryDirectory() as tmp:
         stats = Path(tmp) / "stats.json"
         started = time.perf_counter()
@@ -178,7 +178,7 @@ def run_highs_binary(binary: Path, mps: Path, time_limit: float) -> dict:
     # directory - the repo root, when this script is run from there. --log_file is a
     # HighsOptions field, and every field in HighsOptions is exposed as a --<name> <value>
     # CLI flag (the same convention --time_limit above already relies on), so routing it into
-    # the same scratch temp dir run_sankhya() uses for --stats keeps both solvers' throwaway
+    # the same scratch temp dir run_YUKTHI() uses for --stats keeps both solvers' throwaway
     # output out of the tree the same way.
     with tempfile.TemporaryDirectory() as tmp:
         log_file = Path(tmp) / "Highs.log"
@@ -321,7 +321,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--highs-binary", type=Path, default=None)
-    parser.add_argument("--sankhya-binary", type=Path, default=None)
+    parser.add_argument("--YUKTHI-binary", type=Path, default=None)
     parser.add_argument("--time-limit", type=float, default=60.0)
     parser.add_argument("--repeats", type=int, default=15,
                         help="timed runs per solver per instance; the MEDIAN is reported. "
@@ -337,14 +337,14 @@ def main() -> int:
     args = parser.parse_args()
 
     # Prefer a real command-line binary; fall back to the highspy package. Either way HiGHS
-    # runs as a separate solver and is never linked into SANKHYA.
+    # runs as a separate solver and is never linked into YUKTHI.
     highs = find_highs(args.highs_binary)
     highspy = None if highs is not None else find_highspy()
     if highs is None and highspy is None:
         # Refusing to invent numbers is the whole point of this project. No HiGHS, no row.
         print("HiGHS was not found on this machine, so no comparison was run.")
         print()
-        print("Install it (none of these affects the SANKHYA build):")
+        print("Install it (none of these affects the YUKTHI build):")
         print("    pip install highspy")
         print("    apt-get install highs")
         print("    conda install -c conda-forge highs")
@@ -354,7 +354,7 @@ def main() -> int:
         return 2
     backend = str(highs) if highs is not None else "highspy (pip package, separate process)"
 
-    sankhya = args.sankhya_binary or default_sankhya()
+    YUKTHI = args.YUKTHI_binary or default_YUKTHI()
     reference_path = DATA_DIR / "reference.json"
     if not reference_path.exists():
         raise SystemExit("no reference data; run bench/runners/fetch_data.py first")
@@ -366,7 +366,7 @@ def main() -> int:
     machine = f"{platform.system()}-{platform.machine()}"
     timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
 
-    print(f"SANKHYA  {sankhya}")
+    print(f"YUKTHI  {YUKTHI}")
     print(f"HiGHS    {backend}   (external solver; never linked)")
     print("times are SOLVER-INTERNAL on both sides: HiGHS getRunTime() against our")
     print("         effort.solve_seconds. Process start-up is excluded for both.")
@@ -375,8 +375,8 @@ def main() -> int:
     print("         solve in milliseconds, so a single timing measures scheduling luck.")
     print(f"machine  {machine}   time limit {args.time_limit}s")
     print()
-    print(f"{'instance':<11}{'SANKHYA obj':>20}{'HiGHS obj':>20}{'agree':>7}"
-          f"{'SANKHYA s':>11}{'HiGHS s':>10}{'ratio':>8}")
+    print(f"{'instance':<11}{'YUKTHI obj':>20}{'HiGHS obj':>20}{'agree':>7}"
+          f"{'YUKTHI s':>11}{'HiGHS s':>10}{'ratio':>8}")
     print("-" * 87)
 
     rows: list[dict] = []
@@ -387,7 +387,7 @@ def main() -> int:
         if not mps.exists():
             continue
         published = reference[name]["published_optimal"]
-        ours = repeat(lambda: run_sankhya(sankhya, mps, args.time_limit),
+        ours = repeat(lambda: run_YUKTHI(YUKTHI, mps, args.time_limit),
                       args.repeats, args.warmup)
         theirs = repeat(
             lambda: (run_highs_binary(highs, mps, args.time_limit) if highs is not None
@@ -404,13 +404,13 @@ def main() -> int:
         rows.append({
             "instance": name,
             "published_objective": repr(published),
-            "sankhya_status": ours["status"],
-            "sankhya_objective": "" if ours["objective"] is None else repr(ours["objective"]),
-            "sankhya_relative_error": "" if our_error is None else repr(our_error),
-            "sankhya_seconds": round(ours["seconds"], 6),
-            "sankhya_seconds_min": round(ours["seconds_min"], 6),
-            "sankhya_seconds_max": round(ours["seconds_max"], 6),
-            "sankhya_iterations": ours["iterations"],
+            "YUKTHI_status": ours["status"],
+            "YUKTHI_objective": "" if ours["objective"] is None else repr(ours["objective"]),
+            "YUKTHI_relative_error": "" if our_error is None else repr(our_error),
+            "YUKTHI_seconds": round(ours["seconds"], 6),
+            "YUKTHI_seconds_min": round(ours["seconds_min"], 6),
+            "YUKTHI_seconds_max": round(ours["seconds_max"], 6),
+            "YUKTHI_iterations": ours["iterations"],
             "highs_status": theirs["status"],
             "highs_objective": "" if theirs["objective"] is None else repr(theirs["objective"]),
             "highs_relative_error": "" if their_error is None else repr(their_error),
@@ -419,7 +419,7 @@ def main() -> int:
             "highs_seconds_max": round(theirs["seconds_max"], 6),
             "timing_repeats": ours["repeats"],
             "objectives_agree": int(agree),
-            "speed_ratio_sankhya_over_highs": "" if ratio is None else round(ratio, 3),
+            "speed_ratio_YUKTHI_over_highs": "" if ratio is None else round(ratio, 3),
             "git_commit": commit,
             "machine": machine,
             "timestamp_utc": timestamp,
@@ -438,7 +438,7 @@ def main() -> int:
               f"{ours['seconds']:>10.3f}s{theirs['seconds']:>9.3f}s{ratio_text}"
               f"{'  ~' if overlap else ''}")
         if not ours["objective_stable"]:
-            print(f"           SANKHYA's objective MOVED across repeats on {name} - "
+            print(f"           YUKTHI's objective MOVED across repeats on {name} - "
                   f"the solver is not deterministic on this input")
         if not theirs["objective_stable"]:
             print(f"           HiGHS's objective moved across repeats on {name}")
@@ -448,12 +448,12 @@ def main() -> int:
     agreed = sum(row["objectives_agree"] for row in rows)
     print("-" * 87)
     print(f"{agreed}/{len(rows)} instances where the two solvers agree on the objective")
-    ratios = [row["speed_ratio_sankhya_over_highs"] for row in rows
-              if isinstance(row["speed_ratio_sankhya_over_highs"], float)]
+    ratios = [row["speed_ratio_YUKTHI_over_highs"] for row in rows
+              if isinstance(row["speed_ratio_YUKTHI_over_highs"], float)]
     if ratios:
         ordered = sorted(ratios)
         median = ordered[len(ordered) // 2]
-        print(f"median solve-time ratio SANKHYA/HiGHS: {median:.2f}x  (>1 means we are slower)")
+        print(f"median solve-time ratio YUKTHI/HiGHS: {median:.2f}x  (>1 means we are slower)")
         print(f"  ratios across instances span {ordered[0]:.2f}x to {ordered[-1]:.2f}x")
 
     # How much each individual timing still wobbles, stated rather than hidden. If this is

@@ -90,7 +90,7 @@ def main() -> int:
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("instances", nargs="*")
     parser.add_argument("--binary", type=Path, default=None,
-                        help="our solver; defaults to build/sankhya[.exe]")
+                        help="our solver; defaults to build/YUKTHI[.exe]")
     parser.add_argument("--time-limit", type=float, default=120.0)
     parser.add_argument("--out", type=Path, default=None)
     args = parser.parse_args()
@@ -108,7 +108,7 @@ def main() -> int:
 
     binary = args.binary
     if binary is None:
-        for candidate in ("build/sankhya", "build/sankhya.exe"):
+        for candidate in ("build/YUKTHI", "build/YUKTHI.exe"):
             if (REPO_ROOT / candidate).exists():
                 binary = REPO_ROOT / candidate
                 break

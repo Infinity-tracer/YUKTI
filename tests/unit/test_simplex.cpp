@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - primal simplex tests.
+// YUKTHI - primal simplex tests.
 //
 // A simplex that returns the wrong number does not crash, does not warn, and prints a
 // beautifully formatted answer. So almost nothing here asserts on the objective alone.
@@ -21,11 +21,11 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// Build a model from a dense row-major matrix. Entries that are exactly zero are dropped,
@@ -963,4 +963,4 @@ TEST(PrimalSimplex, TheRouteAnAnswerTookIsRecorded) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

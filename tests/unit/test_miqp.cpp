@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - mixed-integer quadratic programming.
+// YUKTHI - mixed-integer quadratic programming.
 //
 // MIQP is branch and bound over QP node relaxations. The failure this file exists to catch is
 // the one solve() previously avoided by refusing the class outright: reporting a RELAXATION as
@@ -13,10 +13,10 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 Options miqp_options() {
@@ -167,4 +167,4 @@ TEST(Miqp, IsClassifiedAsMiqpRatherThanFallingBackToAnLp) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

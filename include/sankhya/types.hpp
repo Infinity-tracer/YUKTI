@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA — core scalar and index types.
+// YUKTHI — core scalar and index types.
 //
 // Every numerical quantity in the solver core is `double`. Per CLAUDE.md there is no
 // `float` anywhere in src/. Indices are 32-bit signed: this caps us at ~2.1e9 nonzeros,
@@ -11,7 +11,7 @@
 #include <cstdint>
 #include <limits>
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// Index type for rows, columns and nonzero positions.
 using Index = std::int32_t;
@@ -56,4 +56,4 @@ inline constexpr double kMpsInfinity = 1e30;
   return v == 0.0 ? 0.0 : v;
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

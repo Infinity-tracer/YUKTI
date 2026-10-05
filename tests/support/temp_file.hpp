@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - a scratch file that deletes itself, for the reader tests.
+// YUKTHI - a scratch file that deletes itself, for the reader tests.
 //
 // The reader tests are table-driven over dozens of small MPS and LP fragments. Keeping
 // those fragments as string literals inside the test file rather than as checked-in data
@@ -14,14 +14,14 @@
 
 #include <gtest/gtest.h>
 
-namespace sankhya::testing {
+namespace YUKTHI::testing {
 
 class TempFile {
  public:
   /// Write `contents` to a uniquely named file with the given extension.
   TempFile(std::string_view contents, const char* extension = ".mps") {
     static int counter = 0;
-    path_ = std::string("sankhya_test_") + std::to_string(counter++) + extension;
+    path_ = std::string("YUKTHI_test_") + std::to_string(counter++) + extension;
     std::FILE* out = std::fopen(path_.c_str(), "wb");
     if (out == nullptr) {
       ADD_FAILURE() << "cannot create scratch file " << path_;
@@ -44,4 +44,4 @@ class TempFile {
   std::string path_;
 };
 
-}  // namespace sankhya::testing
+}  // namespace YUKTHI::testing

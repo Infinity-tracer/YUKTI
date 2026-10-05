@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - MPS reader tests.
+// YUKTHI - MPS reader tests.
 //
 // These are the tests CLAUDE.md says must never be cut. RANGES and BOUNDS are the two
 // places in the MPS format where a plausible misreading yields a well-formed model of a
@@ -14,17 +14,17 @@
 
 #include <gtest/gtest.h>
 
-#ifdef SANKHYA_WITH_ZLIB
+#ifdef YUKTHI_WITH_ZLIB
 #include <zlib.h>
 #endif
 
-#include "sankhya/io.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
 #include "support/temp_file.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 using testing::TempFile;
@@ -673,13 +673,13 @@ TEST(MpsReader, CarriageReturnsAreStripped) {
 // Compressed input
 // =========================================================================================
 
-#ifdef SANKHYA_WITH_ZLIB
+#ifdef YUKTHI_WITH_ZLIB
 /// Write `contents` through zlib, producing a real gzip file, and delete it on destruction.
 class TempGzFile {
  public:
   explicit TempGzFile(const std::string& contents) {
     static int counter = 0;
-    path_ = "sankhya_test_gz_" + std::to_string(counter++) + ".mps.gz";
+    path_ = "YUKTHI_test_gz_" + std::to_string(counter++) + ".mps.gz";
     gzFile out = gzopen(path_.c_str(), "wb");
     if (out == nullptr) {
       ADD_FAILURE() << "cannot create " << path_;
@@ -764,7 +764,7 @@ TEST(MpsReader, ReadsAnUncompressedFileThroughTheSameCodePath) {
   EXPECT_EQ(model.num_rows(), 1);
   EXPECT_DOUBLE_EQ(model.row_upper[0], 10.0);
 }
-#endif  // SANKHYA_WITH_ZLIB
+#endif  // YUKTHI_WITH_ZLIB
 
 // =========================================================================================
 // Non-finite coefficients
@@ -1011,4 +1011,4 @@ TEST(MpsReader, AColumnNamedQuadobjIsStillJustAColumn) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - command line front end.
+// YUKTHI - command line front end.
 //
 // Subcommands: version, options, info, solve. The generic --option name=value passthrough
 // reaches every entry in the registry, so a knob added in src/util/options.cpp is reachable
@@ -17,16 +17,16 @@
 #include <fmt/format.h>
 #include <CLI/CLI.hpp>
 
-#include "sankhya/io.hpp"
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/version.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/version.hpp"
 
 namespace {
 
 /// Apply repeated --option name=value pairs. Returns false after printing the first error.
-bool apply_options(const std::vector<std::string>& assignments, sankhya::Options* options) {
+bool apply_options(const std::vector<std::string>& assignments, YUKTHI::Options* options) {
   for (const std::string& assignment : assignments) {
     const std::size_t eq = assignment.find('=');
     if (eq == std::string::npos) {
@@ -45,14 +45,14 @@ bool apply_options(const std::vector<std::string>& assignments, sankhya::Options
 
 void print_option_table() {
   fmt::print("{:<32} {:<8} {:<12} {}\n", "NAME", "TYPE", "DEFAULT", "DESCRIPTION");
-  const sankhya::Options defaults;
-  for (const sankhya::OptionSpec& spec : sankhya::Options::registry()) {
+  const YUKTHI::Options defaults;
+  for (const YUKTHI::OptionSpec& spec : YUKTHI::Options::registry()) {
     const char* type_name = "string";
     switch (spec.type) {
-      case sankhya::OptionType::Bool: type_name = "bool"; break;
-      case sankhya::OptionType::Int: type_name = "int"; break;
-      case sankhya::OptionType::Double: type_name = "double"; break;
-      case sankhya::OptionType::String: type_name = "string"; break;
+      case YUKTHI::OptionType::Bool: type_name = "bool"; break;
+      case YUKTHI::OptionType::Int: type_name = "int"; break;
+      case YUKTHI::OptionType::Double: type_name = "double"; break;
+      case YUKTHI::OptionType::String: type_name = "string"; break;
     }
     // An option the solver does not read yet is marked, not hidden. The registry is the
     // one table the CLI, the C API and the bindings all share, so entries stay put; what
@@ -87,17 +87,17 @@ bool looks_like_lp(const std::string& path) {
 }
 
 /// Load a model, printing the reader's diagnostic on failure.
-bool load_model(const std::string& path, const sankhya::Options& options,
-                sankhya::Model* model) {
-  sankhya::io::MpsFormat format = sankhya::io::MpsFormat::kAuto;
-  if (!sankhya::io::parse_mps_format(options.get_string("mps_format"), &format)) {
+bool load_model(const std::string& path, const YUKTHI::Options& options,
+                YUKTHI::Model* model) {
+  YUKTHI::io::MpsFormat format = YUKTHI::io::MpsFormat::kAuto;
+  if (!YUKTHI::io::parse_mps_format(options.get_string("mps_format"), &format)) {
     fmt::print(stderr, "error: unknown mps_format\n");
     return false;
   }
 
-  const sankhya::io::ReadResult result = looks_like_lp(path)
-                                             ? sankhya::io::read_lp(path, model)
-                                             : sankhya::io::read_mps(path, model, format);
+  const YUKTHI::io::ReadResult result = looks_like_lp(path)
+                                             ? YUKTHI::io::read_lp(path, model)
+                                             : YUKTHI::io::read_mps(path, model, format);
   if (!result.ok) {
     fmt::print(stderr, "error: {}\n", result.error);
     return false;
@@ -105,27 +105,27 @@ bool load_model(const std::string& path, const sankhya::Options& options,
   return true;
 }
 
-/// `sankhya info` - structure without solving. This is the first command a judge runs on an
+/// `YUKTHI info` - structure without solving. This is the first command a judge runs on an
 /// instance they brought themselves, so it prints what they would otherwise count by hand,
 /// including the coefficient magnitude ratio: a model whose entries span 1e-6 to 1e9 is one
 /// of the ill-conditioned cases the problem statement asks about, and it should be visible
 /// before the solve rather than inferred from the solve going wrong.
-void print_model_info(const sankhya::Model& model) {
-  const sankhya::Index m = model.num_rows();
-  const sankhya::Index n = model.num_cols();
-  const sankhya::Index nnz = model.num_nonzeros();
+void print_model_info(const YUKTHI::Model& model) {
+  const YUKTHI::Index m = model.num_rows();
+  const YUKTHI::Index n = model.num_cols();
+  const YUKTHI::Index nnz = model.num_nonzeros();
   const double density =
       (m > 0 && n > 0)
           ? 100.0 * static_cast<double>(nnz) / (static_cast<double>(m) * static_cast<double>(n))
           : 0.0;
 
-  sankhya::Index equalities = 0;
-  sankhya::Index ranges = 0;
-  sankhya::Index free_rows = 0;
-  for (sankhya::Index i = 0; i < m; ++i) {
+  YUKTHI::Index equalities = 0;
+  YUKTHI::Index ranges = 0;
+  YUKTHI::Index free_rows = 0;
+  for (YUKTHI::Index i = 0; i < m; ++i) {
     const auto u = static_cast<std::size_t>(i);
-    const bool lo = sankhya::is_finite_bound(model.row_lower[u]);
-    const bool hi = sankhya::is_finite_bound(model.row_upper[u]);
+    const bool lo = YUKTHI::is_finite_bound(model.row_lower[u]);
+    const bool hi = YUKTHI::is_finite_bound(model.row_upper[u]);
     if (lo && hi && model.row_lower[u] == model.row_upper[u]) {
       ++equalities;
     } else if (lo && hi) {
@@ -135,13 +135,13 @@ void print_model_info(const sankhya::Model& model) {
     }
   }
 
-  sankhya::Index boxed = 0;
-  sankhya::Index free_cols = 0;
-  sankhya::Index fixed = 0;
-  for (sankhya::Index j = 0; j < n; ++j) {
+  YUKTHI::Index boxed = 0;
+  YUKTHI::Index free_cols = 0;
+  YUKTHI::Index fixed = 0;
+  for (YUKTHI::Index j = 0; j < n; ++j) {
     const auto u = static_cast<std::size_t>(j);
-    const bool lo = sankhya::is_finite_bound(model.col_lower[u]);
-    const bool hi = sankhya::is_finite_bound(model.col_upper[u]);
+    const bool lo = YUKTHI::is_finite_bound(model.col_lower[u]);
+    const bool hi = YUKTHI::is_finite_bound(model.col_upper[u]);
     if (lo && hi && model.col_lower[u] == model.col_upper[u]) {
       ++fixed;
     } else if (lo && hi) {
@@ -163,7 +163,7 @@ void print_model_info(const sankhya::Model& model) {
   fmt::print("name              {}\n", model.name.empty() ? "(unnamed)" : model.name);
   fmt::print("source            {}\n", model.source_path);
   fmt::print("sense             {}\n",
-             model.sense == sankhya::ObjSense::kMaximize ? "maximize" : "minimize");
+             model.sense == YUKTHI::ObjSense::kMaximize ? "maximize" : "minimize");
   fmt::print("objective offset  {:g}\n", model.objective_offset);
   fmt::print("rows              {}  (equality {}, range {}, free {})\n", m, equalities, ranges,
              free_rows);
@@ -182,9 +182,9 @@ void print_model_info(const sankhya::Model& model) {
 }  // namespace
 
 int main(int argc, char** argv) {
-  CLI::App app{"SANKHYA - LP / MILP / QP solver", "sankhya"};
+  CLI::App app{"YUKTHI - LP / MILP / QP solver", "YUKTHI"};
   app.require_subcommand(1);
-  app.set_version_flag("--version", std::string(sankhya::banner()));
+  app.set_version_flag("--version", std::string(YUKTHI::banner()));
 
   std::vector<std::string> option_assignments;
 
@@ -221,7 +221,7 @@ int main(int argc, char** argv) {
   CLI11_PARSE(app, argc, argv);
 
   if (version_cmd->parsed()) {
-    fmt::print("{}\n", sankhya::banner());
+    fmt::print("{}\n", YUKTHI::banner());
     return 0;
   }
 
@@ -230,26 +230,26 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  sankhya::Options options;
+  YUKTHI::Options options;
   if (!apply_options(option_assignments, &options)) return 2;
   if (time_limit > 0.0) options.set_double("time_limit", time_limit);
   if (use_gpu) options.set_bool("gpu", true);
 
   if (info_cmd->parsed()) {
-    sankhya::Model model;
+    YUKTHI::Model model;
     if (!load_model(info_path, options, &model)) return 3;
     print_model_info(model);
     return 0;
   }
 
   if (solve_cmd->parsed()) {
-    sankhya::Model model;
+    YUKTHI::Model model;
     if (!load_model(model_path, options, &model)) return 3;
     if (!progress_out_path.empty()) options.set_string("progress_out", progress_out_path);
 
-    const sankhya::Solution solution = sankhya::solve(model, options);
+    const YUKTHI::Solution solution = YUKTHI::solve(model, options);
 
-    fmt::print("\n{:<22}{}\n", "status", sankhya::to_string(solution.status));
+    fmt::print("\n{:<22}{}\n", "status", YUKTHI::to_string(solution.status));
     if (solution.has_primal_values()) {
       fmt::print("{:<22}{:.12g}\n", "objective", solution.objective);
       fmt::print("{:<22}{:.12g}\n", "dual bound", solution.dual_bound);
@@ -264,12 +264,12 @@ int main(int argc, char** argv) {
 
     std::string error;
     if (!solution_path.empty() &&
-        !sankhya::io::write_solution(solution_path, model, solution, options, &error)) {
+        !YUKTHI::io::write_solution(solution_path, model, solution, options, &error)) {
       fmt::print(stderr, "error: {}\n", error);
       return 4;
     }
     if (!stats_path.empty() &&
-        !sankhya::io::write_stats_json(stats_path, model, solution, &error)) {
+        !YUKTHI::io::write_stats_json(stats_path, model, solution, &error)) {
       fmt::print(stderr, "error: {}\n", error);
       return 4;
     }
@@ -277,10 +277,10 @@ int main(int argc, char** argv) {
     // Exit code carries the outcome so a benchmark script can branch without parsing
     // stdout: 0 optimal, 1 a limit or a proven infeasible/unbounded model, 5 an error.
     switch (solution.status) {
-      case sankhya::SolveStatus::kOptimal: return 0;
-      case sankhya::SolveStatus::kNumericalError:
-      case sankhya::SolveStatus::kModelError:
-      case sankhya::SolveStatus::kNotSolved: return 5;
+      case YUKTHI::SolveStatus::kOptimal: return 0;
+      case YUKTHI::SolveStatus::kNumericalError:
+      case YUKTHI::SolveStatus::kModelError:
+      case YUKTHI::SolveStatus::kNotSolved: return 5;
       default: return 1;
     }
   }

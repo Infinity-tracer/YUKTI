@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - checking the two certificates. See include/sankhya/certificate.hpp for what they
+// YUKTHI - checking the two certificates. See include/YUKTHI/certificate.hpp for what they
 // are and why the solver checks its own.
 
-#include "sankhya/certificate.hpp"
+#include "YUKTHI/certificate.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -10,10 +10,10 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/sparse.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/sparse.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 [[nodiscard]] bool finite(double value) noexcept {
@@ -217,4 +217,4 @@ bool ray_proves_unbounded(const Model& model, const std::vector<double>& d, std:
   return true;
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

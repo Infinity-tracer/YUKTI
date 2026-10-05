@@ -154,7 +154,7 @@ def build(rows: int, cols: int, nnz_per_col: int, seed: int, structure: str = "r
     optimal_objective = sum(cost[j] * x_star[j] for j in range(cols))
 
     lines = [
-        f"* SANKHYA synthetic large sparse LP - issue #18",
+        f"* YUKTHI synthetic large sparse LP - issue #18",
         f"* rows={rows} cols={cols} nnz_per_col={nnz_per_col} seed={seed}",
         f"* Built backwards from a known KKT-satisfying primal-dual pair (see this file's",
         f"* generate_large_lp.py docstring, same construction as tests/oracles/lp_generator",

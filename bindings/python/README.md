@@ -1,9 +1,9 @@
-# SANKHYA — Python bindings
+# YUKTHI — Python bindings
 
 ```python
-import sankhya
+import YUKTHI
 
-model = sankhya.Model(maximize=True)
+model = YUKTHI.Model(maximize=True)
 x = model.add_column(cost=3.0, upper=3.0, name="x")
 y = model.add_column(cost=2.0, name="y")
 model.add_row({x: 1.0, y: 1.0}, upper=4.0)
@@ -17,7 +17,7 @@ print(result.status, result.objective, result.x)
 Or read a file:
 
 ```python
-model = sankhya.Model.read("data/netlib/afiro.mps")
+model = YUKTHI.Model.read("data/netlib/afiro.mps")
 print(model.solve().objective)   # -464.7531428571429
 ```
 
@@ -31,13 +31,13 @@ scripts/configure.sh build Release && cmake --build build -j
 export PYTHONPATH=bindings/python
 ```
 
-The bindings load `libsankhya.so` / `libsankhya.dll` from `build/` (and a few other usual
-directories). Point `SANKHYA_LIBRARY` at a specific file to override the search.
+The bindings load `libYUKTHI.so` / `libYUKTHI.dll` from `build/` (and a few other usual
+directories). Point `YUKTHI_LIBRARY` at a specific file to override the search.
 
 **On Windows**, the library imports `zlib1.dll`, which lives beside the compiler rather than
 anywhere Windows searches by default — Python 3.8 stopped honouring `PATH` for this. The
 loader adds the usual MSYS2 and MinGW directories itself; if yours is elsewhere, set
-`SANKHYA_DLL_DIR`.
+`YUKTHI_DLL_DIR`.
 
 ## Why ctypes and not pybind11
 
@@ -47,7 +47,7 @@ matching. ctypes needs none of that: the shared library the C++ build already pr
 the whole dependency, and the same file works from CPython, PyPy, or anything else with an
 FFI.
 
-It also means these bindings exercise `include/sankhya/sankhya.h` exactly as a third-party
+It also means these bindings exercise `include/YUKTHI/YUKTHI.h` exactly as a third-party
 caller would. A defect in that boundary surfaces here rather than being hidden by a
 C++-aware binding layer — which is not hypothetical: writing the C API found that an unknown
 option name reached a `std::abort()` in the C++ accessors, which across an FFI would have

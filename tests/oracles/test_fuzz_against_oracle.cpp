@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the floating-point simplex against the exact oracle.
+// YUKTHI - the floating-point simplex against the exact oracle.
 //
 // THIS IS THE GATE. Every other test in the suite checks that the solver does what its
 // author expected. This one checks that it does what the mathematics requires, on instances
@@ -20,13 +20,13 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
 #include "oracles/lp_generator.hpp"
 #include "oracles/rational_simplex.hpp"
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 namespace {
 
 /// Tally of one fuzz campaign. Every instance lands in exactly one bucket, and the buckets
@@ -240,4 +240,4 @@ TEST(FuzzAgainstOracle, KktInstancesAgainstTheAnalyticOptimum) {
 }
 
 }  // namespace
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

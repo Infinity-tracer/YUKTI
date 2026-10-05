@@ -1,4 +1,4 @@
-* SANKHYA demo instance - crude blending for a diesel pool.
+* YUKTHI demo instance - crude blending for a diesel pool.
 *
 * A deliberately small refinery LP that exercises the MPS features most likely to be
 * misread: a RANGES entry on a G row, an equality row, and both LO and UP bound types,

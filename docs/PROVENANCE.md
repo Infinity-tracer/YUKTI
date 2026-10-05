@@ -1,4 +1,4 @@
-# SANKHYA — provenance
+# YUKTHI — provenance
 
 This document exists so that the claim "built from mathematical foundations, not wrapped
 around an existing solver" can be **checked** rather than believed. It is maintained
@@ -19,7 +19,7 @@ simplex, not their cuts, not their MPS readers.
 HiGHS appears in this project **only** as the comparison baseline in
 `bench/runners/compare.py`. It runs either as an externally installed command-line binary or,
 where none is present, through the `highspy` pip package in a separate Python process. It is
-never linked into SANKHYA, never a build dependency, and no part of its source informs ours.
+never linked into YUKTHI, never a build dependency, and no part of its source informs ours.
 The comparison results are in `docs/BENCHMARKS.md` section 3.
 
 ---
@@ -35,7 +35,7 @@ Every dependency is a general-purpose library. None of them solves an optimizati
 | **nlohmann/json** | 3.11.3 | MIT | header-only | JSON serialisation for the `--stats` result blob. |
 | **OpenMP runtime** (libgomp with GCC, libomp with Clang) | as shipped by the compiler | GPL-3.0 with the GCC Runtime Library Exception / Apache-2.0 with LLVM exception | optional, found by CMake | The compiler's own thread runtime for `#pragma omp parallel for`. Schedules loops; contains no numerical code of any kind. |
 | **zlib** | 1.3.1 | zlib | yes, static | DEFLATE decompression, for `.mps.gz` inputs (Phase 2). |
-| **GoogleTest** | 1.14.0 | BSD-3-Clause | test binary only | Unit test framework. Never linked into `sankhya_core`. |
+| **GoogleTest** | 1.14.0 | BSD-3-Clause | test binary only | Unit test framework. Never linked into `YUKTHI_core`. |
 | **highspy** | pip, benchmark only | MIT | **never linked** | The HiGHS solver, used ONLY as the comparison baseline in `bench/runners/compare.py`. It runs in a separate Python process, is not a build dependency, and nothing in `src/` knows it exists. Its source does not inform ours - see the red line in section 1. |
 
 Considered, and not present. Each was allowed by the policy above; none turned out to be
@@ -82,8 +82,8 @@ mathematics, not transcribed from anyone's implementation.
 | Algorithm | Citation | File |
 |---|---|---|
 | Compressed-column storage, counting-sort transpose | Davis, *Direct Methods for Sparse Linear Systems* (SIAM, 2006), ch. 2 | `src/la/sparse.cpp` |
-| Dense-accumulator sparse vector (FTRAN/BTRAN result pattern) | Davis, ibid.; Hall & McKinnon on hyper-sparsity | `include/sankhya/sparse.hpp`, `src/la/sparse.cpp` |
-| Markowitz threshold pivoting (constant only, so far) | Suhl & Suhl, *Computing sparse LU factorizations for large-scale linear programming bases* | `include/sankhya/tolerances.hpp` |
+| Dense-accumulator sparse vector (FTRAN/BTRAN result pattern) | Davis, ibid.; Hall & McKinnon on hyper-sparsity | `include/YUKTHI/sparse.hpp`, `src/la/sparse.cpp` |
+| Markowitz threshold pivoting (constant only, so far) | Suhl & Suhl, *Computing sparse LU factorizations for large-scale linear programming bases* | `include/YUKTHI/tolerances.hpp` |
 | MPS format: sections, RANGES and BOUNDS semantics | IBM MPS specification; Maros, *Computational Techniques of the Simplex Method* (Kluwer, 2003), appendix A | `src/io/mps_reader.cpp` |
 | CPLEX LP format | Public CPLEX and Gurobi reference manuals (documentation only) | `src/io/lp_reader.cpp` |
 | Dense LU with partial pivoting; transposed triangular solves | Golub & Van Loan, *Matrix Computations* (4th ed.), sections 3.2 and 3.4 | `src/simplex/dense_lu.cpp` |
@@ -120,7 +120,7 @@ mathematics, not transcribed from anyone's implementation.
 | Gomory mixed-integer cuts at the root, from tableau rows reconstructed off the final basis (#159) | Gomory, *An algorithm for the mixed integer problem*, RAND RM-2597 (1960); Balas, Ceria, Cornuéjols & Natraj, *Gomory cuts revisited*, Oper. Res. Letters 19 (1996); Marchand & Wolsey, *Aggregation and mixed integer rounding to solve MIPs*, Oper. Res. 49 (2001) | `src/mip/cuts.cpp` |
 | Bound rounding on integral rows; cut filtering by density, coefficient range and violation, duplicates dropped | Chvátal, *Edmonds polytopes and a hierarchy of combinatorial problems*, Discrete Math. 4 (1973); Achterberg, *Constraint Integer Programming* (thesis, 2007), ch. 8 | `src/mip/cuts.cpp` |
 | Cut validity gate: every family checked in exact arithmetic against the rational oracle's optimum, with a deliberately invalid cut as the negative control | as above, in exact arithmetic | `tests/unit/test_cuts.cpp` |
-| Certificate of infeasibility (Farkas): row multipliers whose aggregate no point in the column box satisfies, checked against the ORIGINAL model before it is published (#191) | Farkas, J., *Theorie der einfachen Ungleichungen*, J. reine angew. Math. 124 (1902); Schrijver, *Theory of Linear and Integer Programming* (1986), section 7.3 | `src/core/certificate.cpp`, `include/sankhya/certificate.hpp` |
+| Certificate of infeasibility (Farkas): row multipliers whose aggregate no point in the column box satisfies, checked against the ORIGINAL model before it is published (#191) | Farkas, J., *Theorie der einfachen Ungleichungen*, J. reine angew. Math. 124 (1902); Schrijver, *Theory of Linear and Integer Programming* (1986), section 7.3 | `src/core/certificate.cpp`, `include/YUKTHI/certificate.hpp` |
 | Certificate of unboundedness: a recession direction no bound blocks along which the objective strictly improves, reported with the feasible point it starts from (#191) | Schrijver, ibid., section 8.2; Chvatal, *Linear Programming* (1983), ch. 3 on the ratio test that exhibits the ray | `src/core/certificate.cpp`, `src/simplex/primal_simplex.cpp` |
 | Convex QP by a primal-dual proximal method with a forward step for the smooth 0.5 x'Qx term (#55; the LP engine's iteration with the gradient added) | Condat, *A primal-dual splitting method for convex optimization involving Lipschitzian, proximable and linear composite terms*, J. Optim. Theory Appl. 158 (2013); Vũ, *A splitting algorithm for dual monotone inclusions involving cocoercive operators*, Adv. Comput. Math. 38 (2013); Chambolle & Pock (2011) for the Q = 0 case | `src/qp/qp_condat_vu.cpp` |
 | Convexity decided before any arithmetic: LDL^T without interchanges on sense · Q, a negative pivot returned as the certificate; dense, and above 2000 columns it reports unverified rather than guessing | Golub & Van Loan, *Matrix Computations* (4th ed.), section 4.1; Higham, *Accuracy and Stability of Numerical Algorithms* (2nd ed.), ch. 10 | `src/qp/convexity.cpp` |
@@ -148,7 +148,7 @@ what that prediction was for.
 Windows 11, **GCC 16.1.0 (MSYS2 UCRT64), Release**:
 
 ```
-$ objdump -p build/sankhya.exe | grep "DLL Name" | sort -u
+$ objdump -p build/YUKTHI.exe | grep "DLL Name" | sort -u
         DLL Name: KERNEL32.dll
         DLL Name: api-ms-win-crt-convert-l1-1-0.dll
         DLL Name: api-ms-win-crt-environment-l1-1-0.dll
@@ -175,7 +175,7 @@ The Linux build is the authoritative one. Produced by the `provenance` job on
 **ubuntu-latest, GCC (runner default), Release**, run 32867892122:
 
 ```
-$ ldd build/sankhya
+$ ldd build/YUKTHI
         linux-vdso.so.1 (0x00007f2012bf2000)
         libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f2012b07000)
         libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007f2012800000)
@@ -184,11 +184,11 @@ $ ldd build/sankhya
         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f2012400000)
         /lib64/ld-linux-x86-64.so.2 (0x00007f2012bf4000)
 
-$ ldd build/sankhya | grep -Ei 'cbc|clp|highs|scip|soplex|glpk|lpsolve|osqp|ortools|gurobi|cplex|xpress'
+$ ldd build/YUKTHI | grep -Ei 'cbc|clp|highs|scip|soplex|glpk|lpsolve|osqp|ortools|gurobi|cplex|xpress'
 OK: no solver library is linked
 ```
 
-zlib, the C++ runtime, libc and libm - and, on a build with `SANKHYA_WITH_OPENMP` on (the
+zlib, the C++ runtime, libc and libm - and, on a build with `YUKTHI_WITH_OPENMP` on (the
 default, #57), the compiler's own OpenMP runtime, `libgomp` with GCC, which the listing
 above predates. Nothing else.
 
@@ -203,15 +203,15 @@ Asked of Ninja directly so it cannot drift from what was really executed.
 Linux, from the CI `provenance` job (run 32867892122):
 
 ```
-$ ninja -C build -t commands sankhya | tail -1
-/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/sankhya-cli.dir/link.d     CMakeFiles/sankhya-cli.dir/apps/sankhya-cli/main.cpp.o     -o sankhya     libsankhya_core.a     _deps/fmt-build/libfmt.a     /usr/lib/x86_64-linux-gnu/libz.so
+$ ninja -C build -t commands YUKTHI | tail -1
+/usr/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/YUKTHI-cli.dir/link.d     CMakeFiles/YUKTHI-cli.dir/apps/YUKTHI-cli/main.cpp.o     -o YUKTHI     libYUKTHI_core.a     _deps/fmt-build/libfmt.a     /usr/lib/x86_64-linux-gnu/libz.so
 ```
 
 Windows, same command on the local tree:
 
 ```
-$ ninja -C build -t commands sankhya-cli | tail -1
-g++ -O3 -DNDEBUG -static-libgcc -static-libstdc++ -static     CMakeFiles/sankhya-cli.dir/apps/sankhya-cli/main.cpp.obj     -o sankhya.exe     -Wl,--out-implib,libsankhya.dll.a     libsankhya_core.a     _deps/fmt-build/libfmt.a     C:/msys64/ucrt64/lib/libz.dll.a
+$ ninja -C build -t commands YUKTHI-cli | tail -1
+g++ -O3 -DNDEBUG -static-libgcc -static-libstdc++ -static     CMakeFiles/YUKTHI-cli.dir/apps/YUKTHI-cli/main.cpp.obj     -o YUKTHI.exe     -Wl,--out-implib,libYUKTHI.dll.a     libYUKTHI_core.a     _deps/fmt-build/libfmt.a     C:/msys64/ucrt64/lib/libz.dll.a
 ```
 
 Three artifacts on each platform: our own core, fmt, and the system zlib. CLI11 and
@@ -221,7 +221,7 @@ dependency table above and visible in `CMakeLists.txt`.
 ### 4.3 SBOM
 
 An SPDX SBOM is generated in CI by the `provenance` job and attached as a build artifact
-(`sankhya-sbom.spdx.json`).
+(`YUKTHI-sbom.spdx.json`).
 
 ---
 
@@ -237,9 +237,9 @@ recorded rather than silently made.
 | 3 | System zlib is picked up in preference to a fetched copy. Does that weaken the provenance claim? | Acceptable, and recorded | zlib is a compression library under a permissive licence, present on essentially every system. The exact resolved path appears in the link line above, so which copy was used is always visible. |
 | 4 | The Windows build links libstdc++ and libgcc **statically** (`-static`). | Deliberate | It removes a start-up failure caused by an older MinGW earlier on PATH, and it makes the dependency list above shorter and easier to audit, not longer. It has no effect on the Linux build, which CI treats as authoritative. |
 | 5 | The MPS reader imitates the *file format* of CPLEX/Xpress inputs, and the LP reader imitates the CPLEX LP format. | Allowed | A file format is an interface, not an implementation. `CLAUDE.md` item 5 covers API shape for the same reason, and reading a format everyone's solver reads is what makes us drop-in adoptable. Both readers were written from the published format specification and from the textbook reference above; **no solver's reader source was consulted**, which `CLAUDE.md` calls out by name as forbidden. |
-| 6 | Netlib distributes its LP test set in a packed `emps` encoding, not as plain MPS, and expanding it requires the `emps` decoder Netlib ships alongside the data. Does fetching that decoder cross the red line? | **RESOLVED — allowed, and not vendored.** See row 8, which records how it is actually done. | Logged as OPEN while Phase 2 was in progress, and Phase 2 correctly claimed no Netlib result at the time. It was settled when `bench/runners/fetch_data.py` was written: the decoder is DOWNLOADED AND COMPILED at fetch time rather than committed, so this repository contains no third-party source, and the sha256 of everything downloaded is recorded. `emps` is a file-format converter, not a solver, so it sits outside the red line, and `CLAUDE.md` item 6 permits the Netlib dataset of which this is the delivery mechanism. Nothing it produces is linked into SANKHYA. The Netlib results in `docs/BENCHMARKS.md` rest on this decision. See issue #62. |
+| 6 | Netlib distributes its LP test set in a packed `emps` encoding, not as plain MPS, and expanding it requires the `emps` decoder Netlib ships alongside the data. Does fetching that decoder cross the red line? | **RESOLVED — allowed, and not vendored.** See row 8, which records how it is actually done. | Logged as OPEN while Phase 2 was in progress, and Phase 2 correctly claimed no Netlib result at the time. It was settled when `bench/runners/fetch_data.py` was written: the decoder is DOWNLOADED AND COMPILED at fetch time rather than committed, so this repository contains no third-party source, and the sha256 of everything downloaded is recorded. `emps` is a file-format converter, not a solver, so it sits outside the red line, and `CLAUDE.md` item 6 permits the Netlib dataset of which this is the delivery mechanism. Nothing it produces is linked into YUKTHI. The Netlib results in `docs/BENCHMARKS.md` rest on this decision. See issue #62. |
 | 7 | The Windows `.exe` dynamically links `zlib1.dll`, so the Phase 1 claim that it is self-contained no longer holds. | Recorded, not fixed | MSYS2 ships zlib only as an import library, and `-static` cannot statically link what has no static archive. Fixing it would mean forcing the bundled zlib build on Windows, which trades an audit-surface improvement for a divergence between the two platforms' dependency sets. Linux is what CI gates and what the provenance claim rests on; Windows is the convenience build. Revisit at Phase 10 packaging if we ship a Windows binary. |
-| 8 | `bench/runners/fetch_data.py` downloads Netlib's `emps.c` decoder and COMPILES it at fetch time. Is that third-party source in the project? | Allowed, and not vendored | Netlib distributes its LP set in a custom compressed encoding, and `emps.c` is the decoder they publish beside it. It is a file-format converter, not a solver, so it is outside the red line. It is downloaded at fetch time rather than committed, so this repository contains no third-party source; its sha256 is recorded in `data/netlib/reference.json`. Nothing it produces is linked into SANKHYA - it runs once, offline, to turn an archive format into plain MPS. |
+| 8 | `bench/runners/fetch_data.py` downloads Netlib's `emps.c` decoder and COMPILES it at fetch time. Is that third-party source in the project? | Allowed, and not vendored | Netlib distributes its LP set in a custom compressed encoding, and `emps.c` is the decoder they publish beside it. It is a file-format converter, not a solver, so it is outside the red line. It is downloaded at fetch time rather than committed, so this repository contains no third-party source; its sha256 is recorded in `data/netlib/reference.json`. Nothing it produces is linked into YUKTHI - it runs once, offline, to turn an archive format into plain MPS. |
 | 9 | MPS says a negative `UP` bound with no explicit lower bound implies `lower = -inf`. That is documented for continuous columns and **implementation-defined for integer ones**, where established readers disagree. Which reading do we take? | Apply the convention to integer columns too, and warn | Declining to choose was tried first and was worse than either choice: leaving `lower = 0` produces `[0, -5]`, an empty interval, so `Model::validate()` rejected the model and the file could not be loaded **at all** - and the resulting error named crossed bounds, which is the symptom rather than the cause. It also put the C++ reader at odds with `tools/verify_solution.py`, which already applies the convention; two components disagreeing about what the same bytes mean is exactly what that verifier exists to catch, so the disagreement sitting inside the pair weakened the check against every instance carrying such a bound. The warning is kept so the ambiguity stays visible in the log. See issue #8. |
 
 ---
@@ -252,14 +252,14 @@ cmake --build build -j
 ctest --test-dir build --output-on-failure
 ```
 
-On Linux, `ldd build/sankhya`. On Windows, `objdump -p build/sankhya.exe | grep "DLL Name"`.
+On Linux, `ldd build/YUKTHI`. On Windows, `objdump -p build/YUKTHI.exe | grep "DLL Name"`.
 
 To reproduce the Phase 2 end-to-end result:
 
 ```bash
-build/sankhya info demo/crude_blend.mps
-build/sankhya solve demo/crude_blend.mps --write-sol blend.sol --stats blend.json
-build/sankhya solve demo/crude_blend.lp
+build/YUKTHI info demo/crude_blend.mps
+build/YUKTHI solve demo/crude_blend.mps --write-sol blend.sol --stats blend.json
+build/YUKTHI solve demo/crude_blend.lp
 ```
 
 The MPS and LP files describe the same model; the two solutions must be identical.

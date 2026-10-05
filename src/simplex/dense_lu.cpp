@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - dense LU factorization, implementation.
+// YUKTHI - dense LU factorization, implementation.
 
 #include "dense_lu.hpp"
 
@@ -8,7 +8,7 @@
 #include <limits>
 #include <utility>
 
-namespace sankhya {
+namespace YUKTHI {
 
 bool DenseLu::factorize(std::vector<double> columns, Index m, double pivot_tolerance) {
   m_ = m;
@@ -103,4 +103,4 @@ void DenseLu::solve_transpose(double* b) const {
   }
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

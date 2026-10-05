@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - Model / Solution tests.
+// YUKTHI - Model / Solution tests.
 //
 // Model is a frozen interface, so these tests are as much a specification as a check. In
 // particular they pin down the two conventions that a later reader or engine is most likely
@@ -15,9 +15,9 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
+#include "YUKTHI/model.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// A tiny well-formed LP:
@@ -364,4 +364,4 @@ TEST(SparseMatrix, FinalizeDoesNotSilentlyDeleteANaN) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

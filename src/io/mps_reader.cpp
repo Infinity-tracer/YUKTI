@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - MPS reader, fixed and free dialect.
+// YUKTHI - MPS reader, fixed and free dialect.
 //
 // Reference: IBM, "MPS file format" (the de-facto specification everyone implements), plus
 // Maros, "Computational Techniques of the Simplex Method" (Kluwer, 2003), appendix A, for
@@ -29,9 +29,9 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/io.hpp"
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
 
 #include "mps_parser.hpp"
 #include "token.hpp"
@@ -40,7 +40,7 @@
 // issue #9, a pure file split with no logic change. MpsParser itself, and the sentinel row
 // indices both files need, are declared once in mps_parser.hpp.
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 namespace {
 
 enum class Section {
@@ -379,7 +379,7 @@ bool MpsParser::do_quadratic(std::string* error) {
   //
   // and lists only the LOWER TRIANGLE of the symmetric Q. A stored off-diagonal entry
   // therefore stands for TWO entries of Q, and the 0.5 is part of the objective rather than
-  // part of the data. `sankhya::Model` was defined in exactly this convention - see the note
+  // part of the data. `YUKTHI::Model` was defined in exactly this convention - see the note
   // in model.hpp - so entries map across with no transformation at all. A reader that
   // "helpfully" halved the off-diagonals, or mirrored them into both triangles, would produce
   // a model that solves cleanly to the optimum of a different problem.
@@ -689,4 +689,4 @@ ReadResult read_mps(const std::string& path, Model* model, MpsFormat format,
                                          free_result.error, fixed_result.error));
 }
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

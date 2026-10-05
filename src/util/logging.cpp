@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - logger implementation.
+// YUKTHI - logger implementation.
 
-#include "sankhya/logging.hpp"
+#include "YUKTHI/logging.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -11,7 +11,7 @@
 
 #include <nlohmann/json.hpp>
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// A blank cell for a quantity the engine does not track, so that columns stay aligned.
@@ -189,4 +189,4 @@ Logger::~Logger() {
   if (progress_stream_ != nullptr) std::fclose(progress_stream_);
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

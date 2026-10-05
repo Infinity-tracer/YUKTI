@@ -1,4 +1,4 @@
-* SANKHYA demo instance - a small convex MIQP (integer variables AND a quadratic objective).
+* YUKTHI demo instance - a small convex MIQP (integer variables AND a quadratic objective).
 *
 * The same two-stream blend as demo/qp_blend.mps, with one change that moves it into a
 * different problem class: throughput is now scheduled in WHOLE units rather than

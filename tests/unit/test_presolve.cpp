@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - presolve and postsolve tests.
+// YUKTHI - presolve and postsolve tests.
 //
 // THE GATE HERE IS THE ROUND TRIP, not the reduction counts. A presolve that removes nothing
 // is merely useless; a presolve whose postsolve is wrong returns a confident, feasible-
@@ -21,11 +21,11 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 Options with_presolve(bool on) {
@@ -485,4 +485,4 @@ TEST(Presolve, FuzzFreeColumnSingletonAndDoubletonEquation) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

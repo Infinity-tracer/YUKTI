@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - bounded-variable revised primal simplex.
+// YUKTHI - bounded-variable revised primal simplex.
 //
 // References
 //   Dantzig, "Linear Programming and Extensions" (Princeton, 1963) - the method.
@@ -58,13 +58,13 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/timer.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/timer.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "../la/lu.hpp"
 #include "../la/scaling.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 namespace detail {
 
@@ -713,7 +713,7 @@ void Simplex::compute_reduced_costs(bool phase_one) {
 
   // One reduced cost per column, each written by one thread and read by none: a gather,
   // deterministic at any thread count (#57).
-#ifdef SANKHYA_HAVE_OPENMP
+#ifdef YUKTHI_HAVE_OPENMP
 #pragma omp parallel for schedule(static)
 #endif
   for (Index k = 0; k < total_; ++k) {
@@ -2017,4 +2017,4 @@ Solution solve_with_scaling(const Model& model, const Options& options, Logger& 
 
 }  // namespace detail
 
-}  // namespace sankhya
+}  // namespace YUKTHI

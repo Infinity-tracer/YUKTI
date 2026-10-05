@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - solution and statistics writer tests.
+// YUKTHI - solution and statistics writer tests.
 //
 // THE .sol FORMAT IS AN INTERFACE, not a debug dump. tools/verify_solution.py (Phase 3) is
 // an independent checker that never links our C++: it re-reads the .mps, recomputes every
@@ -27,13 +27,13 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 
-#include "sankhya/io.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
 #include "support/temp_file.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 using testing::TempFile;
@@ -385,12 +385,12 @@ TEST(StatsWriter, CarriesTheKeysTheBenchmarkRunnersParse) {
 
   const nlohmann::json blob = nlohmann::json::parse(slurp(file.path()));
 
-  ASSERT_TRUE(blob.contains("sankhya"));
+  ASSERT_TRUE(blob.contains("YUKTHI"));
   for (const char* key : {"version", "commit", "build_type", "compiler", "cuda_enabled"}) {
-    EXPECT_TRUE(blob["sankhya"].contains(key)) << "sankhya." << key;
+    EXPECT_TRUE(blob["YUKTHI"].contains(key)) << "YUKTHI." << key;
   }
   // CLAUDE.md requires the commit in every benchmark record, so an empty one is a defect.
-  EXPECT_FALSE(blob["sankhya"]["commit"].get<std::string>().empty());
+  EXPECT_FALSE(blob["YUKTHI"]["commit"].get<std::string>().empty());
 
   ASSERT_TRUE(blob.contains("model"));
   for (const char* key : {"name", "source", "sense", "rows", "columns", "nonzeros",
@@ -496,4 +496,4 @@ TEST(StatsWriter, ReportsAnUnwritablePath) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

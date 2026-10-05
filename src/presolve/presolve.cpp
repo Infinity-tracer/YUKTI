@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - presolve reductions. See presolve.hpp for the references and the rationale.
+// YUKTHI - presolve reductions. See presolve.hpp for the references and the rationale.
 
 #include "presolve.hpp"
 
@@ -11,9 +11,9 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya::presolve {
+namespace YUKTHI::presolve {
 namespace {
 
 /// Row activity limits implied by the current column bounds.
@@ -1696,4 +1696,4 @@ Solution postsolve(const Result& result, const Model& original, const Solution& 
   return solution;
 }
 
-}  // namespace sankhya::presolve
+}  // namespace YUKTHI::presolve

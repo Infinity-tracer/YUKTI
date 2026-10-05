@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - sparse LU tests.
+// YUKTHI - sparse LU tests.
 //
 // A permutation or ordering error in a sparse LU is invisible. It does not crash, does not
 // warn, and does not even produce obviously wrong numbers: FTRAN returns a vector of
@@ -23,13 +23,13 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/tolerances.hpp"
-#include "sankhya/types.hpp"
+#include "YUKTHI/tolerances.hpp"
+#include "YUKTHI/types.hpp"
 
 #include "la/lu.hpp"
 #include "simplex/dense_lu.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 constexpr double kThreshold = tol::kMarkowitzThreshold;
@@ -772,4 +772,4 @@ TEST(SparseLu, ADeadlineNeverAskedIsADeadlineThatChangesNothing) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

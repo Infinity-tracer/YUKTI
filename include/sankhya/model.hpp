@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the frozen model and solution interface.
+// YUKTHI - the frozen model and solution interface.
 //
 // FROZEN INTERFACE (CLAUDE.md). Model is what every reader produces and every engine
 // consumes. Solution is what every engine produces. solve() is the single seam where the
@@ -31,12 +31,12 @@
 #include <string>
 #include <vector>
 
-#include "sankhya/options.hpp"
-#include "sankhya/sparse.hpp"
-#include "sankhya/tolerances.hpp"
-#include "sankhya/types.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/sparse.hpp"
+#include "YUKTHI/tolerances.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// Direction of optimization. Stored on the model rather than folded into the cost vector
 /// so that reported duals and reduced costs keep the sign convention of the original file.
@@ -266,7 +266,7 @@ class Solution {
   // These are an ADDITION to this frozen interface, made deliberately and called out here
   // rather than slipped in: every existing consumer ignores them, and both default to empty,
   // which is this class's established way of saying "the engine produced nothing of that
-  // kind". See include/sankhya/certificate.hpp for what they mean and how they are checked.
+  // kind". See include/YUKTHI/certificate.hpp for what they mean and how they are checked.
 
   /// Farkas multipliers, one per row, when `status` is kInfeasible and the engine could
   /// prove it. Aggregating the rows with these weights yields an inequality no point in the
@@ -384,4 +384,4 @@ class Solution {
 /// It never throws: every failure, including a malformed model, comes back as a status.
 [[nodiscard]] Solution solve(const Model& model, const Options& options);
 
-}  // namespace sankhya
+}  // namespace YUKTHI

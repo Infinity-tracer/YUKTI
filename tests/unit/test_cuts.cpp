@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - cutting-plane validity.
+// YUKTHI - cutting-plane validity.
 //
 // THIS FILE IS THE GATE, and it exists before the cuts it will eventually have to hold back.
 //
@@ -23,15 +23,15 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
 
 #include "mip/cuts.hpp"
 
 #include "oracles/lp_generator.hpp"
 #include "oracles/rational_simplex.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 using oracle::Rational;
@@ -1535,8 +1535,8 @@ TEST(GmiCut, IndependentFormulaCheck) {
 
 #include "oracles/rational_simplex.hpp"
 
-// Replaces the old RealSankhyaOptimumValid
-TEST(GmiCut, RealSankhyaOptimumValid_WithExactOracle) {
+// Replaces the old RealYUKTHIOptimumValid
+TEST(GmiCut, RealYUKTHIOptimumValid_WithExactOracle) {
   oracle::GeneratedLp lp;
   lp.num_rows = 2;
   lp.num_cols = 3;
@@ -1919,14 +1919,14 @@ TEST(RootGmiContext, RejectionConditions) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI
 
 // =========================================================================================
 // Cut Filtering and Deduplication Tests (Stage 4C)
 // =========================================================================================
 
-using namespace sankhya;
-using namespace sankhya::mip;
+using namespace YUKTHI;
+using namespace YUKTHI::mip;
 
 TEST(CutFiltering, RejectsNonfinite) {
   Model model;

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the MPS/QPS parser state, shared between mps_reader.cpp (section dispatch, the
+// YUKTHI - the MPS/QPS parser state, shared between mps_reader.cpp (section dispatch, the
 // two-pass driver, ROWS/COLUMNS/RHS/QUADOBJ) and mps_bounds.cpp (RANGES/BOUNDS).
 //
 // Not a public header - internal to src/io/, exactly like line_reader.hpp and token.hpp.
@@ -13,12 +13,12 @@
 #include <unordered_set>
 #include <vector>
 
-#include "sankhya/io.hpp"
-#include "sankhya/model.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/model.hpp"
 
 #include "line_reader.hpp"
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 
 /// Sentinel row indices used while parsing COLUMNS, RHS and RANGES.
 constexpr Index kObjectiveRow = -1;
@@ -99,4 +99,4 @@ class MpsParser {
   Count free_rows_dropped_ = 0;
 };
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

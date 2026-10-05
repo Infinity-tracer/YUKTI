@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - monotonic timing.
+// YUKTHI - monotonic timing.
 //
 // steady_clock, never system_clock: a wall-clock adjustment mid-solve must not be able to
 // produce a negative elapsed time and trip a time limit. Every reported duration in the
@@ -8,7 +8,7 @@
 
 #include <chrono>
 
-namespace sankhya {
+namespace YUKTHI {
 
 class Timer {
  public:
@@ -47,4 +47,4 @@ class ScopedTimer {
   Timer timer_;
 };
 
-}  // namespace sankhya
+}  // namespace YUKTHI

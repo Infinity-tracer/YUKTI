@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - convex QP tests.
+// YUKTHI - convex QP tests.
 //
 // Every instance here has an optimum derived BY HAND from the KKT conditions and written out
 // in the comment above it, so the assertion is against arithmetic rather than against
@@ -17,11 +17,11 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 Options qp_options(double tolerance = 1e-10) {
@@ -208,4 +208,4 @@ TEST(ConvexQp, AnLpIsNotDivertedToTheQpEngine) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

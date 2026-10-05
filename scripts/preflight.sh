@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
-# SANKHYA - check that this machine can build, run and reproduce our claims.
+# YUKTHI - check that this machine can build, run and reproduce our claims.
 #
 # WHY THIS EXISTS. The evidence in this repository is only worth what a reader can
 # regenerate, and every failure this script tests for has actually happened on a developer
@@ -32,7 +32,7 @@ pass()    { [ "$QUIET" = 1 ] || printf '  \033[32mok\033[0m       %s\n' "$1"; }
 degrade() { printf '  \033[33mDEGRADED\033[0m %s\n' "$1"; printf '           %s\n' "$2"; DEGRADED=$((DEGRADED + 1)); }
 blocker() { printf '  \033[31mBLOCKER\033[0m  %s\n' "$1"; printf '           %s\n' "$2"; BLOCKERS=$((BLOCKERS + 1)); }
 
-[ "$QUIET" = 1 ] || printf '\nSANKHYA preflight\n=================\n\n'
+[ "$QUIET" = 1 ] || printf '\nYUKTHI preflight\n=================\n\n'
 
 # ---- Compiler -----------------------------------------------------------------------------
 # scripts/configure.sh does the real probing; this only reports what it would find, so that a
@@ -110,7 +110,7 @@ if [ -n "$PYTHON" ]; then
   else
     degrade "highspy is missing" \
       "demo section 5 - the solver comparison PS26119 explicitly asks for - does not run
-           at all.  pip install highspy   (a separate process; never linked into SANKHYA,
+           at all.  pip install highspy   (a separate process; never linked into YUKTHI,
            so it does not affect the sovereignty claim)"
   fi
 fi
@@ -119,11 +119,11 @@ fi
 # SMART APP CONTROL. On Windows 11 this blocks unsigned executables by hash and reputation,
 # and a binary you just linked has neither. The failure is "Permission denied" from bash or
 # "An Application Control policy has blocked this file" from PowerShell, and it hits the test
-# runner too - ctest reports sankhya_tests_NOT_BUILT, which reads like a build failure.
+# runner too - ctest reports YUKTHI_tests_NOT_BUILT, which reads like a build failure.
 # It cost several hours here before it was recognised, so it is checked explicitly.
-if [ -x build/sankhya.exe ] || [ -x build/sankhya ]; then
-  BIN="build/sankhya.exe"
-  [ -x "$BIN" ] || BIN="build/sankhya"
+if [ -x build/YUKTHI.exe ] || [ -x build/YUKTHI ]; then
+  BIN="build/YUKTHI.exe"
+  [ -x "$BIN" ] || BIN="build/YUKTHI"
   if "$BIN" version >/dev/null 2>&1; then
     pass "binary executes       $BIN"
   else

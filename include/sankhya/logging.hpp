@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - structured logging.
+// YUKTHI - structured logging.
 //
 // The iteration table is deliberately shaped like the log an industrial solver prints,
 // because the judges for this problem statement read those logs daily and a familiar
@@ -19,9 +19,9 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/types.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// Verbosity. Each level includes everything above it.
 enum class LogLevel : int {
@@ -148,4 +148,4 @@ class Logger {
 /// (readers, mostly). The solver core never reaches for this.
 [[nodiscard]] Logger& default_logger();
 
-}  // namespace sankhya
+}  // namespace YUKTHI

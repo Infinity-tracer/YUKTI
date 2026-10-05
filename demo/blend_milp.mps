@@ -1,4 +1,4 @@
-* SANKHYA demo instance - the crude blending model with a mode-switch binary.
+* YUKTHI demo instance - the crude blending model with a mode-switch binary.
 *
 * Same three crudes as demo/crude_blend.mps, plus one binary: whether the CDU runs in
 * max-diesel mode. Running that mode costs 12 units of margin and relaxes the sulphur

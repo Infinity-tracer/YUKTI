@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - the interior-point method (#56) against the simplex and the exact oracle.
+// YUKTHI - the interior-point method (#56) against the simplex and the exact oracle.
 
 #include <cmath>
 #include <filesystem>
@@ -10,16 +10,16 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/io.hpp"
-#include "sankhya/ipm.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/ipm.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "oracles/lp_generator.hpp"
 #include "oracles/rational_simplex.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 Options with_algorithm(const char* algorithm) {
@@ -239,4 +239,4 @@ TEST(InteriorPoint, AWarmStartOfTheWrongLengthIsIgnoredAndTheSolveIsCold) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

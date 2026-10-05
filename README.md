@@ -1,7 +1,7 @@
 **SIH26119** — Indigenous GPU-Accelerated Optimization Solver (Sovereign Alternative to CPLEX / Xpress)  
 Smart India Hackathon 2026 · Mangalore Refinery and Petrochemicals Limited (MRPL)
 
-# SANKHYA
+# YUKTHI
 
 **Indigenous GPU-accelerated optimization solver — LP, MILP, convex QP, written from
 mathematical foundations.**
@@ -162,11 +162,11 @@ the number is worth reading with a command beside it rather than taken on trust.
 ## Use
 
 ```bash
-./build/sankhya version
-./build/sankhya options
-./build/sankhya info  demo/crude_blend.mps
-./build/sankhya solve demo/crude_blend.mps --write-sol blend.sol --stats blend.json
-./build/sankhya solve demo/crude_blend.mps --progress-out progress.jsonl
+./build/YUKTHI version
+./build/YUKTHI options
+./build/YUKTHI info  demo/crude_blend.mps
+./build/YUKTHI solve demo/crude_blend.mps --write-sol blend.sol --stats blend.json
+./build/YUKTHI solve demo/crude_blend.mps --progress-out progress.jsonl
 ```
 
 `demo/crude_blend.mps` is a small crude-blending LP: three crudes into a diesel pool, with a
@@ -217,8 +217,8 @@ Microsoft Store stub; `scripts/preflight.sh` tells you whether it is.
 ## Layout
 
 ```
-include/sankhya/  public headers — Model, Solution, Options, tolerances, sparse containers
-                  plus sankhya.h, the C API
+include/YUKTHI/  public headers — Model, Solution, Options, tolerances, sparse containers
+                  plus YUKTHI.h, the C API
 src/api           C API — an FFI-safe surface over the core, no C++ types crossing
 src/core          Model/Solution implementation, the solve() dispatcher, certificates (#192)
 src/util          logging, timers, arena allocator, option registry
@@ -257,7 +257,7 @@ the speed ratio is, for the first time, a number two runs an hour apart agree on
 runs of the same binary on `main` at `f7ca7e9` (`bench/results/compare-highs-medium-
 f7ca7e9.csv`, `-second.csv`, `-third.csv`; 16:17, 16:41 and 17:21 on the same afternoon,
 alone on the machine, on mains) put the median per-instance ratio at **2.01x, 2.04x and
-2.12x** - SANKHYA slower - with total solve time 2.64x, 2.56x and 2.62x. The first and the
+2.12x** - YUKTHI slower - with total solve time 2.64x, 2.56x and 2.62x. The first and the
 third are an hour apart and agree within 6%, which is the bar #212 set for quoting it;
 the earlier committed pair, three days apart, had read 1.38x and 2.11x, and that spread is
 why the number was not quoted before. Read it as *about twice HiGHS's time on these

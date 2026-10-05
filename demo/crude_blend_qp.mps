@@ -1,4 +1,4 @@
-* SANKHYA demo instance - crude blending with price impact, as a convex QP.
+* YUKTHI demo instance - crude blending with price impact, as a convex QP.
 *
 * The SAME physical blending decision as demo/crude_blend.mps - same three crudes, same
 * CDU throughput window, same diesel commitment, same sulphur specification - with the one

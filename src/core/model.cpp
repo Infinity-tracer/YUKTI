@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - Model and Solution implementation.
+// YUKTHI - Model and Solution implementation.
 //
 // recompute_quality() is the important function in this file. CLAUDE.md forbids reporting a
 // number the solver merely believes; every engine calls this immediately before returning,
@@ -7,14 +7,14 @@
 // primal and dual vectors rather than accumulated during the solve. An engine that has
 // drifted is caught by its own report.
 
-#include "sankhya/model.hpp"
+#include "YUKTHI/model.hpp"
 
 #include <algorithm>
 #include <cmath>
 
 #include <fmt/format.h>
 
-namespace sankhya {
+namespace YUKTHI {
 
 const char* to_string(SolveStatus status) noexcept {
   switch (status) {
@@ -421,4 +421,4 @@ void Solution::recompute_quality(const Model& model) {
   relative_gap = absolute_gap / scale;
 }
 
-}  // namespace sankhya
+}  // namespace YUKTHI

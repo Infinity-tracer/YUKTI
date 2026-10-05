@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - CPLEX LP format reader tests.
+// YUKTHI - CPLEX LP format reader tests.
 //
 // The LP reader's job is to produce exactly the same Model an MPS file would, so the
 // central test here parses the same tiny problem from both formats and compares field by
@@ -12,12 +12,12 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/io.hpp"
-#include "sankhya/model.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/model.hpp"
 
 #include "support/temp_file.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 using testing::TempFile;
@@ -324,4 +324,4 @@ TEST(LpReader, AFileWithNoObjectiveSectionIsRejected) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

@@ -112,7 +112,7 @@ ESCAPED_QUOTE_NAME = "HAS" + QUOTE + "QUOTED"
 # consumes the backslash first, so the file under test ends up with no escape in it and
 # the test silently checks the wrong thing. That happened twice while writing this.
 SOL_WITH_QUOTED_NAMES = "\n".join([
-    "# SANKHYA solution file",
+    "# YUKTHI solution file",
     "model QTEST",
     "status optimal",
     "",

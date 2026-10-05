@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - an answer whose numbers are not numbers is not an answer (#194).
+// YUKTHI - an answer whose numbers are not numbers is not an answer (#194).
 //
 // WHERE THIS CAME FROM. The first time this solver was run at size, the interior-point
 // method hit a time limit on a generated 5000x5000 instance with its iterate full of NaN,
@@ -18,10 +18,10 @@
 
 #include <gtest/gtest.h>
 
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 Options quiet() {
@@ -105,4 +105,4 @@ TEST(NonFiniteAnswer, NothingFoundMayStillBeReportedAsInfinite) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI

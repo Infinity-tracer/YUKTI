@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - exact rational arithmetic for the reference oracle.
+// YUKTHI - exact rational arithmetic for the reference oracle.
 //
 // TESTS ONLY. Nothing in src/ includes this, and nothing here is fast. Its entire job is to
 // be OBVIOUSLY CORRECT, because it is the standard the floating-point simplex is judged
@@ -16,7 +16,7 @@
 #include <cstdint>
 #include <exception>
 
-namespace sankhya::oracle {
+namespace YUKTHI::oracle {
 
 /// Thrown when an exact operation cannot be represented in __int128.
 struct RationalOverflow : std::exception {
@@ -151,4 +151,4 @@ class Rational {
   Int denominator_ = 1;
 };
 
-}  // namespace sankhya::oracle
+}  // namespace YUKTHI::oracle

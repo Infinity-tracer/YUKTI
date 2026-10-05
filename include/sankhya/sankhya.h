@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: Apache-2.0
  *
- * SANKHYA - C API.
+ * YUKTHI - C API.
  *
  * A C89-compatible surface over the C++ core, for callers that cannot or will not link C++:
  * other languages' FFIs, and the Python bindings that sit on top of this rather than on the
@@ -13,8 +13,8 @@
  * code. Per CLAUDE.md that is interface compatibility, not derivation: it is written from
  * the public shape those APIs document, and no solver source was read to produce it.
  *
- * ERRORS ARE RETURNED, NEVER THROWN. Every fallible call returns a sankhya_status. When one
- * is not SANKHYA_OK, sankhya_last_error() carries a human-readable reason for that thread.
+ * ERRORS ARE RETURNED, NEVER THROWN. Every fallible call returns a YUKTHI_status. When one
+ * is not YUKTHI_OK, YUKTHI_last_error() carries a human-readable reason for that thread.
  * A C caller cannot catch a C++ exception, so every entry point that could raise one wraps
  * its body and converts.
  *
@@ -27,8 +27,8 @@
  * at once. Distinct handles in distinct threads are fine, and the error string is
  * thread-local, so concurrent solves do not overwrite each other's diagnostics.
  */
-#ifndef SANKHYA_H
-#define SANKHYA_H
+#ifndef YUKTHI_H
+#define YUKTHI_H
 
 #include <stddef.h>
 
@@ -38,43 +38,43 @@ extern "C" {
 
 /* ---- Status codes ---------------------------------------------------------------------- */
 
-typedef enum sankhya_status {
-  SANKHYA_OK = 0,
-  SANKHYA_ERROR_ARGUMENT = 1, /**< a null handle, or an index outside the model */
-  SANKHYA_ERROR_IO = 2,       /**< the file could not be read or parsed */
-  SANKHYA_ERROR_MODEL = 3,    /**< the model is not internally consistent; see last_error */
-  SANKHYA_ERROR_OPTION = 4,   /**< no such option, or a value it will not accept */
-  SANKHYA_ERROR_MEMORY = 5,   /**< allocation failed */
-  SANKHYA_ERROR_INTERNAL = 6  /**< a C++ exception crossed the boundary and was converted */
-} sankhya_status;
+typedef enum YUKTHI_status {
+  YUKTHI_OK = 0,
+  YUKTHI_ERROR_ARGUMENT = 1, /**< a null handle, or an index outside the model */
+  YUKTHI_ERROR_IO = 2,       /**< the file could not be read or parsed */
+  YUKTHI_ERROR_MODEL = 3,    /**< the model is not internally consistent; see last_error */
+  YUKTHI_ERROR_OPTION = 4,   /**< no such option, or a value it will not accept */
+  YUKTHI_ERROR_MEMORY = 5,   /**< allocation failed */
+  YUKTHI_ERROR_INTERNAL = 6  /**< a C++ exception crossed the boundary and was converted */
+} YUKTHI_status;
 
-/** Mirrors sankhya::SolveStatus. Values are stable; new ones are appended. */
-typedef enum sankhya_solve_status {
-  SANKHYA_NOT_SOLVED = 0,
-  SANKHYA_OPTIMAL = 1,
-  SANKHYA_FEASIBLE = 2, /**< a usable point; optimality NOT proven */
-  SANKHYA_INFEASIBLE = 3,
-  SANKHYA_UNBOUNDED = 4,
+/** Mirrors YUKTHI::SolveStatus. Values are stable; new ones are appended. */
+typedef enum YUKTHI_solve_status {
+  YUKTHI_NOT_SOLVED = 0,
+  YUKTHI_OPTIMAL = 1,
+  YUKTHI_FEASIBLE = 2, /**< a usable point; optimality NOT proven */
+  YUKTHI_INFEASIBLE = 3,
+  YUKTHI_UNBOUNDED = 4,
   /** Not both feasible and bounded, without separating the two. Some first-order
    *  methods legitimately stop here; reporting it beats guessing which it was. */
-  SANKHYA_INFEASIBLE_OR_UNBOUNDED = 10,
-  SANKHYA_ITERATION_LIMIT = 5,
-  SANKHYA_TIME_LIMIT = 6,
-  SANKHYA_NODE_LIMIT = 7,
-  SANKHYA_NUMERICAL_ERROR = 8,
-  SANKHYA_MODEL_ERROR = 9
-} sankhya_solve_status;
+  YUKTHI_INFEASIBLE_OR_UNBOUNDED = 10,
+  YUKTHI_ITERATION_LIMIT = 5,
+  YUKTHI_TIME_LIMIT = 6,
+  YUKTHI_NODE_LIMIT = 7,
+  YUKTHI_NUMERICAL_ERROR = 8,
+  YUKTHI_MODEL_ERROR = 9
+} YUKTHI_solve_status;
 
 /* ---- Opaque handles -------------------------------------------------------------------- */
 
-typedef struct sankhya_model sankhya_model;
-typedef struct sankhya_options sankhya_options;
-typedef struct sankhya_solution sankhya_solution;
+typedef struct YUKTHI_model YUKTHI_model;
+typedef struct YUKTHI_options YUKTHI_options;
+typedef struct YUKTHI_solution YUKTHI_solution;
 
 /* ---- Library ---------------------------------------------------------------------------- */
 
 /** Version string, e.g. "0.1.0 (abc1234, Release)". Never NULL. */
-const char* sankhya_version(void);
+const char* YUKTHI_version(void);
 
 /**
  * Human-readable reason for the most recent failing call ON THIS THREAD.
@@ -82,16 +82,16 @@ const char* sankhya_version(void);
  * Returns an empty string when nothing has failed. The pointer is valid until the next
  * failing call on this thread.
  */
-const char* sankhya_last_error(void);
+const char* YUKTHI_last_error(void);
 
 /** The infinity this API uses for absent bounds. Bounds at or beyond it are treated as free. */
-double sankhya_infinity(void);
+double YUKTHI_infinity(void);
 
 /* ---- Model ------------------------------------------------------------------------------ */
 
 /** An empty minimisation model with no rows or columns. NULL only on allocation failure. */
-sankhya_model* sankhya_model_create(void);
-void sankhya_model_free(sankhya_model* model);
+YUKTHI_model* YUKTHI_model_create(void);
+void YUKTHI_model_free(YUKTHI_model* model);
 
 /**
  * Read a model from an MPS, QPS or LP file, choosing the reader by extension and content.
@@ -100,21 +100,21 @@ void sankhya_model_free(sankhya_model* model);
  * which names the line - these readers refuse ambiguous files rather than guessing, so a
  * failure here is usually a genuine defect in the file.
  */
-sankhya_status sankhya_model_read(sankhya_model* model, const char* path);
+YUKTHI_status YUKTHI_model_read(YUKTHI_model* model, const char* path);
 
 /** 0 to minimise (the default), non-zero to maximise. */
-sankhya_status sankhya_model_set_maximize(sankhya_model* model, int maximize);
+YUKTHI_status YUKTHI_model_set_maximize(YUKTHI_model* model, int maximize);
 
 /** Constant added to the objective. */
-sankhya_status sankhya_model_set_objective_offset(sankhya_model* model, double offset);
+YUKTHI_status YUKTHI_model_set_objective_offset(YUKTHI_model* model, double offset);
 
 /**
  * Append one column, returning its index through `index` when that is non-NULL.
  *
- * `name` may be NULL. Use +/- sankhya_infinity() for absent bounds. `is_integer` non-zero
+ * `name` may be NULL. Use +/- YUKTHI_infinity() for absent bounds. `is_integer` non-zero
  * makes this an integer column, which makes the model a MILP.
  */
-sankhya_status sankhya_model_add_column(sankhya_model* model, double cost, double lower,
+YUKTHI_status YUKTHI_model_add_column(YUKTHI_model* model, double cost, double lower,
                                         double upper, int is_integer, const char* name,
                                         int* index);
 
@@ -124,7 +124,7 @@ sankhya_status sankhya_model_add_column(sankhya_model* model, double cost, doubl
  * A range row is lower <= a'x <= upper; pass equal bounds for an equality, and an infinite
  * bound on one side for a one-sided inequality.
  */
-sankhya_status sankhya_model_add_row(sankhya_model* model, double lower, double upper,
+YUKTHI_status YUKTHI_model_add_row(YUKTHI_model* model, double lower, double upper,
                                      const char* name, int* index);
 
 /**
@@ -137,7 +137,7 @@ sankhya_status sankhya_model_add_row(sankhya_model* model, double lower, double 
  *
  * A value of exactly zero removes the entry.
  */
-sankhya_status sankhya_model_set_coefficient(sankhya_model* model, int row, int col,
+YUKTHI_status YUKTHI_model_set_coefficient(YUKTHI_model* model, int row, int col,
                                              double value);
 
 /**
@@ -148,35 +148,35 @@ sankhya_status sankhya_model_set_coefficient(sankhya_model* model, int row, int 
  * accepted and means the same thing. The 0.5 belongs to the objective, not to the value you
  * pass here - the same convention QPS files use.
  *
- * A non-convex Q is REFUSED at solve time with SANKHYA_MODEL_ERROR rather than solved to a
+ * A non-convex Q is REFUSED at solve time with YUKTHI_MODEL_ERROR rather than solved to a
  * local point.
  */
-sankhya_status sankhya_model_set_quadratic_coefficient(sankhya_model* model, int row, int col,
+YUKTHI_status YUKTHI_model_set_quadratic_coefficient(YUKTHI_model* model, int row, int col,
                                                        double value);
 
-int sankhya_model_num_cols(const sankhya_model* model);
-int sankhya_model_num_rows(const sankhya_model* model);
-int sankhya_model_num_nonzeros(const sankhya_model* model);
+int YUKTHI_model_num_cols(const YUKTHI_model* model);
+int YUKTHI_model_num_rows(const YUKTHI_model* model);
+int YUKTHI_model_num_nonzeros(const YUKTHI_model* model);
 
 /**
  * Check the model for internal consistency without solving it.
  *
- * Returns SANKHYA_OK when the model is well formed, SANKHYA_ERROR_MODEL otherwise with the
+ * Returns YUKTHI_OK when the model is well formed, YUKTHI_ERROR_MODEL otherwise with the
  * reason in last_error.
  */
-sankhya_status sankhya_model_validate(const sankhya_model* model);
+YUKTHI_status YUKTHI_model_validate(const YUKTHI_model* model);
 
 /* ---- Options ---------------------------------------------------------------------------- */
 
-/** Options preset to their documented defaults. Run `sankhya options` to list them. */
-sankhya_options* sankhya_options_create(void);
-void sankhya_options_free(sankhya_options* options);
+/** Options preset to their documented defaults. Run `YUKTHI options` to list them. */
+YUKTHI_options* YUKTHI_options_create(void);
+void YUKTHI_options_free(YUKTHI_options* options);
 
-sankhya_status sankhya_options_set_bool(sankhya_options* options, const char* name, int value);
-sankhya_status sankhya_options_set_int(sankhya_options* options, const char* name, long value);
-sankhya_status sankhya_options_set_double(sankhya_options* options, const char* name,
+YUKTHI_status YUKTHI_options_set_bool(YUKTHI_options* options, const char* name, int value);
+YUKTHI_status YUKTHI_options_set_int(YUKTHI_options* options, const char* name, long value);
+YUKTHI_status YUKTHI_options_set_double(YUKTHI_options* options, const char* name,
                                           double value);
-sankhya_status sankhya_options_set_string(sankhya_options* options, const char* name,
+YUKTHI_status YUKTHI_options_set_string(YUKTHI_options* options, const char* name,
                                           const char* value);
 
 /* ---- Solve ------------------------------------------------------------------------------ */
@@ -185,27 +185,27 @@ sankhya_status sankhya_options_set_string(sankhya_options* options, const char* 
  * Solve, writing a newly allocated solution handle to `*solution`.
  *
  * `options` may be NULL for the defaults. The return value reports whether the CALL
- * succeeded, not what the solver concluded: a model proved infeasible returns SANKHYA_OK
- * with a solution whose status is SANKHYA_INFEASIBLE. Check both.
+ * succeeded, not what the solver concluded: a model proved infeasible returns YUKTHI_OK
+ * with a solution whose status is YUKTHI_INFEASIBLE. Check both.
  */
-sankhya_status sankhya_solve(const sankhya_model* model, const sankhya_options* options,
-                             sankhya_solution** solution);
+YUKTHI_status YUKTHI_solve(const YUKTHI_model* model, const YUKTHI_options* options,
+                             YUKTHI_solution** solution);
 
-void sankhya_solution_free(sankhya_solution* solution);
+void YUKTHI_solution_free(YUKTHI_solution* solution);
 
-sankhya_solve_status sankhya_solution_status(const sankhya_solution* solution);
+YUKTHI_solve_status YUKTHI_solution_status(const YUKTHI_solution* solution);
 
 /** Explanatory message from the solver. Empty when there is nothing to add. */
-const char* sankhya_solution_message(const sankhya_solution* solution);
+const char* YUKTHI_solution_message(const YUKTHI_solution* solution);
 
-double sankhya_solution_objective(const sankhya_solution* solution);
+double YUKTHI_solution_objective(const YUKTHI_solution* solution);
 
 /** Best proven bound. Equals the objective when optimality was proved. */
-double sankhya_solution_dual_bound(const sankhya_solution* solution);
+double YUKTHI_solution_dual_bound(const YUKTHI_solution* solution);
 
-long sankhya_solution_iterations(const sankhya_solution* solution);
-long sankhya_solution_nodes(const sankhya_solution* solution);
-double sankhya_solution_seconds(const sankhya_solution* solution);
+long YUKTHI_solution_iterations(const YUKTHI_solution* solution);
+long YUKTHI_solution_nodes(const YUKTHI_solution* solution);
+double YUKTHI_solution_seconds(const YUKTHI_solution* solution);
 
 /**
  * MEASURED quality of the returned point, not asserted by the engine about itself.
@@ -214,34 +214,34 @@ double sankhya_solution_seconds(const sankhya_solution* solution);
  * the dispatcher downgrades a status that disagrees with them. A caller writing its own
  * acceptance test should read these rather than trusting the status alone.
  */
-double sankhya_solution_primal_infeasibility(const sankhya_solution* solution);
-double sankhya_solution_dual_infeasibility(const sankhya_solution* solution);
-double sankhya_solution_integrality_violation(const sankhya_solution* solution);
+double YUKTHI_solution_primal_infeasibility(const YUKTHI_solution* solution);
+double YUKTHI_solution_dual_infeasibility(const YUKTHI_solution* solution);
+double YUKTHI_solution_integrality_violation(const YUKTHI_solution* solution);
 
 /**
  * Copy the primal column values into `values`, which must have room for `count` doubles.
  *
- * `count` must equal the model's column count; a mismatch returns SANKHYA_ERROR_ARGUMENT
+ * `count` must equal the model's column count; a mismatch returns YUKTHI_ERROR_ARGUMENT
  * rather than writing a partial vector, because a caller that has the dimension wrong is
  * about to misread every number it copies.
  */
-sankhya_status sankhya_solution_col_values(const sankhya_solution* solution, double* values,
+YUKTHI_status YUKTHI_solution_col_values(const YUKTHI_solution* solution, double* values,
                                            int count);
 
-/** Row activities a'x, same contract as sankhya_solution_col_values. */
-sankhya_status sankhya_solution_row_activities(const sankhya_solution* solution, double* values,
+/** Row activities a'x, same contract as YUKTHI_solution_col_values. */
+YUKTHI_status YUKTHI_solution_row_activities(const YUKTHI_solution* solution, double* values,
                                                int count);
 
 /** Row dual values (shadow prices), same contract. */
-sankhya_status sankhya_solution_row_duals(const sankhya_solution* solution, double* values,
+YUKTHI_status YUKTHI_solution_row_duals(const YUKTHI_solution* solution, double* values,
                                           int count);
 
 /** Column reduced costs, same contract. */
-sankhya_status sankhya_solution_col_duals(const sankhya_solution* solution, double* values,
+YUKTHI_status YUKTHI_solution_col_duals(const YUKTHI_solution* solution, double* values,
                                           int count);
 
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
 
-#endif /* SANKHYA_H */
+#endif /* YUKTHI_H */

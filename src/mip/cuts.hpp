@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - cutting planes for the branch and bound (#23).
+// YUKTHI - cutting planes for the branch and bound (#23).
 //
 // THE FAILURE MODE THIS FILE MUST NOT HAVE. A cut that is very slightly invalid removes the
 // optimum, and the search then PROVES that the second-best answer is optimal: status
@@ -46,10 +46,10 @@
 #include <vector>
 
 #include "la/lu.hpp"
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
 
-namespace sankhya::mip {
+namespace YUKTHI::mip {
 
 /// How many row bounds `tighten_integral_rows` moved.
 struct RowTightening {
@@ -230,4 +230,4 @@ struct FilteredCut {
 /// qualifying row and nothing happens.
 RowTightening tighten_integral_rows(Model* model, Logger& logger);
 
-}  // namespace sankhya::mip
+}  // namespace YUKTHI::mip

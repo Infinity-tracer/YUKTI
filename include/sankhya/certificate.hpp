@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - certificates for the two verdicts that have no point to show (#191).
+// YUKTHI - certificates for the two verdicts that have no point to show (#191).
 //
 // `optimal` hands over a point and a basis, and anyone can check it. `infeasible` and
 // `unbounded` hand over nothing, and until now the solver's own independent checker
@@ -42,9 +42,9 @@
 #include <string>
 #include <vector>
 
-#include "sankhya/model.hpp"
+#include "YUKTHI/model.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// Does `y` prove `model` has no feasible point?
 ///
@@ -63,4 +63,4 @@ namespace sankhya {
 [[nodiscard]] bool ray_proves_unbounded(const Model& model, const std::vector<double>& d,
                                         std::string* why = nullptr);
 
-}  // namespace sankhya
+}  // namespace YUKTHI

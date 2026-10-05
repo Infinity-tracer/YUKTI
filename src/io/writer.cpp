@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - solution and statistics writers.
+// YUKTHI - solution and statistics writers.
 //
 // The solution file is a deliverable, not a debug dump. tools/verify_solution.py reads it,
 // re-derives the model from the original .mps without touching our C++, and recomputes
@@ -21,12 +21,12 @@
 #include <fmt/format.h>
 #include <nlohmann/json.hpp>
 
-#include "sankhya/io.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/version.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/version.hpp"
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 namespace {
 
 /// Shortest exact decimal for a double. See the file header for why this is not negotiable.
@@ -127,7 +127,7 @@ bool write_solution(const std::string& path, const Model& model, const Solution&
   const Index n = model.num_cols();
   const Index m = model.num_rows();
 
-  fmt::print(out, "# SANKHYA solution file\n");
+  fmt::print(out, "# YUKTHI solution file\n");
   fmt::print(out, "# generated-by {}\n", banner());
   fmt::print(out, "# All numbers carry 17 significant digits and round-trip exactly.\n");
   fmt::print(out, "model {}\n", model.name.empty() ? "(unnamed)" : model.name);
@@ -231,7 +231,7 @@ bool write_stats_json(const std::string& path, const Model& model, const Solutio
   // These key names are consumed by bench/runners/*.py. Renaming one silently breaks the
   // benchmark CSVs, which are the project's only evidence, so treat them as an interface.
   nlohmann::json blob;
-  blob["sankhya"] = {{"version", version_string()},
+  blob["YUKTHI"] = {{"version", version_string()},
                      {"commit", git_commit()},
                      {"build_type", build_type()},
                      {"compiler", compiler_string()},
@@ -279,4 +279,4 @@ bool write_stats_json(const std::string& path, const Model& model, const Solutio
   return ok;
 }
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

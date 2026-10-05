@@ -1,4 +1,4 @@
-# SANKHYA — benchmarks
+# YUKTHI — benchmarks
 
 <!-- GENERATED FILE. Do not edit by hand. -->
 <!-- Regenerate with: python bench/runners/make_benchmarks_doc.py -->
@@ -539,7 +539,7 @@ that, and both run in CI:
 ## 4. Comparison against an established solver
 
 HiGHS is the reference. It runs as a SEPARATE PROCESS over the same MPS files; no HiGHS code
-is linked into, or read by, SANKHYA - see `docs/PROVENANCE.md`. Both sides are timed on
+is linked into, or read by, YUKTHI - see `docs/PROVENANCE.md`. Both sides are timed on
 solver-internal time only.
 
 The comparison below is run on **the same tier as section 1b**, not on the nine-instance
@@ -554,7 +554,7 @@ Commit `f7ca7e9` · machine `Windows-AMD64`
 
 Times are **solver-internal on both sides** - HiGHS's own `getRunTime()` against our `effort.solve_seconds` - so process start-up is excluded for both. At this instance size start-up would otherwise dominate and the comparison would measure the wrong thing entirely.
 
-| instance | SANKHYA obj | HiGHS obj | agree | SANKHYA (s) | HiGHS (s) | ratio |
+| instance | YUKTHI obj | HiGHS obj | agree | YUKTHI (s) | HiGHS (s) | ratio |
 |---|---:|---:|:--:|---:|---:|---:|
 | `adlittle` | 2.25494963e+05 | 2.25494963e+05 | yes | 0.002 | 0.002 | 1.15x |
 | `afiro` | -4.64753143e+02 | -4.64753143e+02 | yes | 0.001 | 0.001 | 1.02x |
@@ -609,9 +609,9 @@ Times are **solver-internal on both sides** - HiGHS's own `getRunTime()` against
 
 **Summary**
 
-- SANKHYA shifted geometric mean: **0.057s**
+- YUKTHI shifted geometric mean: **0.057s**
 - HiGHS shifted geometric mean: **0.022s**
-- SANKHYA is **2.6x** the HiGHS time by that measure
+- YUKTHI is **2.6x** the HiGHS time by that measure
 
 - per-instance ratio: median **2.12x**, worst **7.55x**, faster than HiGHS on **4 of 50** instances
 

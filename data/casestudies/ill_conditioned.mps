@@ -1,4 +1,4 @@
-* SANKHYA case study - the supply chain model, deliberately badly scaled.
+* YUKTHI case study - the supply chain model, deliberately badly scaled.
 *
 * PS26119 asks for robustness on 'ill-conditioned constraint matrices'. The honest way
 * to demonstrate that is on an instance WHOSE ANSWER IS ALREADY KNOWN, so the claim is

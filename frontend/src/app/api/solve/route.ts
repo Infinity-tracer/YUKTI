@@ -26,12 +26,12 @@ export async function POST(request: NextRequest) {
   try {
     const { mpsContent, mpsFile, options = {} } = await request.json()
 
-    // Find the SANKHYA binary
+    // Find the YUKTHI binary
     const possiblePaths = [
-      path.join(process.cwd(), '..', 'build', 'sankhya.exe'),
-      path.join(process.cwd(), '..', 'build', 'sankhya'),
-      'D:/SIH/sih26/build/sankhya.exe',
-      'D:/SIH/sih26/build/sankhya',
+      path.join(process.cwd(), '..', 'build', 'YUKTHI.exe'),
+      path.join(process.cwd(), '..', 'build', 'YUKTHI'),
+      'D:/SIH/sih26/build/YUKTHI.exe',
+      'D:/SIH/sih26/build/YUKTHI',
     ]
 
     let binaryPath = ''
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
 
     if (!binaryPath) {
       return NextResponse.json(
-        { error: 'SANKHYA binary not found. Build the project first.' },
+        { error: 'YUKTHI binary not found. Build the project first.' },
         { status: 500 }
       )
     }
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     // If MPS content is provided, write to temp file
     if (mpsContent) {
       const tempDir = os.tmpdir()
-      inputFile = path.join(tempDir, `sankhya_${Date.now()}.mps`)
+      inputFile = path.join(tempDir, `YUKTHI_${Date.now()}.mps`)
       fs.writeFileSync(inputFile, mpsContent)
     }
 
@@ -133,10 +133,10 @@ export async function GET() {
   // Health check / version endpoint
   try {
     const possiblePaths = [
-      path.join(process.cwd(), '..', 'build', 'sankhya.exe'),
-      path.join(process.cwd(), '..', 'build', 'sankhya'),
-      'D:/SIH/sih26/build/sankhya.exe',
-      'D:/SIH/sih26/build/sankhya',
+      path.join(process.cwd(), '..', 'build', 'YUKTHI.exe'),
+      path.join(process.cwd(), '..', 'build', 'YUKTHI'),
+      'D:/SIH/sih26/build/YUKTHI.exe',
+      'D:/SIH/sih26/build/YUKTHI',
     ]
 
     let binaryPath = ''

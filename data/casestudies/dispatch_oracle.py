@@ -14,7 +14,7 @@ Four units means sixteen on/off patterns. For a FIXED pattern the remaining prob
 
 which is a continuous problem over a single equality and a box, so the greedy merit order is
 exactly optimal: hold every committed unit at its minimum, then buy the shortfall from the
-cheapest unit with headroom left. No LP solver is involved and no SANKHYA code is imported,
+cheapest unit with headroom left. No LP solver is involved and no YUKTHI code is imported,
 so agreement between this and the solver is genuine corroboration rather than a tautology.
 
     python data/casestudies/dispatch_oracle.py

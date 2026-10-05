@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - buffered line input, implementation.
+// YUKTHI - buffered line input, implementation.
 
 #include "line_reader.hpp"
 
@@ -8,18 +8,18 @@
 
 #include <fmt/format.h>
 
-#ifdef SANKHYA_WITH_ZLIB
+#ifdef YUKTHI_WITH_ZLIB
 #include <zlib.h>
 #endif
 
-namespace sankhya::io {
+namespace YUKTHI::io {
 namespace {
 
 /// 64 KiB. Large enough that the syscall cost disappears against the parse cost, small
 /// enough to stay in L2 while the reader tokenizes out of it.
 constexpr std::size_t kChunkBytes = 64 * 1024;
 
-#ifndef SANKHYA_WITH_ZLIB
+#ifndef YUKTHI_WITH_ZLIB
 [[nodiscard]] bool has_gz_suffix(const std::string& path) {
   return path.size() >= 3 && path.compare(path.size() - 3, 3, ".gz") == 0;
 }
@@ -40,7 +40,7 @@ bool LineReader::open(const std::string& path, std::string* error) {
   eof_ = false;
   buffer_.assign(kChunkBytes, '\0');
 
-#ifdef SANKHYA_WITH_ZLIB
+#ifdef YUKTHI_WITH_ZLIB
   gz_ = gzopen(path.c_str(), "rb");
   if (gz_ == nullptr) {
     if (error != nullptr) *error = fmt::format("{}: cannot open file", path);
@@ -52,7 +52,7 @@ bool LineReader::open(const std::string& path, std::string* error) {
   if (has_gz_suffix(path)) {
     if (error != nullptr) {
       *error =
-          fmt::format("{}: gzip input needs a build with zlib (-DSANKHYA_WITH_ZLIB=ON)", path);
+          fmt::format("{}: gzip input needs a build with zlib (-DYUKTHI_WITH_ZLIB=ON)", path);
     }
     return false;
   }
@@ -66,7 +66,7 @@ bool LineReader::open(const std::string& path, std::string* error) {
 }
 
 void LineReader::close() {
-#ifdef SANKHYA_WITH_ZLIB
+#ifdef YUKTHI_WITH_ZLIB
   if (gz_ != nullptr) {
     gzclose(static_cast<gzFile>(gz_));
     gz_ = nullptr;
@@ -84,7 +84,7 @@ std::size_t LineReader::fill() {
   end_ = 0;
   if (eof_) return 0;
 
-#ifdef SANKHYA_WITH_ZLIB
+#ifdef YUKTHI_WITH_ZLIB
   const int got =
       gzread(static_cast<gzFile>(gz_), buffer_.data(), static_cast<unsigned>(buffer_.size()));
   if (got <= 0) {
@@ -142,4 +142,4 @@ std::string LineReader::error_at(const std::string& message) const {
   return fmt::format("{}:{}: {}", path_, line_number_, message);
 }
 
-}  // namespace sankhya::io
+}  // namespace YUKTHI::io

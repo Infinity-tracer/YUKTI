@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - restarted PDHG, the first-order LP engine.
+// YUKTHI - restarted PDHG, the first-order LP engine.
 #pragma once
 
-#include "sankhya/logging.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
+#include "YUKTHI/logging.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
 
-namespace sankhya::pdhg {
+namespace YUKTHI::pdhg {
 
 /// Solve an LP with restarted primal-dual hybrid gradient.
 ///
@@ -14,4 +14,4 @@ namespace sankhya::pdhg {
 /// checks that. Never throws: every failure comes back as a status.
 [[nodiscard]] Solution solve_pdhg(const Model& model, const Options& options, Logger& logger);
 
-}  // namespace sankhya::pdhg
+}  // namespace YUKTHI::pdhg

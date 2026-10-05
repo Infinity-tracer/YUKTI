@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - sparse LU factorization of the simplex basis, with Markowitz pivoting.
+// YUKTHI - sparse LU factorization of the simplex basis, with Markowitz pivoting.
 //
 // References:
 //   Markowitz, "The elimination form of the inverse and its application to linear
@@ -44,10 +44,10 @@
 #include <functional>
 #include <vector>
 
-#include "sankhya/sparse.hpp"
-#include "sankhya/types.hpp"
+#include "YUKTHI/sparse.hpp"
+#include "YUKTHI/types.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 
 /// One basis column, as a list of (row, value) pairs. The simplex holds its columns in the
 /// model's CSC matrix and in the logical slack columns, so it hands them over rather than
@@ -240,4 +240,4 @@ class SparseLu {
   std::vector<Index> uncovered_rows_;
 };
 
-}  // namespace sankhya
+}  // namespace YUKTHI

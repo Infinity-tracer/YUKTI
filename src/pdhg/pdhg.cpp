@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - restarted primal-dual hybrid gradient for LP.
+// YUKTHI - restarted primal-dual hybrid gradient for LP.
 //
 // References, all written from the papers. Per CLAUDE.md the source of PDLP, cuPDLP,
 // cuPDLP-C, cuPDLPx, OR-Tools and HiGHS was NOT consulted.
@@ -36,7 +36,7 @@
 // flips it back, and test_pdhg.cpp pins the two engines against each other so the flip
 // cannot silently invert.
 
-#include "sankhya/pdhg.hpp"
+#include "YUKTHI/pdhg.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -46,12 +46,12 @@
 
 #include <fmt/format.h>
 
-#include "sankhya/timer.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/timer.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "../la/scaling.hpp"
 
-namespace sankhya::pdhg {
+namespace YUKTHI::pdhg {
 namespace {
 
 constexpr int kRuizIterations = 10;
@@ -112,7 +112,7 @@ struct Residuals {
   /// Has the run met the tolerance the CALLER asked for, AND is the point actually feasible
   /// in absolute terms? Both are required to stop.
   ///
-  /// The absolute half is not pedantry. kFeasible in sankhya::Solution asserts that a
+  /// The absolute half is not pedantry. kFeasible in YUKTHI::Solution asserts that a
   /// feasible point is being reported, so stopping on a relative residual alone would let
   /// this engine claim feasibility for a point that misses the project's own primal
   /// tolerance - a weaker claim than kOptimal, but still one the verifier rejects.
@@ -122,7 +122,7 @@ struct Residuals {
   }
 
   /// Would this point survive independent verification? These are the project's own
-  /// tolerances from include/sankhya/tolerances.hpp, the same ones the .sol file is judged
+  /// tolerances from include/YUKTHI/tolerances.hpp, the same ones the .sol file is judged
   /// against, and meeting them is the ONLY basis on which this engine claims kOptimal.
   [[nodiscard]] bool meets_project_standard() const {
     return absolute_primal <= tol::kPrimalFeasibility &&
@@ -725,4 +725,4 @@ Solution solve_pdhg(const Model& model, const Options& options, Logger& logger) 
   return solution;
 }
 
-}  // namespace sankhya::pdhg
+}  // namespace YUKTHI::pdhg

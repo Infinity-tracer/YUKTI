@@ -1,4 +1,4 @@
-* SANKHYA case study - power system dispatch (single-period unit commitment).
+* YUKTHI case study - power system dispatch (single-period unit commitment).
 *
 * PS26119 names 'power system dispatch' in scope. This is its smallest honest form:
 * each generating unit has a marginal cost, a minimum stable generation level it

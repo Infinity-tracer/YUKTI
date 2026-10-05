@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: Apache-2.0
-# SANKHYA - configure a build tree with a C++20-capable compiler.
+# YUKTHI - configure a build tree with a C++20-capable compiler.
 #
 # Windows dev boxes vary: one carries a MinGW 6.3.0 on PATH that cannot do C++20 at all,
 # another has MSYS2 UCRT64 GCC 16. This script probes known-good locations and verifies the
@@ -38,7 +38,7 @@ pick_compiler() {
 
 CXX_BIN="$(pick_compiler)"
 CC_BIN="${CXX_BIN%g++*}gcc${CXX_BIN##*g++}"
-echo "sankhya: using ${CXX_BIN} ($("$CXX_BIN" -dumpversion))"
+echo "YUKTHI: using ${CXX_BIN} ($("$CXX_BIN" -dumpversion))"
 
 # MSYS2 and Strawberry ship cmake/ninja next to the compiler. Prepending the toolchain bin
 # directory means we pick those up instead of an unrelated cmake that targets another ABI.
@@ -87,12 +87,12 @@ for existing in "$(dirname "$BUILD_DIR")"/*/_deps; do
   done
 done
 if [ "${#FETCH_ARGS[@]}" -gt 0 ]; then
-  echo "sankhya: reusing ${#FETCH_ARGS[@]} dependency source(s) already on disk"
+  echo "YUKTHI: reusing ${#FETCH_ARGS[@]} dependency source(s) already on disk"
 fi
 
 CC="$CC_BIN" CXX="$CXX_BIN" cmake -G Ninja -B "$BUILD_DIR" \
   -DCMAKE_BUILD_TYPE="$BUILD_TYPE" ${FETCH_ARGS[@]+"${FETCH_ARGS[@]}"} "$@"
 
-echo "sankhya: configured ${BUILD_DIR} (${BUILD_TYPE})"
+echo "YUKTHI: configured ${BUILD_DIR} (${BUILD_TYPE})"
 echo "         build with: cmake --build ${BUILD_DIR} -j"
 echo "         test  with: ctest --test-dir ${BUILD_DIR} --output-on-failure"

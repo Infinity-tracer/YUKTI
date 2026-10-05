@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""Run SANKHYA over the fetched Mittelmann LP instances and emit the evidence CSV (#60).
+"""Run YUKTHI over the fetched Mittelmann LP instances and emit the evidence CSV (#60).
 
 The third of the three libraries PS26119 names. Unlike Netlib there is no published optimum
 to pass against: Mittelmann's benchmark page publishes solver times. So a row here carries
@@ -68,8 +68,8 @@ def git_commit() -> str:
         return "unknown"
 
 def default_binary() -> Path:
-    for candidate in ("build/sankhya.exe", "build/sankhya", "build-main/sankhya.exe",
-                      "build-main/sankhya"):
+    for candidate in ("build/YUKTHI.exe", "build/YUKTHI", "build-main/YUKTHI.exe",
+                      "build-main/YUKTHI"):
         path = REPO_ROOT / candidate
         if path.exists():
             return path

@@ -1,4 +1,4 @@
-# SANKHYA case studies — sources
+# YUKTHI case studies — sources
 
 `data/casestudies/generate.py` documents the algebra of each model in its own header
 comments (visible at the top of the committed `.mps` files). This file adds what those

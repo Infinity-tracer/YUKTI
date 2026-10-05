@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// SANKHYA - restarted PDHG tests.
+// YUKTHI - restarted PDHG tests.
 //
 // The controlling test in this file is AgreesWithTheSimplexOnGeneratedInstances. Two engines
 // with nothing in common beyond the Model - one pivoting on exact ratios, one taking
@@ -22,10 +22,10 @@
 #include <gtest/gtest.h>
 #include <nlohmann/json.hpp>
 
-#include "sankhya/io.hpp"
-#include "sankhya/model.hpp"
-#include "sankhya/options.hpp"
-#include "sankhya/tolerances.hpp"
+#include "YUKTHI/io.hpp"
+#include "YUKTHI/model.hpp"
+#include "YUKTHI/options.hpp"
+#include "YUKTHI/tolerances.hpp"
 
 #include "core/status_guard.hpp"
 
@@ -34,7 +34,7 @@
 #include "oracles/lp_generator.hpp"
 #include "oracles/rational_simplex.hpp"
 
-namespace sankhya {
+namespace YUKTHI {
 namespace {
 
 /// The repository root, from this file's own location, so a test that reads a committed
@@ -282,7 +282,7 @@ TEST(Pdhg, StopsOnlyOnAPointThatMeetsTheProjectStandard) {
 }
 
 TEST(Pdhg, AFeasibleStatusStillMeansTheePointIsActuallyFeasible) {
-  // kFeasible is a weaker claim than kOptimal but it is still a claim: sankhya::Solution
+  // kFeasible is a weaker claim than kOptimal but it is still a claim: YUKTHI::Solution
   // documents it as "a feasible point exists and is reported". Stopping on a relative
   // residual alone would let this engine assert feasibility for a point that misses the
   // project's own primal tolerance.
@@ -684,4 +684,4 @@ TEST(Pdhg, PolishDeclinesWhenTheFactorCapSaysSoAndTheFirstOrderAnswerStands) {
 }
 
 }  // namespace
-}  // namespace sankhya
+}  // namespace YUKTHI
